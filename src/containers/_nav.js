@@ -94,7 +94,7 @@ const SCHOOL = [
         {
           _name: 'CSidebarNavItem',
           name: 'Manage Subjects Lists',
-          to: '/manage-subjects',
+          to: '/manage-subjects/all/subject',
           icon: 'cil-calculator'
         },
         {
