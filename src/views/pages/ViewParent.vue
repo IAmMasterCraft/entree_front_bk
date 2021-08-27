@@ -47,8 +47,8 @@
                             </CRow>
                         </CCardHeader>
                         <CCardBody>
-                            full_name<br />
-                            email
+                            <!--full_name<br />
+                            email -->
                         </CCardBody>
                     </CCard>
                 </CCol>

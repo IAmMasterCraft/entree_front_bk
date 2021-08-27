@@ -43,7 +43,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Manage Bursars",
-          to: "/",
+          to: "/manage-bursars",
           icon: "cil-user",
         },
       ],

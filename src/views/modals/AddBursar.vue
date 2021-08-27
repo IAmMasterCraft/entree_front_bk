@@ -30,34 +30,50 @@
         </CCol>
       </CRow>
       <template v-slot:header>
-        <h5 class="px-3">Link a new ward to {{ $route.params.name.toUpperCase().replace(/-/g, " ") }}</h5>
+        <h5 class="px-3">Add a new bursar to your school</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
-      Search and filter all students below <hr />
+      This personnel handles accounting<hr />
 			<CRow>
-				<CCol lg="12">
-          <CDataTable
-            :items="items"
-            :fields="fields"
-            column-filter
-            table-filter
-            items-per-page-select
-            :items-per-page="5"
-            hover
-            sorter
-            pagination>
-              <template #show_details="{item}">
-                <td class="py-2">
-                  <CInputCheckbox
-                    name="Select"
-                    :checked="false"
-                    :value="item.user_id"
-                    @change="selectStudent" />
-                </td>
-              </template>
-            </CDataTable>
-				</CCol>
-			</CRow>
+        <CCol sm="6">
+          <CInput
+            label="First Name"
+            required="true"
+            autocomplete="off"
+            placeholder="Enter Bursar's first name"
+            v-model="formValues.first_name"
+          />
+        </CCol>
+        <CCol sm="6">
+          <CInput
+            label="Last Name"
+            required="true"
+            autocomplete="off"
+            placeholder="Enter Bursar's last name"
+            v-model="formValues.last_name"
+          />
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol sm="6">
+          <CInput
+            label="Email Address"
+            required="true"
+            autocomplete="off"
+            placeholder="Enter Bursar's email address"
+            v-model="formValues.t_email"
+          />
+        </CCol>
+        <CCol sm="6">
+          <CInput
+            label="Password"
+            required="true"
+            autocomplete="off"
+            placeholder="Enter Bursar's password"
+            v-model="formValues.t_password"
+          />
+        </CCol>
+      </CRow>
 			<CRow>
 				<CCol lg="12">
 					<CButton
@@ -65,7 +81,7 @@
 						color="info"
 						block
             :disabled="isBtnDisabled"
-            @click="linkWards"
+            @click="newParent"
           >
             {{ `submit`.toUpperCase() }}
 					</CButton>
@@ -79,22 +95,8 @@
 </template>
 
 <script>
-const items = [];
-
-const fields = [
-  { key: 'full_name', _style:'min-width:200px' },
-  { key: 'class', _style:'min-width:100px;' },
-  {
-    key: 'show_details',
-    label: '',
-    _style: 'width:1%',
-    sorter: false,
-    filter: false
-  }
-];
-
 export default {
-  name: "AddWard",
+  name: "AddBursar",
   props: {
     showModal: {
       type: Boolean,
@@ -116,11 +118,8 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Student List . . . ",
+        message: "Loading Bursars . . . ",
       },
-      items: items.map((item, id) => { return {...item, id}}),
-      fields,
-      students_selected: [],
     }
   },
   methods: {
@@ -128,18 +127,29 @@ export default {
       let visibility = this.showModal;
       this.$emit("show-modal", !visibility);
     }, //updateModalVisibility method
-    async allStudents () {
+    async newParent () {
       try {
         this.isBtnDisabled = true;
         this.showProgress = true;
+        const user = localStorage.getItem("user_type");
         const config = {
-          method: "get",
-          url: "https://entreelab.com.ng/src/api/students",
+          method: "post",
+          url: "https://entreelab.com.ng/src/api/register",
+          data: {
+            user_type: 6,
+            first_name: this.formValues.first_name,
+            last_name: this.formValues.last_name,
+            email: this.formValues.t_email,
+            password: this.formValues.t_password,
+            school_id: (user == 2) ? user : null,
+          },
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
         const response = await this.axios(config);
         // this.updateModalVisibility();
-        this.showData(response.data);
+        let updatedParents = response.data;
+        this.formValues.grade_name = null;
+        this.$emit("show-parent", updatedParents);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch(error) {
@@ -163,47 +173,7 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of newClass
-    showData (response) {
-      const students = response.map(stdObj => {
-        return {
-          id: stdObj.id,
-          full_name: `${stdObj.first_name} ${stdObj.last_name}`,
-          class: stdObj.grade_name,
-          user_id: stdObj.user_id,
-        };
-      });
-      this.items = students;
-      this.showProgress = !this.showProgress;
-      this.isBtnDisabled = false;
-    }, //end of showData
-    selectStudent(evt){
-      console.log(evt);
-      if (evt.target.checked) {
-        const student_id = evt.target.value;
-        if (!this.students_selected.includes(student_id)) this.students_selected.push(student_id);
-      }
-    }, //end of selectStudent
-    async linkWards () {
-      try {
-        this.isBtnDisabled = true;
-        this.showProgress = true;
-        const config = {
-          method: "post",
-          url: "https://entreelab.com.ng/src/api/parents/wards",
-          data: {
-            user_id: this.$route.params.id,
-            all_wards: this.students_selected,
-          },
-          headers: {"Authorization" : localStorage.getItem("token"),},
-        };
-
-        const response = await this.axios(config);
-      } catch (error) {}
-    }, //end of linkWards
-  },
-  created() {
-    this.allStudents();
+    }, //end of newParent
   },
 }
 </script>

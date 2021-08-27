@@ -57,7 +57,7 @@ export default {
           content: "Access to over 1,000 high quality courses. For Students.",
           icon: "book",
           color: "danger",
-          isModuleReady: true,
+          isModuleReady: false,
         },
         {
           id: 5,
@@ -65,7 +65,7 @@ export default {
           content: "Sign Up As A Parent And Monitor Your Wards Performance.",
           icon: "user",
           color: "warning",
-          isModuleReady: true,
+          isModuleReady: false,
         },
         {
           id: 3,
