@@ -1,0 +1,39 @@
+name: 🚀 Build and Deploy to CPanel
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Latest update
+      uses: actions/checkout@v2
+
+    - name: Setup node env
+      uses: actions/setup-node@v2.1.2
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate
+      run: npm run build
+    
+    - name: 📂 Deploy static files
+      uses: SamKirkland/FTP-Deploy-Action@4.1.0
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+
+#     - name: 📂 Deploy project files
+#       uses: SamKirkland/FTP-Deploy-Action@4.1.0
+#       with:
+#         server: ${{ secrets.FTP_SERVER }}
+#         username: ${{ secrets.FTP_USERNAME }}
+#         password: ${{ secrets.FTP_PASSWORD }}
+#         server-dir: v2_codebase/
