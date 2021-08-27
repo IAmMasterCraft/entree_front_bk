@@ -67,36 +67,6 @@
                     </CBadge>
                   </td>
                 </template>
-                <template #show_details="{}">
-                  <td class="py-2">
-                    <CButton
-                      color="info"
-                      variant="outline"
-                      square
-                      :disabled="isBtnDisabled"
-                      size="sm"
-                      class="fa fa-eye"
-                    />
-                  </td>
-                </template>
-                <template #details="{item}">
-                  <CCollapse :show="Boolean(item._toggled)" :duration="collapseDuration">
-                    <CCardBody>
-                      <CMedia :aside-image-props="{ height: 102 }">
-                        <h4>
-                          {{item.username}}
-                        </h4>
-                        <p class="text-muted">Teacher since: {{item.registered}}</p>
-                        <CButton size="sm" color="info" class="">
-                          Teacher's Profile
-                        </CButton>
-                        <CButton size="sm" color="danger" class="ml-1">
-                          Delete
-                        </CButton>
-                      </CMedia>
-                    </CCardBody>
-                  </CCollapse>
-                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -116,14 +86,6 @@ const fields = [
   { key: 'last_name', _style:'min-width:100px;' },
   'registered',
   { key: 'total_subject', _style:'min-width:100px;' },
-  { key: 'login_count', _style:'min-width:100px;' },
-  {
-    key: 'show_details',
-    label: '',
-    _style: 'width:1%',
-    sorter: false,
-    filter: false
-  }
 ]
 
 

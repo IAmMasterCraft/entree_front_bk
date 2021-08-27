@@ -67,19 +67,6 @@
                     </CBadge>
                   </td>
                 </template>
-                <!-- <template #show_details="{}">
-                  <td class="py-2">
-                    <CButton
-                      color="danger"
-                      variant="outline"
-                      square
-                      :disabled="isBtnDisabled"
-                      size="sm"
-                    >
-                      DELETE
-                    </CButton>
-                  </td>
-                </template> -->
               </CDataTable>
             </CCardBody>
           </CCard>

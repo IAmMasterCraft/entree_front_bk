@@ -67,19 +67,19 @@
                     </CBadge>
                   </td>
                 </template>
-                <!-- <template #show_details="{}">
+                <template #show_details="{item}">
                   <td class="py-2">
                     <CButton
-                      color="danger"
+                      color="info"
                       variant="outline"
                       square
                       :disabled="isBtnDisabled"
                       size="sm"
-                    >
-                      DELETE
-                    </CButton>
+                      class="fa fa-eye"
+                      @click="navigation({id: item.user_id, name: item.full_name,})"
+                    />
                   </td>
-                </template> -->
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -98,15 +98,14 @@ const fields = [
   { key: 'full_name', _style:'min-width:200px' },
   { key: 'email', _style:'min-width:100px;' },
   { key: 'ward_count', _style:'min-width:100px;' },
-  { key: 'login_count', _style:'min-width:100px;' },
   'registered',
-  // {
-  //   key: 'show_details',
-  //   label: '',
-  //   _style: 'width:1%',
-  //   sorter: false,
-  //   filter: false
-  // }
+  {
+    key: 'show_details',
+    label: '',
+    _style: 'width:1%',
+    sorter: false,
+    filter: false
+  }
 ]
 
 
@@ -201,6 +200,7 @@ export default {
       const classes = response.map(parentObject => {
         return {
           id: parentObject.id,
+          user_id: parentObject.user_id,
           full_name: `${parentObject.first_name} ${parentObject.last_name}`,
           email: parentObject.email,
           registered: parentObject.createddate,
@@ -220,6 +220,10 @@ export default {
       // this.showData(allParents);
       this.allParents();
     }, //end of updateParent
+    navigation(classProps) {
+      // console.log(classProps);
+      this.$router.push({name: "View Parent", params: {id: classProps.id, name: classProps.name.toLowerCase().replace(/ /g, "-")}});
+    }, //end of navigation
   },
   created(){
     this.allParents();

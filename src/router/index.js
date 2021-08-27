@@ -23,6 +23,7 @@ const ManageStudents = () => import('@/views/pages/ManageStudents')
 const StudentList = () => import('@/views/pages/StudentList')
 const ManageQuizzes = () => import('@/views/pages/ManageQuizzes')
 const ManageParents = () => import('@/views/pages/ManageParents')
+const ViewParent = () => import("@/views/pages/ViewParent");
 
 // Views - Pages
 const Page404 = () => import('@/views/pages/Page404')
@@ -41,97 +42,102 @@ export default new Router({
 function configRoutes () {
   return [
     {
-      path: '/',
-      redirect: '/dashboard',
-      name: 'Home',
+      path: "/",
+      redirect: "/dashboard",
+      name: "Home",
       component: TheContainer,
       children: [
         {
-          path: 'dashboard',
-          name: 'Dashboard',
-          component: Dashboard
+          path: "dashboard",
+          name: "Dashboard",
+          component: Dashboard,
         },
         {
-          path: 'manage-classes',
-          name: 'Manage Classes',
-          component: ManageClasses
+          path: "manage-classes",
+          name: "Manage Classes",
+          component: ManageClasses,
         },
         {
-          path: 'manage-teachers',
-          name: 'Manage Teachers',
-          component: ManageTeachers
+          path: "manage-teachers",
+          name: "Manage Teachers",
+          component: ManageTeachers,
         },
         {
-          path: 'manage-subjects',
-          name: 'Manage Subjects',
-          component: ManageSubjects
+          path: "manage-subjects",
+          name: "Manage Subjects",
+          component: ManageSubjects,
         },
         {
-          path: 'manage-subjects/:id/:class',
-          name: 'Manage Subjects / ',
-          component: SubjectList
+          path: "manage-subjects/:id/:class",
+          name: "Manage Subjects / ",
+          component: SubjectList,
         },
         {
-          path: 'manage-students',
-          name: 'Manage Students',
-          component: ManageStudents
+          path: "manage-students",
+          name: "Manage Students",
+          component: ManageStudents,
         },
         {
-          path: 'manage-students/:id/:class',
-          name: 'Manage Students / ',
-          component: StudentList
+          path: "manage-students/:id/:class",
+          name: "Manage Students / ",
+          component: StudentList,
         },
         {
-          path: 'manage-quizzes',
-          name: 'Manage Quizzes',
-          component: ManageQuizzes
+          path: "manage-quizzes",
+          name: "Manage Quizzes",
+          component: ManageQuizzes,
         },
         {
-          path: 'manage-quizzes/:id/:class',
-          name: 'Manage Quizzes / ',
-          component: SubjectList
+          path: "manage-quizzes/:id/:class",
+          name: "Manage Quizzes / ",
+          component: SubjectList,
         },
         {
-          path: 'manage-parents',
-          name: 'Manage Parents',
-          component: ManageParents
+          path: "manage-parents",
+          name: "Manage Parents",
+          component: ManageParents,
         },
-      ]
+        {
+          path: "view-parents/:id/:name",
+          name: "View Parent",
+          component: ViewParent,
+        },
+      ],
     },
     {
-          path: '/login',
-          name: 'Login',
-          component: Login,
-        },
-        {
-          path: '/register',
-          name: 'UserType',
-          component: UserType,
-        },
-        {
-          path: '/register/:user_type',
-          name: 'Register',
-          component: Register,
-        },
-        {
-          path: '/verify-otp',
-          name: 'VerifyOtp',
-          component: VerifyOtp,
-        },
-        {
-          path: '/profile-setup',
-          name: 'ProfileSetup',
-          component: ProfileSetup,
-        },
-        {
-          path: '/404',
-          name: 'Page404',
-          component: Page404,
-        },
-        {
-          path: '/500',
-          name: 'Page500',
-          component: Page500,
-        },
-  ]
+      path: "/login",
+      name: "Login",
+      component: Login,
+    },
+    {
+      path: "/register",
+      name: "UserType",
+      component: UserType,
+    },
+    {
+      path: "/register/:user_type",
+      name: "Register",
+      component: Register,
+    },
+    {
+      path: "/verify-otp",
+      name: "VerifyOtp",
+      component: VerifyOtp,
+    },
+    {
+      path: "/profile-setup",
+      name: "ProfileSetup",
+      component: ProfileSetup,
+    },
+    {
+      path: "/404",
+      name: "Page404",
+      component: Page404,
+    },
+    {
+      path: "/500",
+      name: "Page500",
+      component: Page500,
+    },
+  ];
 }
