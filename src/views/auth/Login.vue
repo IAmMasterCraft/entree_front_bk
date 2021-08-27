@@ -100,6 +100,11 @@
                           <CButton color="link" :disabled="isBtnDisabled" class="px-0">Forgot password?</CButton>
                         </CCol>
                       </CRow>
+                      <CRow>
+                        <CCol col="12" class="text-center">
+                          <p>New to EntreeLab? <br /><router-link to="register">Sign up</router-link></p>
+                        </CCol>
+                      </CRow>
                     </CForm>
                   </CCardBody>
                 </CCard>
