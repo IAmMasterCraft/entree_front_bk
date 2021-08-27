@@ -26,6 +26,7 @@
     <div>
       <SchoolDashboard v-if="user === 2" :dashBoardData="dashBoardData" />
       <TeacherDashboard v-if="user === 3" :dashBoardData="dashBoardData" />
+      <StudentDashboard v-if="user === 4" :dashBoardData="dashBoardData" />
     </div>
 
   </div>
@@ -35,12 +36,14 @@
 import getDashboardData from './dash_data'
 import SchoolDashboard from './users/School/SchoolDashboard'
 import TeacherDashboard from './users/Teacher/TeachersDashboard'
+import StudentDashboard from './users/Student/StudentDashboard'
 
 export default {
   name: 'Dashboard',
   components: {
     SchoolDashboard,
     TeacherDashboard,
+    StudentDashboard,
   },
   data () {
     return {
@@ -69,6 +72,11 @@ export default {
         this.dashBoardData.total_lessons_per_subject = response.total_lessons_per_subject.length;
         this.dashBoardData.total_quiz = response.total_quiz[0]['count(quiz.id)'];
         this.dashBoardData.total_students = response.total_students[0]['count(distinct(student_subjects.student_id))'];
+        this.dashBoardData.total_subjects = response.total_subjects[0]['count(id)'];
+      } else if (this.user === 4) {
+        this.dashBoardData.quiz_record = response.quiz_record;
+        this.dashBoardData.total_quiz = response.total_quiz[0]['count(quiz.id)'];
+        this.dashBoardData.total_quiz_correctly_answered = response.total_quiz_correctly_answered[0]['count(quiz.id)'];
         this.dashBoardData.total_subjects = response.total_subjects[0]['count(id)'];
       }
       
