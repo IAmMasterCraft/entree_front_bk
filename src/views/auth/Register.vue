@@ -403,7 +403,7 @@ export default {
         }
       } catch (error) {
         if (error.response) {
-          this.notification.message = error.response;
+          this.notification.message = error.response.data;
           this.notification.countdown = 20;
           this.notification.type = "danger";
           this.isBtnDisabled = !this.isBtnDisabled;
