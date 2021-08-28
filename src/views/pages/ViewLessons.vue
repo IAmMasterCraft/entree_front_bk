@@ -43,6 +43,16 @@
                                     </video>
                                 </CCol>
                             </CRow>
+                            <hr />
+                            <CRow>
+                                <CCol lg="12">
+                                    <CTextarea
+                                        label="Interaction Zone"
+                                        autocomplete="off"
+                                        placeholder="Enter message"
+                                    />
+                                </CCol>
+                            </CRow>
                         </CCardBody>
                     </CCard>
                 </CCol>
