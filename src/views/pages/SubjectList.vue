@@ -331,6 +331,7 @@ export default {
   },
   created() {
     this.allSubjects();
+    // console.log("welcome");
   },
 };
 </script>
