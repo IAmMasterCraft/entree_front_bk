@@ -291,7 +291,7 @@ export default {
           total_lessons: (!subject.lesson_count) ? 0 : subject.lesson_count,
           total_quiz: (!subject.quiz_count) ? 0 : subject.quiz_count,
           "teacher's_name": `${subject.first_name} ${subject.last_name}`,
-          subject_id: subject.id,
+          subject_id: (this.user === 4) ? subject.subject_id : subject.id,
         };
       });
       this.showProgress = !this.showProgress;
