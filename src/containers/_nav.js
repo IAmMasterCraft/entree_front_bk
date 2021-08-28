@@ -98,13 +98,13 @@ const SCHOOL = [
         },
         {
           _name: "CSidebarNavItem",
-          name: "Manage Subjects Lists",
+          name: "Subject Lists",
           to: "/manage-subjects/all/subject",
           icon: "cil-calculator",
         },
         {
           _name: "CSidebarNavItem",
-          name: "Manage Quizzes",
+          name: "Quizzes",
           to: "/manage-quizzes/all/quizzes",
           icon: "cil-calculator",
         },
