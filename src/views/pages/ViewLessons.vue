@@ -33,8 +33,16 @@
                             </CRow>
                         </CCardHeader>
                         <CCardBody>
-                            <!--full_name<br />
-                            email -->
+                            <CRow v-for="(lesson, index) in lessons">
+                                <CCol lg="1">
+                                    {{ index + 1 }}
+                                </CCol>
+                                <CCol lg="11">
+                                    <video controls>
+                                        <source :src="lesson.source" type="video/mp4">
+                                    </video>
+                                </CCol>
+                            </CRow>
                         </CCardBody>
                     </CCard>
                 </CCol>
@@ -58,6 +66,7 @@ export default {
                 message: "Loading Lessons . . . ",
             },
             showModal: false,
+            lessons: [],
         }
     },
     methods: {
@@ -97,17 +106,7 @@ export default {
             }
         }, //end of getParentInfo
         showResponse (response) {
-            const classes = response.map(parentObject => {
-                return {
-                    id: parentObject.id,
-                    user_id: parentObject.user_id,
-                    full_name: `${parentObject.first_name} ${parentObject.last_name}`,
-                    email: parentObject.email,
-                    registered: parentObject.createddate,
-                    ward_count: parentObject.ward_count ?? 0,
-                    login_count: parentObject.login_count ?? 0,
-                };
-            });
+            this.lessons = response;
             this.showProgress = !this.showProgress;
         }, //end of showResponse
         toggleModal(){
