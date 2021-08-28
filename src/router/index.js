@@ -25,6 +25,7 @@ const ManageQuizzes = () => import('@/views/pages/ManageQuizzes')
 const ManageParents = () => import('@/views/pages/ManageParents')
 const ManageBursars = () => import("@/views/pages/ManageBursars");
 const ViewParent = () => import("@/views/pages/ViewParent");
+const ViewLessons = () => import("@/views/pages/ViewLessons");
 
 // Views - Pages
 const Page404 = () => import('@/views/pages/Page404')
@@ -107,6 +108,11 @@ function configRoutes () {
           path: "manage-bursars",
           name: "Manage Bursars",
           component: ManageBursars,
+        },
+        {
+          path: "view-lessons/:subject_id",
+          name: "Manage Lessons",
+          component: ViewLessons,
         },
       ],
     },

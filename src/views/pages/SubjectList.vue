@@ -35,7 +35,7 @@
                 <CCol lg="6" v-if="user === 2">
                   <AddSubject
                     :showModal="showModal"
-                    @show-modal="toggleModal"
+                    @show-modal="toggleModal(1)"
                     @show-subjects="updateSubjects"
                   />
                   <CButton
@@ -45,7 +45,7 @@
                     class="text-right float-right"
                     size="sm"
                     :disabled="isBtnDisabled"
-                    @click="toggleModal"
+                    @click="toggleModal(1)"
                   >
                     Add Subject
                   </CButton>
@@ -107,7 +107,7 @@
                     </CBadge>
                   </td>
                 </template>
-                <template #show_details="{}">
+                <template #show_details="{ item }">
                   <td class="py-2">
                     <CButton
                       color="info"
@@ -116,7 +116,29 @@
                       :disabled="isBtnDisabled"
                       size="sm"
                       class="fa fa-eye"
+                      v-if="true == false"
                     />
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      size="sm"
+                      :disabled="isBtnDisabled"
+                      v-if="Number.parseInt(item.total_lessons) > 0"
+                      @click="toLesson(item.subject_id)"
+                    >
+                      View Lessons
+                    </CButton>
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      size="sm"
+                      :disabled="isBtnDisabled"
+                      v-if="Number.parseInt(item.total_quiz) > 0"
+                    >
+                      View Quiz
+                    </CButton>
                   </td>
                 </template>
                 <template #details="{ item }">
@@ -269,6 +291,7 @@ export default {
           total_lessons: (!subject.lesson_count) ? 0 : subject.lesson_count,
           total_quiz: (!subject.quiz_count) ? 0 : subject.quiz_count,
           "teacher's_name": `${subject.first_name} ${subject.last_name}`,
+          subject_id: subject.id,
         };
       });
       this.showProgress = !this.showProgress;
@@ -291,6 +314,7 @@ export default {
             registered: subject.createddate,
             total_lessons: (!subject.lesson_count) ? 0 : subject.lesson_count,
             "teacher's_name": `${subject.first_name} ${subject.last_name}`,
+            subject_id: subject.id,
           };
         });
         this.showProgress = !this.showProgress;
@@ -300,6 +324,10 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateSubjects
+    toLesson(subject_id){
+      //console.log(subject_id);
+      this.$router.push({name: "Manage Lessons", params: {subject_id: subject_id,}});
+    }, //end of subject_id
   },
   created() {
     this.allSubjects();
