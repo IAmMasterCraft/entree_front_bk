@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+const Mail = () => import('@/views/general/Mail')
+
 //Auth
 const Login = () => import('@/views/auth/Login')
 const UserType = () => import('@/views/auth/UserType')
@@ -15,7 +17,10 @@ const TheContainer = () => import('@/containers/TheContainer')
 const Dashboard = () => import('@/views/Dashboard')
 
 // View - Pages
+const Profile = () => import('@/views/pages/Profile')
 const ManageClasses = () => import('@/views/pages/ManageClasses')
+const ManageFeeStructures = () => import('@/views/pages/ManageFeeStructures')
+const ManagePaymentRecords = () => import('@/views/pages/ManagePaymentRecords')
 const ManageTeachers = () => import('@/views/pages/ManageTeachers')
 const ManageSubjects = () => import('@/views/pages/ManageSubjects')
 const SubjectList = () => import('@/views/pages/SubjectList')
@@ -110,6 +115,21 @@ function configRoutes () {
           component: ManageBursars,
         },
         {
+          path: "manage-fee-structure",
+          name: "Manage Fee Structure",
+          component: ManageFeeStructures,
+        },
+        {
+          path: "manage-payment-record",
+          name: "Manage Payment Records",
+          component: ManagePaymentRecords,
+        },
+        {
+          path: "profile",
+          name: "Profile",
+          component: Profile,
+        },
+        {
           path: "view-lessons/:subject_id",
           name: "Manage Lessons",
           component: ViewLessons,
@@ -120,6 +140,11 @@ function configRoutes () {
       path: "/login",
       name: "Login",
       component: Login,
+    },
+    {
+      path: "/broadcast",
+      name: "Mail",
+      component: Mail,
     },
     {
       path: "/register",

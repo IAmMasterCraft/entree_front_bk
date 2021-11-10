@@ -30,50 +30,19 @@
         </CCol>
       </CRow>
       <template v-slot:header>
-        <h5 class="px-3">Add a new bursar to your school</h5>
+        <h5 class="px-3">Add a new class to your school</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
-      This personnel handles accounting<hr />
+      This represent a class level/arm in your school e.g. JSS1, B.E. 7, Year 10 etc... <hr />
 			<CRow>
-        <CCol sm="6">
-          <CInput
-            label="First Name"
-            required="true"
-            autocomplete="off"
-            placeholder="Enter Bursar's first name"
-            v-model="formValues.first_name"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CInput
-            label="Last Name"
-            required="true"
-            autocomplete="off"
-            placeholder="Enter Bursar's last name"
-            v-model="formValues.last_name"
-          />
-        </CCol>
-      </CRow>
-      <CRow>
-        <CCol sm="6">
-          <CInput
-            label="Email Address"
-            required="true"
-            autocomplete="off"
-            placeholder="Enter Bursar's email address"
-            v-model="formValues.t_email"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CInput
-            label="Password"
-            required="true"
-            autocomplete="off"
-            placeholder="Enter Bursar's password"
-            v-model="formValues.t_password"
-          />
-        </CCol>
-      </CRow>
+				<CCol lg="12">
+					<CInput
+						required="true"
+						placeholder="Enter name of the class"
+            v-model="formValues.grade_name"
+					/>
+				</CCol>
+			</CRow>
 			<CRow>
 				<CCol lg="12">
 					<CButton
@@ -81,7 +50,7 @@
 						color="info"
 						block
             :disabled="isBtnDisabled"
-            @click="newBursar"
+            @click="newClass"
           >
             {{ `submit`.toUpperCase() }}
 					</CButton>
@@ -96,7 +65,7 @@
 
 <script>
 export default {
-  name: "AddBursar",
+  name: "AddFeeStructure",
   props: {
     showModal: {
       type: Boolean,
@@ -118,7 +87,7 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Bursars . . . ",
+        message: "Loading Fee Structure . . . ",
       },
     }
   },
@@ -127,32 +96,23 @@ export default {
       let visibility = this.showModal;
       this.$emit("show-modal", !visibility);
     }, //updateModalVisibility method
-    async newBursar () {
+    async newClass () {
       try {
         this.isBtnDisabled = true;
         this.showProgress = true;
-        const user = localStorage.getItem("user_type");
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/register",
+          url: "https://entreelab.com.ng/src/api/classes",
           data: {
-            user_type: 6,
-            first_name: this.formValues.first_name,
-            last_name: this.formValues.last_name,
-            email: this.formValues.t_email,
-            password: this.formValues.t_password,
-            school_id: (user == 2) ? user : null,
+            grade_name: this.formValues.grade_name,
           },
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
         const response = await this.axios(config);
         // this.updateModalVisibility();
-        let updatedBursar = response.data;
-        this.formValues.first_name = null;
-        this.formValues.last_name = null;
-        this.formValues.t_email = null;
-        this.formValues.t_password = null;
-        this.$emit("show-bursar", updatedBursar);
+        let updatedClasses = response.data;
+        this.formValues.grade_name = null;
+        this.$emit("show-structure", updatedClasses);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch(error) {
@@ -176,7 +136,7 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of newBursar
+    }, //end of newClass
   },
 }
 </script>

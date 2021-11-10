@@ -30,10 +30,10 @@
             <CCardHeader>
               <CRow>
                 <CCol lg="6">
-                  <span>Bursars</span>
+                  <span>Classes</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 2">
-                  <AddBursar :showModal="showModal" @show-modal="toggleModal" @show-bursar="updateBursars" />
+                <CCol lg="6">
+                  <AddFeeStructure :showModal="showModal" @show-modal="toggleModal" @show-structure="updateClasses" />
                   <CButton
                     color="success"
                     variant="outline"
@@ -43,7 +43,7 @@
                     :disabled="isBtnDisabled"
                     @click="toggleModal"
                     >
-                      Add Bursar
+                      Add Fee Structure
                     </CButton>
                 </CCol>
               </CRow>
@@ -77,13 +77,14 @@
 </template>
 
 <script>
-import AddBursar from '../modals/AddBursar';
+import AddFeeStructure from '../modals/AddFeeStructure';
 
 const items = [];
 
 const fields = [
-  { key: 'full_name', _style:'min-width:200px' },
-  { key: 'email', _style:'min-width:100px;' },
+  { key: 'class_name', _style:'min-width:200px' },
+  { key: 'total_subject', _style:'min-width:100px;' },
+  { key: 'total_student', _style:'min-width:100px;' },
   'registered',
   // {
   //   key: 'show_details',
@@ -96,9 +97,9 @@ const fields = [
 
 
 export default {
-  name: 'ManageBursars',
+  name: 'ManageFeeStructure',
   components: {
-    AddBursar
+    AddFeeStructure
   },
   data () {
     return {
@@ -108,7 +109,7 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Bursars . . . ",
+        message: "Loading Fee Structures . . . ",
       },
       showModal: false,
 
@@ -147,11 +148,11 @@ export default {
       this.$nextTick(() => { this.collapseDuration = 0})
     },
 
-    async allBursars () {
+    async allClasses () {
       try {
         const config = {
           method: "get",
-          url: "https://entreelab.com.ng/src/api/bursars",
+          url: "https://entreelab.com.ng/src/api/clases",
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,
@@ -186,9 +187,10 @@ export default {
       const classes = response.map(classObject => {
         return {
           id: classObject.id,
-          full_name: `${classObject.first_name} ${classObject.last_name}`,
-          email: classObject.email,
+          class_name: classObject.grade_name,
           registered: classObject.createddate,
+          total_subject: classObject.subject_count ?? 0,
+          total_student: classObject.student_count ?? 0,
         };
       });
       this.items = classes;
@@ -197,14 +199,14 @@ export default {
     toggleModal(){
       this.showModal = !this.showModal;
     }, //end of toggleModal
-    updateBursars(allBursars) {
+    updateClasses(allClasses) {
       this.showProgress = !this.showProgress;
       this.showModal = false;
-      this.allBursars();
-    }, //end of updateBursars
+      this.showData(allClasses);
+    }, //end of updateClasses
   },
   created(){
-    this.allBursars();
+    this.allClasses();
   }
 }
 </script>

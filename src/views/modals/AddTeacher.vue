@@ -141,6 +141,29 @@ export default {
       let visibility = this.showModal;
       this.$emit("show-modal", !visibility);
     }, //updateModalVisibility method
+    async sendMail(){
+      const mailValue = {
+        receiver_name: this.formValues.school_name,
+        receiver_email: this.formValues.email,
+        subject: "Welcome on board!",
+        body: `
+          <h1>
+            Welcome to entreelab, you have been registered as a teacher <br />
+            Password: ${this.formValues.password}
+          </h1>
+        `,
+      };
+      try {
+        const config = {
+          method: "post",
+          url: "https://entreelab.com.ng/src/api/mail",
+          data: mailValue,
+        };
+        await this.axios(config);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }, //end of sendMail
     async newTeacher () {
       try {
         this.isBtnDisabled = true;
@@ -161,6 +184,8 @@ export default {
         await this.axios(config);
         this.formValues = null;
         this.$emit("show-teachers", true);
+        // send mail
+        await this.sendMail();
       } catch(error) {
         if (error.response) {
           this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;

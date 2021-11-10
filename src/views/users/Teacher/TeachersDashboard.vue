@@ -106,7 +106,7 @@
               style="height:300px"
               :datasets="[
                 {
-                  data: [10, 22, 34, 46, 58, 70, 46, 23, 45, 78, 34, 12],
+                  data: [0, 0, 0, 0, 0,0 ,0 ,0, 0, 0, 0, 0 ],
                   backgroundColor: '#E55353',
                   label: 'Student Growth',
                 },
@@ -126,7 +126,7 @@
               style="height:300px"
               :datasets="[
                 {
-                  data: [40, 20, 80, 10],
+                  data: [0, 0, 0, 0],
                   backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
                   label: 'Sales',
                 },

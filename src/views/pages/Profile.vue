@@ -26,49 +26,28 @@
     <div v-if="!showProgress">
       <CRow>
         <CCol lg="12">
-          <CCard>
-            <CCardHeader>
-              <CRow>
-                <CCol lg="6">
-                  <span>Bursars</span>
-                </CCol>
-                <CCol lg="6" v-if="user === 2">
-                  <AddBursar :showModal="showModal" @show-modal="toggleModal" @show-bursar="updateBursars" />
-                  <CButton
-                    color="success"
-                    variant="outline"
-                    square
-                    class="text-right float-right"
-                    size="sm"
-                    :disabled="isBtnDisabled"
-                    @click="toggleModal"
-                    >
-                      Add Bursar
-                    </CButton>
-                </CCol>
-              </CRow>
-            </CCardHeader>
-            <CCardBody>
-              <CDataTable
-                :items="items"
-                :fields="fields"
-                column-filter
-                table-filter
-                items-per-page-select
-                :items-per-page="5"
-                hover
-                sorter
-                pagination
-              >
-                <template #status="{item}">
-                  <td>
-                    <CBadge :color="getBadge(item.status)">
-                      {{item.status}}
-                    </CBadge>
-                  </td>
-                </template>
-              </CDataTable>
-            </CCardBody>
+          <CCard class="mb-3" style="max=width: 540px">
+            <CRow class="g-0">
+              <CCol :md="4">
+                <CCardImage 
+                  class="docs-placeholder-img rounded-0"
+                  width="100%" 
+                  height="250" 
+                  src="http://www.w3.org/2000/svg" 
+                  role="img" 
+                  aria-label="Placeholder: Image" 
+                  preserveAspectRatio="xMidYMid slice" 
+                  focusable="false">
+                </CCardImage>
+              </CCol>
+              <CCol :md="8">
+                <CCardBody>
+                  <CCardTitle>Name:</CCardTitle>
+                  <CCardText>Other info...</CCardText>
+                  <CCardText><small class="text-muted">Last updated 3 mins ago</small></CCardText>
+                </CCardBody>
+              </CCol>
+            </CRow>
           </CCard>
         </CCol>
       </CRow>
@@ -77,13 +56,13 @@
 </template>
 
 <script>
-import AddBursar from '../modals/AddBursar';
 
 const items = [];
 
 const fields = [
-  { key: 'full_name', _style:'min-width:200px' },
-  { key: 'email', _style:'min-width:100px;' },
+  { key: 'class_name', _style:'min-width:200px' },
+  { key: 'total_subject', _style:'min-width:100px;' },
+  { key: 'total_student', _style:'min-width:100px;' },
   'registered',
   // {
   //   key: 'show_details',
@@ -96,9 +75,9 @@ const fields = [
 
 
 export default {
-  name: 'ManageBursars',
+  name: 'Profile',
   components: {
-    AddBursar
+    // AddClass
   },
   data () {
     return {
@@ -108,7 +87,7 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Bursars . . . ",
+        message: "Loading Classes . . . ",
       },
       showModal: false,
 
@@ -147,11 +126,11 @@ export default {
       this.$nextTick(() => { this.collapseDuration = 0})
     },
 
-    async allBursars () {
+    async allClasses () {
       try {
         const config = {
           method: "get",
-          url: "https://entreelab.com.ng/src/api/bursars",
+          url: "https://entreelab.com.ng/src/api/classes",
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,
@@ -186,9 +165,10 @@ export default {
       const classes = response.map(classObject => {
         return {
           id: classObject.id,
-          full_name: `${classObject.first_name} ${classObject.last_name}`,
-          email: classObject.email,
+          class_name: classObject.grade_name,
           registered: classObject.createddate,
+          total_subject: classObject.subject_count ?? 0,
+          total_student: classObject.student_count ?? 0,
         };
       });
       this.items = classes;
@@ -197,14 +177,14 @@ export default {
     toggleModal(){
       this.showModal = !this.showModal;
     }, //end of toggleModal
-    updateBursars(allBursars) {
+    updateClasses(allClasses) {
       this.showProgress = !this.showProgress;
       this.showModal = false;
-      this.allBursars();
-    }, //end of updateBursars
+      this.showData(allClasses);
+    }, //end of updateClasses
   },
   created(){
-    this.allBursars();
+    this.allClasses();
   }
 }
 </script>

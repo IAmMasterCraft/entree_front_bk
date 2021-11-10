@@ -18,11 +18,11 @@
     <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>Account</strong>
     </CDropdownHeader>
-    <CDropdownItem>
+    <CDropdownItem v-if="true === false">
       <CIcon name="cil-bell"/> Updates
       <CBadge color="info" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem>
-    <CDropdownItem>
+    <CDropdownItem v-if="true === false">
       <CIcon name="cil-envelope-open" /> Messages
       <CBadge color="success" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem>
@@ -30,7 +30,7 @@
       <CIcon name="cil-task" /> Tasks
       <CBadge color="danger" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem> -->
-    <CDropdownItem>
+    <CDropdownItem v-if="true === false">
       <CIcon name="cil-comment-square" /> Chat
       <CBadge color="warning" class="mfs-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem>
@@ -38,13 +38,14 @@
       tag="div"
       class="text-center"
       color="light"
+      v-if="true === false"
     >
       <strong>Settings</strong>
     </CDropdownHeader>
-    <CDropdownItem>
+    <CDropdownItem to="profile">
       <CIcon name="cil-user" /> Profile
     </CDropdownItem>
-    <CDropdownItem>
+    <CDropdownItem v-if="true === false">
       <CIcon name="cil-settings" /> Settings
     </CDropdownItem>
     <CDropdownDivider/>

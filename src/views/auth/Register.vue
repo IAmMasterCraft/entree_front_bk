@@ -378,6 +378,29 @@ export default {
       //disable lga
       this.isLgaDisabled = false;
     },
+    async sendMail(){
+      const mailValue = {
+        receiver_name: this.formValues.school_name,
+        receiver_email: this.formValues.email,
+        subject: "Welcome on board!",
+        body: `
+          <h1>
+            Welcome to entreelab <br />
+            Password: ${this.formValues.password}
+          </h1>
+        `,
+      };
+      try {
+        const config = {
+          method: "post",
+          url: "https://entreelab.com.ng/src/api/mail",
+          data: mailValue,
+        };
+        await this.axios(config);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }, //end of sendMail
     async registerUser(){
       this.isBtnDisabled = !this.isBtnDisabled;
       this.showProgress = !this.showProgress;
@@ -394,6 +417,8 @@ export default {
           this.notification.type = "success";
           localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
           this.$router.push({name: "Home", data: response.data});
+          // send mail
+          await this.sendMail();
         } else {
           this.notification.message = "This is strange, server response is invalid!";
           this.notification.countdown = 20;
