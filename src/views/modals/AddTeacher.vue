@@ -143,14 +143,25 @@ export default {
     }, //updateModalVisibility method
     async sendMail(){
       const mailValue = {
-        receiver_name: this.formValues.school_name,
-        receiver_email: this.formValues.email,
+        receiver_name: `${this.formValues.first_name} ${this.formValues.last_name}`,
+        receiver_email: this.formValues.t_email,
         subject: "Welcome on board!",
         body: `
-          <h1>
-            Welcome to entreelab, you have been registered as a teacher <br />
-            Password: ${this.formValues.password}
-          </h1>
+          <p>
+            Hey ${this.formValues.first_name} ${this.formValues.last_name},<br />
+            <br />I’m Damie Ajayi, the founder of EntreeLab and I’d like to personally thank you for signing up to our platform.<br />
+            <br />We established Entreelab in order to have a central learning hub where multiple users have access to training and evaluation tools needed for learning in one place. The APP is designed to help Educators, Parents and Students to monitor activities and performances by providing periodic digital charts in designated accounts. <br />
+            <br /><i>I’d love to hear what you think of EntreeLab and if there is anything we can improve. If you have any questions or feedback, please send me a direct mail on damie.ajayi@entreelab.org. I’m always happy to help! <br />
+            <br />We will check in with you shortly. Until then, enjoy learning with us.</i> <br />
+            <br />Cheers!<hr />
+            Damie Ajayi<br />
+            Founder & CEO<br />
+            EntreeLab Inc.<br /><br /><br />
+
+
+            NOTE:
+            Password: ${this.formValues.t_password}
+          </p>
         `,
       };
       try {
