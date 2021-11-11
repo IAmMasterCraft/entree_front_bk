@@ -193,10 +193,10 @@ export default {
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
         await this.axios(config);
-        this.formValues = null;
-        this.$emit("show-teachers", true);
         // send mail
         await this.sendMail();
+        this.formValues = null;
+        this.$emit("show-teachers", true);
       } catch(error) {
         if (error.response) {
           this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
