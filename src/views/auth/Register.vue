@@ -426,10 +426,10 @@ export default {
           this.notification.message = "Registration Successful!";
           this.notification.countdown = 20;
           this.notification.type = "success";
-          localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
-          this.$router.push({name: "Home", data: response.data});
           // send mail
           await this.sendMail();
+          localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
+          this.$router.push({name: "Home", data: response.data});
         } else {
           this.notification.message = "This is strange, server response is invalid!";
           this.notification.countdown = 20;
