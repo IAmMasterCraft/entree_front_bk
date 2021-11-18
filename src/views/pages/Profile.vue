@@ -26,25 +26,69 @@
     <div v-if="!showProgress">
       <CRow>
         <CCol lg="12">
-          <CCard class="mb-3" style="max=width: 540px">
+          <CCard class="mb-3 p-3" style="max=width: 540px">
+            <CCardHeader v-if="true === false">
+              <CRow>
+                <CCol lg="6">
+                  <span>Profile</span>
+                </CCol>
+                <CCol lg="6" v-if="user === 2">
+                  <AddClass :showModal="showModal" @show-modal="toggleModal" @show-classes="updateClasses" />
+                  <CButton
+                    color="success"
+                    variant="outline"
+                    square
+                    class="text-right float-right"
+                    size="sm"
+                    :disabled="isBtnDisabled"
+                    @click="toggleModal"
+                    >
+                      Edit Profile
+                    </CButton>
+                </CCol>
+              </CRow>
+            </CCardHeader>
             <CRow class="g-0">
               <CCol :md="4">
-                <CCardImage 
-                  class="docs-placeholder-img rounded-0"
-                  width="100%" 
-                  height="250" 
-                  src="http://www.w3.org/2000/svg" 
-                  role="img" 
-                  aria-label="Placeholder: Image" 
-                  preserveAspectRatio="xMidYMid slice" 
-                  focusable="false">
-                </CCardImage>
+                <img rounded thumbnail :src="profile.user.avatar" width="200" height="200"/>
               </CCol>
               <CCol :md="8">
-                <CCardBody>
-                  <CCardTitle>Name:</CCardTitle>
-                  <CCardText>Other info...</CCardText>
-                  <CCardText><small class="text-muted">Last updated 3 mins ago</small></CCardText>
+                <CCardBody v-if="user === 2">
+                  <CCardTitle>
+                    {{ profile.user_details.school_name }}
+                  </CCardTitle>
+                  <CCardText>
+                    {{ profile.user.email }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user.phone_number }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user_details.school_address }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user_details.lga }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user_details.state }}
+                  </CCardText>
+                  <CCardText><small class="text-muted">{{ profile.user_details.createddate }}</small></CCardText>
+                </CCardBody>
+
+                <CCardBody v-if="user === 3">
+                  <CCardTitle>
+                    {{ profile.user.first_name }} {{ profile.user.last_name }}
+                  </CCardTitle>
+                  <CCardText>
+                    {{ profile.user.email }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user.phone_number }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user_details.description }}
+                  </CCardText>
+                  <CCardText><small class="text-muted">{{ profile.user_details.createddate }}</small></CCardText>
                 </CCardBody>
               </CCol>
             </CRow>
@@ -56,22 +100,6 @@
 </template>
 
 <script>
-
-const items = [];
-
-const fields = [
-  { key: 'class_name', _style:'min-width:200px' },
-  { key: 'total_subject', _style:'min-width:100px;' },
-  { key: 'total_student', _style:'min-width:100px;' },
-  'registered',
-  // {
-  //   key: 'show_details',
-  //   label: '',
-  //   _style: 'width:1%',
-  //   sorter: false,
-  //   filter: false
-  // }
-]
 
 
 export default {
@@ -87,13 +115,10 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Classes . . . ",
+        message: "Loading Profile . . . ",
       },
       showModal: false,
-
-      items: items.map((item, id) => { return {...item, id}}),
-      fields,
-      details: [],
+      profile: {},
       collapseDuration: 0
     }
   },
@@ -125,21 +150,18 @@ export default {
       this.collapseDuration = 300
       this.$nextTick(() => { this.collapseDuration = 0})
     },
-
-    async allClasses () {
+    async getProfile () {
       try {
         const config = {
           method: "get",
-          url: "https://entreelab.com.ng/src/api/classes",
+          url: "https://entreelab.com.ng/src/api/user-profile",
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,
         };
         const response = await this.axios(config);
         this.showData(response.data);
-        // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
-        // this.$router.push({name: "Home", data: response.data});
-      } catch(error) {
+      } catch (error) {
         if (error.response) {
           this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
           this.notification.countdown = 20;
@@ -160,31 +182,18 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of allClasses
+    }, //end of Profile
     showData(response){
-      const classes = response.map(classObject => {
-        return {
-          id: classObject.id,
-          class_name: classObject.grade_name,
-          registered: classObject.createddate,
-          total_subject: classObject.subject_count ?? 0,
-          total_student: classObject.student_count ?? 0,
-        };
-      });
-      this.items = classes;
+      this.profile = response;
+      if (!this.profile.user.avatar) this.profile.user.avatar = "img/logo_a.png";
       this.showProgress = !this.showProgress;
     }, //end of showData
     toggleModal(){
       this.showModal = !this.showModal;
     }, //end of toggleModal
-    updateClasses(allClasses) {
-      this.showProgress = !this.showProgress;
-      this.showModal = false;
-      this.showData(allClasses);
-    }, //end of updateClasses
   },
   created(){
-    this.allClasses();
+    this.getProfile();
   }
 }
 </script>
