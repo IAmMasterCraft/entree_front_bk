@@ -27,13 +27,13 @@
       <CRow>
         <CCol lg="12">
           <CCard class="mb-3 p-3" style="max=width: 540px">
-            <CCardHeader v-if="true === false">
+            <CCardHeader>
               <CRow>
                 <CCol lg="6">
                   <span>Profile</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 2">
-                  <AddClass :showModal="showModal" @show-modal="toggleModal" @show-classes="updateClasses" />
+                <CCol lg="6" >
+                  <EditProfile :showModal="showModal" @show-modal="toggleModal" @show-profile="updateProfile" :userProfile="profile" />
                   <CButton
                     color="success"
                     variant="outline"
@@ -48,7 +48,7 @@
                 </CCol>
               </CRow>
             </CCardHeader>
-            <CRow class="g-0">
+            <CRow class="g-0 my-4">
               <CCol :md="4">
                 <img rounded thumbnail :src="profile.user.avatar" width="200" height="200"/>
               </CCol>
@@ -100,12 +100,12 @@
 </template>
 
 <script>
-
+import EditProfile from '../modals/EditProfile';
 
 export default {
   name: 'Profile',
   components: {
-    // AddClass
+    EditProfile
   },
   data () {
     return {
@@ -191,6 +191,11 @@ export default {
     toggleModal(){
       this.showModal = !this.showModal;
     }, //end of toggleModal
+    updateProfile(profileInfo) {
+      this.showProgress = !this.showProgress;
+      this.showModal = false;
+      this.showData(profileInfo);
+    }, //end of updateProfile
   },
   created(){
     this.getProfile();

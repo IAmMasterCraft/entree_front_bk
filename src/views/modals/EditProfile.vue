@@ -30,47 +30,27 @@
         </CCol>
       </CRow>
       <template v-slot:header>
-        <h5 class="px-3">Add a new bursar to your school</h5>
+        <h5 class="px-3">Update User Profile</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
-      This personnel handles accounting<hr />
 			<CRow>
-        <CCol sm="6">
+        <CCol sm="6" v-for="(val, index) in formValues" :key="index">
           <CInput
-            label="First Name"
+            :label="index.toUpperCase().replace(/_/g, ' ')"
             required="true"
+            :disabled="(index.includes('avatar')) ? true : false"
             autocomplete="off"
-            placeholder="Enter Bursar's first name"
-            v-model="formValues.first_name"
+            :placeholder="`Enter ${index.replace(/_/g, ' ')}`"
+            v-model="formValues[index]"
           />
-        </CCol>
-        <CCol sm="6">
           <CInput
-            label="Last Name"
+            :label="`SELECT ${index.toUpperCase().replace(/_/g, ' ')}`"
             required="true"
+            type="file"
             autocomplete="off"
-            placeholder="Enter Bursar's last name"
-            v-model="formValues.last_name"
-          />
-        </CCol>
-      </CRow>
-      <CRow>
-        <CCol sm="6">
-          <CInput
-            label="Email Address"
-            required="true"
-            autocomplete="off"
-            placeholder="Enter Bursar's email address"
-            v-model="formValues.t_email"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CInput
-            label="Password"
-            required="true"
-            autocomplete="off"
-            placeholder="Enter Bursar's password"
-            v-model="formValues.t_password"
+            v-if="index.includes('avatar')"
+            :placeholder="`Select ${index.replace(/_/g, ' ')}`"
+            v-model="new_pic"
           />
         </CCol>
       </CRow>
@@ -103,8 +83,9 @@ export default {
       required: true,
       default: false,
     },
-    classes: {
-      type: Array,
+    userProfile: {
+      type: Object,
+      required: true,
     }
   },
   data () {
@@ -120,6 +101,8 @@ export default {
         countdown: 2,
         message: "Loading Profile . . . ",
       },
+      user: parseInt(localStorage.getItem("user_type")),
+      new_pic: "",
     }
   },
   methods: {
@@ -177,6 +160,19 @@ export default {
         }
       }
     }, //end of newBursar
+  },
+  created () {
+    if (this.user === 2) {
+      this.formValues = {
+        school_name: this.userProfile.user_details.school_name,
+        email: this.userProfile.user.email,
+        phone_number: this.userProfile.user.phone_number,
+        school_address: this.userProfile.user_details.school_address,
+        state: this.userProfile.user_details.state,
+        lga: this.userProfile.user_details.lga,
+        avatar: this.userProfile.user.avatar,
+      };
+    }
   },
 }
 </script>
