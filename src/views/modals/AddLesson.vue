@@ -55,22 +55,44 @@
         </CCol>
       </CRow>
       <CRow>
+        <CCol sm="12">
+          <CSelect
+              label="Choose File type for lesson"
+              required="true"
+              :options="filetype_options"
+              :value.sync="selected_filetype"
+            />
+        </CCol>
+      </CRow>
+      <CRow>
         <CCol sm="6">
           <CInputFile
-            label="Upload Lessson"
+            label="Upload Lessson (MP4 Video File)"
             placeholder="Upload Lesson"
             required="true"
             ref="file"
             accept="video/*"
             autocomplete="off"
             @change="uploadFile"
+            v-if="selected_filetype === 'video'"
+          />
+          <CInputFile
+            label="Upload Lessson (PDF FIle)"
+            placeholder="Upload Lesson"
+            required="true"
+            ref="file"
+            accept="application/pdf"
+            autocomplete="off"
+            @change="uploadFile"
+            v-if="selected_filetype === 'pdf'"
           />
         </CCol>
         <CCol sm="6">
-          <video controls v-if="formValues.lesson_file_data" width="350" height="200">
+          <video controls v-if="formValues.lesson_file_data && selected_filetype === 'video'" width="350" height="200">
             <source :src="formValues.lesson_file_data" type="video/mp4">
           </video>
-          <p class="text-danger" v-else>Kindly upload lesson video</p>
+          <iframe v-else-if="formValues.lesson_file_data && selected_filetype === 'pdf'" width="350" height="200"></iframe>
+          <p class="text-danger" v-else>Kindly upload lesson video or pdf file</p>
         </CCol>
       </CRow>
       <CRow>
@@ -228,6 +250,12 @@ export default {
         {label: "Option C", value: "C",},
         {label: "Option D", value: "D",},
       ],
+      filetype_options: [
+        {label: "-- Select correct option --", value: null,},
+        {label: "PDF File", value: "pdf",},
+        {label: "MP4 Video File", value: "video",},
+      ],
+      selected_filetype: null,
       isBtnDisabled: false,
       showProgress: false,
       notification: {
