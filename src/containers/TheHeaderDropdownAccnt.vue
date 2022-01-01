@@ -42,7 +42,7 @@
     >
       <strong>Settings</strong>
     </CDropdownHeader>
-    <CDropdownItem to="profile">
+    <CDropdownItem to="/profile">
       <CIcon name="cil-user" /> Profile
     </CDropdownItem>
     <CDropdownItem v-if="true === false">

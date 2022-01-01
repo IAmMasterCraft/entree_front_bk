@@ -78,11 +78,100 @@
           <CTextarea
             label="Lesson Description"
             autocomplete="off"
+            rows="5"
             placeholder="Enter Lesson Description"
             v-model="formValues.description"
           />
         </CCol>
       </CRow>
+      <hr />
+      <h5>Setup Revision Quiz</h5>
+      <CRow>
+        <CCol sm="6">
+          <CInput
+            label="Total Questions"
+            required="true"
+            type="number"
+            placeholder="Enter total questions"
+            v-model="total_questions"
+            @change="modulatingQuestions"
+          />
+        </CCol>
+        <CCol sm="6">
+          <CInput
+            label="General score per question"
+            required="true"
+            type="number"
+            placeholder="Enter score per question"
+            v-model="general_score"
+          />
+        </CCol>
+      </CRow>
+      <div v-for="(quest, index) in formValues.questions" :key="index">
+        <h5>Setup Question {{ index + 1}}</h5>
+        <CRow>
+          <CCol sm="12">
+            <CTextarea
+              :label="`Question ${index + 1}`"
+              rows="5"
+              required="true"
+              :placeholder="`Enter question ${index + 1}`"
+              v-model="formValues.questions[index].question"
+            />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="6">
+            <CSelect
+              :label="`Select Correct Option for question ${index + 1}`"
+              rows="5"
+              required="true"
+              :options="mcq_options"
+              :value.sync="formValues.questions[index].correct_answer"
+            />
+          </CCol>
+          <CCol sm="6">
+            <CInput
+              :label="`Score for question ${index + 1}`"
+              required="true"
+              type="number"
+              placeholder="Enter total questions"
+              v-model="formValues.questions[index].score"
+            />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="6">
+            <CInput
+              label="Option A"
+              required="true"
+              placeholder="Enter option A"
+              v-model="formValues.questions[index].options.option_a"
+            />
+            <CInput
+              label="Option B"
+              required="true"
+              placeholder="Enter option B"
+              v-model="formValues.questions[index].options.option_b"
+            />
+          </CCol>
+          <CCol sm="6">
+            <CInput
+              label="Option C"
+              required="true"
+              placeholder="Enter option C"
+              v-model="formValues.questions[index].options.option_c"
+            />
+            <CInput
+              label="Option D"
+              required="true"
+              placeholder="Enter option D"
+              v-model="formValues.questions[index].options.option_d"
+            />
+          </CCol>
+        </CRow>
+        <hr />
+      </div>
 			<CRow>
 				<CCol lg="12">
 					<CButton
@@ -128,7 +217,17 @@ export default {
         lesson_file_data: null,
         lesson_file_duration: null,
         description: null,
+        // ---
+        questions: [],
+        // ---
       },
+      mcq_options: [
+        {label: "-- Select correct option --", value: null,},
+        {label: "Option A", value: "A",},
+        {label: "Option B", value: "B",},
+        {label: "Option C", value: "C",},
+        {label: "Option D", value: "D",},
+      ],
       isBtnDisabled: false,
       showProgress: false,
       notification: {
@@ -137,6 +236,8 @@ export default {
         message: "Loading Subject . . . ",
       },
       subjects: [{label: "-- Select subject --", value: null,}],
+      total_questions: 1,
+      general_score: 1,
     }
   },
   methods: {
@@ -237,9 +338,26 @@ export default {
       fileReader.readAsDataURL(this.formValues.lesson_file);
       // console.log(this.formValues);
     }, //end of uploadFile
+    modulatingQuestions () {
+      this.formValues.questions = [];
+      for(let i = 0; i < Number(this.total_questions); i++) {
+        this.formValues.questions.push({
+          question: null,
+          options: {
+            option_a: null,
+            option_b: null,
+            option_c: null,
+            option_d: null,
+          },
+          score: this.general_score,
+          correct_answer: null,
+        });
+      }
+    }, //end of modulatingQuestions
   },
   mounted(){
     this.getSubjects();
+    this.modulatingQuestions();
   },
 }
 </script>
