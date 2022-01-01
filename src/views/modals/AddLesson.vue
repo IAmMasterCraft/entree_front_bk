@@ -73,6 +73,16 @@
           <p class="text-danger" v-else>Kindly upload lesson video</p>
         </CCol>
       </CRow>
+      <CRow>
+        <CCol sm="12">
+          <CTextarea
+            label="Lesson Description"
+            autocomplete="off"
+            placeholder="Enter Lesson Description"
+            v-model="formValues.description"
+          />
+        </CCol>
+      </CRow>
 			<CRow>
 				<CCol lg="12">
 					<CButton
@@ -117,6 +127,7 @@ export default {
         lesson_file_type: null,
         lesson_file_data: null,
         lesson_file_duration: null,
+        description: null,
       },
       isBtnDisabled: false,
       showProgress: false,
@@ -144,7 +155,8 @@ export default {
             "subject_id": this.formValues.subject_id,
             "topic": this.formValues.topic,
             "source": this.formValues.lesson_file_data,
-            "video_length": this.formValues.lesson_file_duration
+            "video_length": this.formValues.lesson_file_duration,
+            "description": this.formValues.description,
           },
           headers: {
             "Authorization" : localStorage.getItem("token"),
