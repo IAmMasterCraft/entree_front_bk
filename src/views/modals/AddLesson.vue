@@ -277,19 +277,20 @@ export default {
       try {
         this.isBtnDisabled = true;
         this.showProgress = true;
+        const formData = new FormData();
+        formData.append("subject_id", this.formValues.subject_id);
+        formData.append("topic", this.formValues.topic);
+        formData.append("source", this.formValues.lesson_file);
+        formData.append("video_length", this.formValues.lesson_file_duration);
+        formData.append("description", this.formValues.description);
+        formData.append("questions", this.formValues.questions);
         const config = {
           method: "post",
           url: "https://entreelab.com.ng/src/api/subjects/new-topic",
-          data: {
-            "subject_id": this.formValues.subject_id,
-            "topic": this.formValues.topic,
-            "source": this.formValues.lesson_file_data,
-            "video_length": this.formValues.lesson_file_duration,
-            "description": this.formValues.description,
-            "questions": this.formValues.questions,
-          },
+          data: formData,
           headers: {
             "Authorization" : localStorage.getItem("token"),
+            "Content-Type": 'multipart/form-data',
           },
         };
         const response = await this.axios(config);
