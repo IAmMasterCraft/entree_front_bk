@@ -286,6 +286,7 @@ export default {
             "source": this.formValues.lesson_file_data,
             "video_length": this.formValues.lesson_file_duration,
             "description": this.formValues.description,
+            "questions": this.formValues.questions,
           },
           headers: {
             "Authorization" : localStorage.getItem("token"),
