@@ -279,11 +279,11 @@ export default {
         this.showProgress = true;
         const formData = new FormData();
         formData.append("subject_id", this.formValues.subject_id);
-        formData.append("topic", this.formValues.topic);
+        formData.append("topic", this.formValues.lesson_title);
         formData.append("source", this.formValues.lesson_file);
         formData.append("video_length", this.formValues.lesson_file_duration);
         formData.append("description", this.formValues.description);
-        formData.append("questions", this.formValues.questions);
+        formData.append("questions", JSON.stringify(this.formValues.questions));
         const config = {
           method: "post",
           url: "https://entreelab.com.ng/src/api/subjects/new-topic",
