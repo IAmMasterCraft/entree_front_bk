@@ -99,6 +99,12 @@ export default {
       }
     }, //end of dashData
     errorManagement(error) {
+      if (error.response.data.error.status == 401 || error.response.data.error.message.toLowerCase().includes("unauthorized")) {
+        localStorage.setItem("token", "");
+        localStorage.setItem("user_type", "");
+        localStorage.setItem("avatar", "");
+        this.$router.push({name: "Login"});
+      }
       if (error.response) {
           this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
           this.notification.countdown = 20;
