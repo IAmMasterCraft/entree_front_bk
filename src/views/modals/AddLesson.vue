@@ -240,6 +240,9 @@ export default {
     },
     classes: {
       type: Array,
+    },
+    subjects: {
+      type: Array,
     }
   },
   data () {
@@ -279,7 +282,7 @@ export default {
         countdown: 2,
         message: "Loading Subject . . . ",
       },
-      subjects: [{label: "-- Select subject --", value: null,}],
+      // subjects: [{label: "-- Select subject --", value: null,}],
       total_questions: 1,
       general_score: 1,
     }
@@ -402,7 +405,7 @@ export default {
     }, //end of modulatingQuestions
   },
   mounted(){
-    this.getSubjects();
+    // this.getSubjects();
     this.modulatingQuestions();
   },
 }

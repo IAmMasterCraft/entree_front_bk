@@ -53,12 +53,14 @@
                 <CCol lg="6" v-if="user === 3">
                   <AddQuiz
                     :showModal="showModal"
+                    :subjects="subjectDropdowmn"
                     @show-modal="toggleModal(1)"
                     @show-subjects="updateSubjects"
                     @show-quiz="updateSubjects"
                   />
                   <AddLesson
                     :showModal="showModalq"
+                    :subjects="subjectDropdowmn"
                     @show-modal="toggleModal(2)"
                     @show-subjects="updateSubjects"
                     @show-quiz="updateSubjects()"
@@ -207,6 +209,7 @@ export default {
       fields,
       details: [],
       collapseDuration: 0,
+      subjectDropdowmn: [ {label: "--Select Subject--", value: null,}, ],
     };
   },
   methods: {
@@ -284,6 +287,12 @@ export default {
     }, //end of allSubject
     showData(response) {
       this.items = response.map((subject) => {
+        const subjectId = (this.user === 4) ? subject.subject_id : subject.id;
+        const dropdownObj = {
+          label: `${subject.grade_name} - ${subject.subject_name}`,
+          value: subjectId,
+        };
+        this.subjectDropdowmn.push(dropdownObj);
         return {
           subject: subject.subject_name,
           class: subject.grade_name,
@@ -291,7 +300,7 @@ export default {
           total_lessons: (!subject.lesson_count) ? 0 : subject.lesson_count,
           total_quiz: (!subject.quiz_count) ? 0 : subject.quiz_count,
           "teacher's_name": `${subject.first_name} ${subject.last_name}`,
-          subject_id: (this.user === 4) ? subject.subject_id : subject.id,
+          subject_id: subjectId,
         };
       });
       this.showProgress = !this.showProgress;
