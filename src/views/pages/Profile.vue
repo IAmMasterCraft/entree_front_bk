@@ -175,6 +175,7 @@ export default {
           this.isBtnDisabled = false;
           this.showProgress = false;
         } else {
+          console.log(error)
           console.log("Developer fucked up!");
           // this.notification.countdown = 20;
           // this.notification.type = "danger";
@@ -185,8 +186,8 @@ export default {
     }, //end of Profile
     showData(response){
       this.profile = response;
-      if (!this.profile.user.avatar) this.profile.user.avatar = "img/logo_a.png";
       this.showProgress = !this.showProgress;
+      this.profile.user.avatar = (!this.profile.user.avatar) ? "img/logo_a.png" : `https://entreelab.com.ng/src/storage/app/${this.profile.user.avatar}`;
     }, //end of showData
     toggleModal(){
       this.showModal = !this.showModal;

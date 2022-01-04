@@ -131,13 +131,13 @@ export default {
         formData.append("school_address", this.formValues.school_address);
         formData.append("state", this.formValues.states);
         formData.append("lga", this.formValues.lga);
-        formData.append("avatar", this.formValues.picture_file);
+        formData.append("avatar", this.picture_file);
         formData.append("first_name", this.formValues.first_name);
         formData.append("last_name", this.formValues.last_name);
         formData.append("description", this.formValues.description);
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/subjects/new-topic",
+          url: "https://entreelab.com.ng/src/api/user-profile",
           data: formData,
           headers: {
             "Authorization" : localStorage.getItem("token"),
@@ -146,7 +146,9 @@ export default {
         };
         const response = await this.axios(config);
         this.formValues = null;
-        (response.data.user.avatar) ? localStorage.setItem("avatar", `https://entreelab.com.ng/src/storage/app/${response.data.user.avatar}`) : "img/logo_a.png";
+        (response.data.user.avatar) ? localStorage.setItem("avatar", `https://entreelab.com.ng/src/storage/app/${response.data.user.avatar}`) : localStorage.setItem("avatar", "img/logo_a.png");
+        this.isBtnDisabled = false;
+        this.showProgress = false;
         this.$emit("show-profile", response.data);
       } catch (error) {
         if (error.response) {

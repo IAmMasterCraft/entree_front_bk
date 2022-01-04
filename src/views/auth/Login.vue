@@ -163,7 +163,7 @@ export default {
         const response = await this.axios(config);
         localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         localStorage.setItem("user_type", response.data.user.user_type);
-        (response.data.user.avatar) ? localStorage.setItem("avatar", `https://entreelab.com.ng/src/storage/app/${response.data.user.avatar}`) : "img/logo_a.png";
+        (response.data.user.avatar) ? localStorage.setItem("avatar", `https://entreelab.com.ng/src/storage/app/${response.data.user.avatar}`) : localStorage.setItem("avatar", "img/logo_a.png");
         this.$router.push({name: "Home", data: response.data});
       } catch(error) {
         if (error.response) {
@@ -179,6 +179,7 @@ export default {
           this.isBtnDisabled = !this.isBtnDisabled;
           this.showProgress = !this.showProgress;
         } else {
+          console.log(error.message)
           this.notification.message = "Developer fucked up!";
           this.notification.countdown = 20;
           this.notification.type = "danger";
