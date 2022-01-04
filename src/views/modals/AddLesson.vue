@@ -107,8 +107,20 @@
         </CCol>
       </CRow>
       <hr />
-      <h5>Setup Revision Quiz</h5>
-      <CRow>
+      <CRow class="mb-4">
+        <CCol sm="6">
+          <h5>Setup Revision Quiz</h5>
+        </CCol>
+        <CCol sm="6">
+          <CSwitch
+            color="info"
+            variant="3d"
+            class="float-right"
+            v-bind:checked.sync="setupQuestion"
+          />
+        </CCol>
+      </CRow>
+      <CRow v-if="setupQuestion">
         <CCol sm="6">
           <CInput
             label="Total Questions"
@@ -130,69 +142,72 @@
         </CCol>
       </CRow>
       <div v-for="(quest, index) in formValues.questions" :key="index">
-        <h5>Setup Question {{ index + 1}}</h5>
-        <CRow>
-          <CCol sm="12">
-            <CTextarea
-              :label="`Question ${index + 1}`"
-              rows="5"
-              required="true"
-              :placeholder="`Enter question ${index + 1}`"
-              v-model="formValues.questions[index].question"
-            />
-          </CCol>
-        </CRow>
-        <CRow>
-          <CCol sm="6">
-            <CSelect
-              :label="`Select Correct Option for question ${index + 1}`"
-              rows="5"
-              required="true"
-              :options="mcq_options"
-              :value.sync="formValues.questions[index].correct_answer"
-            />
-          </CCol>
-          <CCol sm="6">
-            <CInput
-              :label="`Score for question ${index + 1}`"
-              required="true"
-              type="number"
-              placeholder="Enter total questions"
-              v-model="formValues.questions[index].score"
-            />
-          </CCol>
-        </CRow>
-        <CRow>
-          <CCol sm="6">
-            <CInput
-              label="Option A"
-              required="true"
-              placeholder="Enter option A"
-              v-model="formValues.questions[index].options.option_a"
-            />
-            <CInput
-              label="Option B"
-              required="true"
-              placeholder="Enter option B"
-              v-model="formValues.questions[index].options.option_b"
-            />
-          </CCol>
-          <CCol sm="6">
-            <CInput
-              label="Option C"
-              required="true"
-              placeholder="Enter option C"
-              v-model="formValues.questions[index].options.option_c"
-            />
-            <CInput
-              label="Option D"
-              required="true"
-              placeholder="Enter option D"
-              v-model="formValues.questions[index].options.option_d"
-            />
-          </CCol>
-        </CRow>
-        <hr />
+        <div v-if="setupQuestion">
+          <h5>Setup Question {{ index + 1}}</h5>
+          <CRow>
+            <CCol sm="12">
+              <CTextarea
+                :label="`Question ${index + 1}`"
+                rows="5"
+                required="true"
+                :placeholder="`Enter question ${index + 1}`"
+                v-model="formValues.questions[index].question"
+              />
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol sm="6">
+              <CSelect
+                :label="`Select Correct Option for question ${index + 1}`"
+                rows="5"
+                required="true"
+                :options="mcq_options"
+                :value.sync="formValues.questions[index].correct_answer"
+              />
+            </CCol>
+            <CCol sm="6">
+              <CInput
+                :label="`Score for question ${index + 1}`"
+                required="true"
+                type="number"
+                placeholder="Enter total questions"
+                v-model="formValues.questions[index].score"
+              />
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol sm="6">
+              <CInput
+                label="Option A"
+                required="true"
+                placeholder="Enter option A"
+                v-model="formValues.questions[index].options.option_a"
+              />
+              <CInput
+                label="Option B"
+                required="true"
+                placeholder="Enter option B"
+                v-model="formValues.questions[index].options.option_b"
+              />
+            </CCol>
+            <CCol sm="6">
+              <CInput
+                label="Option C"
+                required="true"
+                placeholder="Enter option C"
+                v-model="formValues.questions[index].options.option_c"
+              />
+              <CInput
+                label="Option D"
+                required="true"
+                placeholder="Enter option D"
+                v-model="formValues.questions[index].options.option_d"
+              />
+            </CCol>
+          </CRow>
+          <hr />
+        </div>
+        
       </div>
 			<CRow>
 				<CCol lg="12">
@@ -243,6 +258,7 @@ export default {
         questions: [],
         // ---
       },
+      setupQuestion: false,
       mcq_options: [
         {label: "-- Select correct option --", value: null,},
         {label: "Option A", value: "A",},

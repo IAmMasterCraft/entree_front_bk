@@ -33,7 +33,7 @@
                             </CRow>
                         </CCardHeader>
                         <CCardBody>
-                            <CRow v-for="(lesson, index) in lessons">
+                            <CRow v-for="(lesson, index) in lessons" :key="index">
                                 <CCol lg="1">
                                     {{ index + 1 }}
                                 </CCol>
