@@ -47,21 +47,22 @@
           <img 
             rounded 
             thumbnail 
-            :src="formValues[index]" 
+            :src="new_pic" 
             v-if="index.includes('avatar')"
             class="mb-3"
             width="100" 
             height="100"
           />
-          <CInput
+          <CInputFile
             :label="`CHANGE ${index.toUpperCase().replace(/_/g, ' ')}`"
             required="true"
             type="file"
+            ref="file"
             accept="image/*"
             autocomplete="off"
+            @change="uploadPicture"
             v-if="index.includes('avatar')"
             :placeholder="`Select ${index.replace(/_/g, ' ')}`"
-            v-model="new_pic"
           />
         </CCol>
       </CRow>
@@ -114,6 +115,8 @@ export default {
       },
       user: parseInt(localStorage.getItem("user_type")),
       new_pic: "",
+      picture_file: null,
+      picture_file_type: null,
     }
   },
   methods: {
@@ -128,7 +131,7 @@ export default {
         formData.append("school_address", this.formValues.school_address);
         formData.append("state", this.formValues.states);
         formData.append("lga", this.formValues.lga);
-        formData.append("avatar", this.formValues.avatar);
+        formData.append("avatar", this.formValues.picture_file);
         formData.append("first_name", this.formValues.first_name);
         formData.append("last_name", this.formValues.last_name);
         formData.append("description", this.formValues.description);
@@ -142,6 +145,8 @@ export default {
           },
         };
         const response = await this.axios(config);
+        this.formValues = null;
+        this.$emit("show-profile", response.data);
       } catch (error) {
         if (error.response) {
           this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status ?? ""}<br />MESSAGE: ${error.response.data.error.message ?? error}</code>`;
@@ -156,12 +161,23 @@ export default {
         }
       }
     }, //end of updateProfile
+    uploadPicture(evt){
+      this.picture_file = evt[0];
+      console.log(evt);
+      this.picture_file_type = evt[0]['type'];
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        this.new_pic = e.target.result;
+      }
+      fileReader.readAsDataURL(this.picture_file);
+    }, //end of uploadPicture
     updateModalVisibility(){
       let visibility = this.showModal;
       this.$emit("show-modal", !visibility);
     }, //updateModalVisibility method
   },
   created () {
+    this.new_pic = this.userProfile.user.avatar;
     if (this.user === 2) {
       this.formValues = {
         school_name: this.userProfile.user_details.school_name,
