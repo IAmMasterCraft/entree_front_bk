@@ -146,6 +146,7 @@ export default {
         };
         const response = await this.axios(config);
         this.formValues = null;
+        (response.data.user.avatar) ? localStorage.setItem("avatar", `https://entreelab.com.ng/src/storage/app/${response.data.user.avatar}`) : "img/logo_a.png";
         this.$emit("show-profile", response.data);
       } catch (error) {
         if (error.response) {

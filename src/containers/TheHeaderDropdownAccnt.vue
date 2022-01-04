@@ -9,7 +9,7 @@
       <CHeaderNavLink>
         <div class="c-avatar">
           <img
-            src="img/logo_a.png"
+            :src="avatar"
             class="c-avatar-img "
           />
         </div>
@@ -60,7 +60,8 @@ export default {
   name: 'TheHeaderDropdownAccnt',
   data () {
     return {
-      itemsCount: 42
+      itemsCount: 42,
+      avatar: localStorage.getItem("avatar"),
     }
   },
   methods: {
@@ -68,6 +69,7 @@ export default {
       //post request to logout
       localStorage.setItem("token", "");
       localStorage.setItem("user_type", "");
+      localStorage.setItem("avatar", "");
       this.$router.push({name: "Login"});
     },
   }
