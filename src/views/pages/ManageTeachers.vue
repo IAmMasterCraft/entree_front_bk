@@ -60,6 +60,18 @@
                 sorter
                 pagination
               >
+                <template #reset="{item}">
+                  <td class="py-2">
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      size="sm"
+                      :disabled="isBtnDisabled"
+                      @click="ResetPassword(item.reset)"
+                    >Reset</CButton>
+                  </td>
+                </template>
                 <template #status="{item}">
                   <td>
                     <CBadge :color="getBadge(item.status)">
@@ -84,8 +96,10 @@ const items = [];
 const fields = [
   { key: 'first_name', _style:'min-width:100px' },
   { key: 'last_name', _style:'min-width:100px;' },
+  { key: 'email', _style:'min-width:100px;' },
   'registered',
   { key: 'total_subject', _style:'min-width:100px;' },
+  { key: 'reset', label: '', _style: 'width:1%', sorter: false, filter: false },
 ]
 
 
@@ -181,13 +195,16 @@ export default {
           id: teacher.id,
           first_name: teacher.first_name,
           last_name: teacher.last_name,
+          email: teacher.email,
           registered: teacher.createddate,
           total_subject: teacher.subject_count ?? 0,
           login_count: teacher.login_count ?? 0,
+          reset: teacher.id,
         };
       });
       this.items = teachers;
-      this.showProgress = !this.showProgress;
+      this.showProgress = false;
+      this.isBtnDisabled = false;
     }, //end of showData
     toggleModal(){
       this.showModal = !this.showModal;
@@ -203,6 +220,58 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateTeachers
+    async ResetPassword(id) {
+      this.showProgress = true;
+      this.isBtnDisabled = true;
+      try {
+        const config = {
+          method: "post",
+          url: "https://entreelab.com.ng/src/api/reset-password",
+          data: {
+            user: id,
+          },
+          headers: {"Authorization" : localStorage.getItem("token"),},
+          withCredentials: false,
+        };
+        const response = await this.axios(config);
+        if (response.data.status == 1) {
+          this.notification.message = `Password reset successful, default password: 'p@ss'`;
+          this.notification.countdown = 20;
+          this.notification.type = "success";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else {
+          this.notification.message = `<code>Something went wrong with password reset!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        }
+        // this.showData(response.data);
+        // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
+        // this.$router.push({name: "Home", data: response.data});
+      } catch(error) {
+        if (error.response) {
+          this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else if (error.request) {
+          this.notification.message = `<code>Network Error!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else {
+          console.log("Developer fucked up!");
+          // this.notification.countdown = 20;
+          // this.notification.type = "danger";
+          // this.isBtnDisabled = !this.isBtnDisabled;
+          // this.showProgress = !this.showProgress;
+        }
+      }
+    }, //end of ResetPassword
   },
   created(){
     this.allClasses();
