@@ -31,6 +31,7 @@ const ManageParents = () => import('@/views/pages/ManageParents')
 const ManageBursars = () => import("@/views/pages/ManageBursars");
 const ViewParent = () => import("@/views/pages/ViewParent");
 const ViewLessons = () => import("@/views/pages/ViewLessons");
+const ResetPassword = () => import("@/views/pages/ResetPassword");
 
 // Views - Pages
 const Page404 = () => import('@/views/pages/Page404')
@@ -133,6 +134,11 @@ function configRoutes () {
           path: "view-lessons/:subject_id",
           name: "Manage Lessons",
           component: ViewLessons,
+        },
+        {
+          path: "reset-password",
+          name: "Reset Password",
+          component: ResetPassword,
         },
       ],
     },
