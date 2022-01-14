@@ -28,202 +28,213 @@
             class="mb-2"
           />
         </CCol>
-    </CRow>
+      </CRow>
       <template v-slot:header>
         <h5 class="px-3">Add a new lesson for {{ $route.params.class.toUpperCase() }}</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
-			<CRow>
-        <CCol sm="6">
-          <CSelect
-            label="Subject"
-            required="true"
-            autocomplete="off"
-            :options="subjects"
-            :value.sync="formValues.subject_id"
-          >
-            <template #append-content><i class="fa fa-refresh" @click="getSubjects" ></i></template>
-          </CSelect>
-        </CCol>
-        <CCol sm="6">
-          <CInput
-            label="Lesson Title"
-            required="true"
-            placeholder="Enter Lesson title"
-            v-model="formValues.lesson_title"
-          />
-        </CCol>
-      </CRow>
-      <CRow>
-        <CCol sm="12">
-          <CSelect
-              label="Choose File type for lesson"
+      <div v-if="!isBtnDisabled && !showProgress">
+        <CRow>
+          <CCol sm="6">
+            <CSelect
+              label="Subject"
               required="true"
-              :options="filetype_options"
-              :value.sync="selected_filetype"
+              autocomplete="off"
+              :options="subjects"
+              :value.sync="formValues.subject_id"
+            >
+              <template #append-content><i class="fa fa-refresh" @click="getSubjects" ></i></template>
+            </CSelect>
+          </CCol>
+          <CCol sm="6">
+            <CInput
+              label="Lesson Title"
+              required="true"
+              placeholder="Enter Lesson title"
+              v-model="formValues.lesson_title"
             />
-        </CCol>
-      </CRow>
-      <CRow>
-        <CCol sm="6">
-          <CInputFile
-            label="Upload Lessson (MP4 Video File)"
-            placeholder="Upload Lesson"
-            required="true"
-            ref="file"
-            accept="video/*"
-            autocomplete="off"
-            @change="uploadFile"
-            v-if="selected_filetype === 'video'"
-          />
-          <CInputFile
-            label="Upload Lessson (PDF FIle)"
-            placeholder="Upload Lesson"
-            required="true"
-            ref="file"
-            accept="application/pdf"
-            autocomplete="off"
-            @change="uploadFile"
-            v-if="selected_filetype === 'pdf'"
-          />
-        </CCol>
-        <CCol sm="6">
-          <video controls v-if="formValues.lesson_file_data && selected_filetype === 'video'" width="350" height="200">
-            <source :src="formValues.lesson_file_data" type="video/mp4">
-          </video>
-          <iframe v-else-if="formValues.lesson_file_data && selected_filetype === 'pdf'" width="350" height="200"></iframe>
-          <p class="text-danger" v-else>Kindly upload lesson video or pdf file</p>
-        </CCol>
-      </CRow>
-      <CRow>
-        <CCol sm="12">
-          <CTextarea
-            label="Lesson Description"
-            autocomplete="off"
-            rows="5"
-            placeholder="Enter Lesson Description"
-            v-model="formValues.description"
-          />
-        </CCol>
-      </CRow>
-      <hr />
-      <CRow class="mb-4">
-        <CCol sm="6">
-          <h5>Setup Revision Quiz</h5>
-        </CCol>
-        <CCol sm="6">
-          <CSwitch
-            color="info"
-            variant="3d"
-            class="float-right"
-            v-bind:checked.sync="setupQuestion"
-          />
-        </CCol>
-      </CRow>
-      <CRow v-if="setupQuestion">
-        <CCol sm="6">
-          <CInput
-            label="Total Questions"
-            required="true"
-            type="number"
-            placeholder="Enter total questions"
-            v-model="total_questions"
-            @change="modulatingQuestions"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CInput
-            label="General score per question"
-            required="true"
-            type="number"
-            placeholder="Enter score per question"
-            v-model="general_score"
-          />
-        </CCol>
-      </CRow>
-      <div v-for="(quest, index) in formValues.questions" :key="index">
-        <div v-if="setupQuestion">
-          <h5>Setup Question {{ index + 1}}</h5>
-          <CRow>
-            <CCol sm="12">
-              <CTextarea
-                :label="`Question ${index + 1}`"
-                rows="5"
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="12">
+            <CSelect
+                label="Choose File type for lesson"
                 required="true"
-                :placeholder="`Enter question ${index + 1}`"
-                v-model="formValues.questions[index].question"
+                :options="filetype_options"
+                :value.sync="selected_filetype"
               />
-            </CCol>
-          </CRow>
-          <CRow>
-            <CCol sm="6">
-              <CSelect
-                :label="`Select Correct Option for question ${index + 1}`"
-                rows="5"
-                required="true"
-                :options="mcq_options"
-                :value.sync="formValues.questions[index].correct_answer"
-              />
-            </CCol>
-            <CCol sm="6">
-              <CInput
-                :label="`Score for question ${index + 1}`"
-                required="true"
-                type="number"
-                placeholder="Enter total questions"
-                v-model="formValues.questions[index].score"
-              />
-            </CCol>
-          </CRow>
-          <CRow>
-            <CCol sm="6">
-              <CInput
-                label="Option A"
-                required="true"
-                placeholder="Enter option A"
-                v-model="formValues.questions[index].options.option_a"
-              />
-              <CInput
-                label="Option B"
-                required="true"
-                placeholder="Enter option B"
-                v-model="formValues.questions[index].options.option_b"
-              />
-            </CCol>
-            <CCol sm="6">
-              <CInput
-                label="Option C"
-                required="true"
-                placeholder="Enter option C"
-                v-model="formValues.questions[index].options.option_c"
-              />
-              <CInput
-                label="Option D"
-                required="true"
-                placeholder="Enter option D"
-                v-model="formValues.questions[index].options.option_d"
-              />
-            </CCol>
-          </CRow>
-          <hr />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="6">
+            <CInputFile
+              label="Upload Lessson (MP4 Video File)"
+              placeholder="Upload Lesson"
+              required="true"
+              ref="file"
+              accept="video/*"
+              autocomplete="off"
+              @change="uploadFile"
+              v-if="selected_filetype === 'video'"
+            />
+            <CInputFile
+              label="Upload Lessson (PDF FIle)"
+              placeholder="Upload Lesson"
+              required="true"
+              ref="file"
+              accept="application/pdf"
+              autocomplete="off"
+              @change="uploadFile"
+              v-if="selected_filetype === 'pdf'"
+            />
+          </CCol>
+          <CCol sm="6">
+            <video controls v-if="formValues.lesson_file_data && selected_filetype === 'video'" width="350" height="200">
+              <source :src="formValues.lesson_file_data" type="video/mp4">
+            </video>
+            <iframe v-else-if="formValues.lesson_file_data && selected_filetype === 'pdf'" width="350" height="200"></iframe>
+            <p class="text-danger" v-else>Kindly upload lesson video or pdf file</p>
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol sm="12">
+            <CTextarea
+              label="Lesson Description"
+              autocomplete="off"
+              rows="5"
+              placeholder="Enter Lesson Description"
+              v-model="formValues.description"
+            />
+          </CCol>
+        </CRow>
+        <hr />
+        <CRow class="mb-4">
+          <CCol sm="6">
+            <h5>Setup Revision Quiz</h5>
+          </CCol>
+          <CCol sm="6">
+            <CSwitch
+              color="info"
+              variant="3d"
+              class="float-right"
+              v-bind:checked.sync="setupQuestion"
+            />
+          </CCol>
+        </CRow>
+        <CRow v-if="setupQuestion">
+          <CCol sm="6">
+            <CInput
+              label="Total Questions"
+              required="true"
+              type="number"
+              placeholder="Enter total questions"
+              v-model="total_questions"
+              @change="modulatingQuestions"
+            />
+          </CCol>
+          <CCol sm="6">
+            <CInput
+              label="General score per question"
+              required="true"
+              type="number"
+              placeholder="Enter score per question"
+              v-model="general_score"
+            />
+          </CCol>
+        </CRow>
+        <div v-for="(quest, index) in formValues.questions" :key="index">
+          <div v-if="setupQuestion">
+            <h5>Setup Question {{ index + 1}}</h5>
+            <CRow>
+              <CCol sm="12">
+                <CTextarea
+                  :label="`Question ${index + 1}`"
+                  rows="5"
+                  required="true"
+                  :placeholder="`Enter question ${index + 1}`"
+                  v-model="formValues.questions[index].question"
+                />
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol sm="6">
+                <CSelect
+                  :label="`Select Correct Option for question ${index + 1}`"
+                  rows="5"
+                  required="true"
+                  :options="mcq_options"
+                  :value.sync="formValues.questions[index].correct_answer"
+                />
+              </CCol>
+              <CCol sm="6">
+                <CInput
+                  :label="`Score for question ${index + 1}`"
+                  required="true"
+                  type="number"
+                  placeholder="Enter total questions"
+                  v-model="formValues.questions[index].score"
+                />
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol sm="6">
+                <CInput
+                  label="Option A"
+                  required="true"
+                  placeholder="Enter option A"
+                  v-model="formValues.questions[index].options.option_a"
+                />
+                <CInput
+                  label="Option B"
+                  required="true"
+                  placeholder="Enter option B"
+                  v-model="formValues.questions[index].options.option_b"
+                />
+              </CCol>
+              <CCol sm="6">
+                <CInput
+                  label="Option C"
+                  required="true"
+                  placeholder="Enter option C"
+                  v-model="formValues.questions[index].options.option_c"
+                />
+                <CInput
+                  label="Option D"
+                  required="true"
+                  placeholder="Enter option D"
+                  v-model="formValues.questions[index].options.option_d"
+                />
+              </CCol>
+            </CRow>
+            <hr />
+          </div>
+          
         </div>
-        
+        <CRow>
+          <CCol lg="12">
+            <CButton
+              type="submit"
+              color="info"
+              block
+              :disabled="isBtnDisabled"
+              @click="newSubject"
+            >
+              {{ `submit`.toUpperCase() }}
+            </CButton>
+          </CCol>
+        </CRow>
       </div>
-			<CRow>
-				<CCol lg="12">
-					<CButton
-						type="submit"
-						color="info"
-						block
-            :disabled="isBtnDisabled"
-            @click="newSubject"
-          >
-            {{ `submit`.toUpperCase() }}
-					</CButton>
-				</CCol>
-			</CRow>
+      <div v-else>
+        <CRow>
+          <CCol lg="12">
+            <p class="text-danger mx-3">
+              Uploading File, Please wait ...
+            </p>
+          </CCol>
+        </CRow>
+      </div>
       <template v-slot:footer>
-          <CButton v-show="false">Close</CButton>
+          <CButton v-show="true">Close</CButton>
       </template>
     </CModal>
   </div>
@@ -314,13 +325,17 @@ export default {
         };
         const response = await this.axios(config);
         // this.updateModalVisibility();
-        let updatedSubjects = response.data;
+        const updatedSubjects = (response.data.status == 1) ? true :  false;
         this.formValues.lesson_title = null;
         this.formValues.subject_id = null;
         this.formValues.lesson_file = null;
         this.formValues.lesson_file_type = null;
         this.formValues.lesson_file_data = null;
         this.formValues.lesson_file_duration = null;
+        this.formValues.questions = null;
+        this.isBtnDisabled = false;
+        this.showProgress = false;
+        // this.showModal = false;
         this.$emit("show-subjects", updatedSubjects);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});

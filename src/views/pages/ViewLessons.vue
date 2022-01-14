@@ -33,16 +33,25 @@
                             </CRow>
                         </CCardHeader>
                         <CCardBody>
-                            <CRow v-for="(lesson, index) in lessons" :key="index">
-                                <CCol lg="1">
-                                    {{ index + 1 }}
-                                </CCol>
-                                <CCol lg="11">
-                                    <video controls>
-                                        <source :src="lesson.source" type="video/mp4">
-                                    </video>
-                                </CCol>
-                            </CRow>
+                            <div v-for="(lesson, index) in lessons" :key="index">
+                                <CRow>
+                                    <CCol lg="1">
+                                        {{ index + 1 }}
+                                    </CCol>
+                                    <CCol lg="11" class="text-center">
+                                        <video controls width="350" height="200">
+                                            <source :src="`https://entreelab.com.ng/src/storage/app/${lesson.source}`" type="video/mp4">
+                                        </video>
+                                    </CCol>
+                                </CRow>
+                                <CRow>
+                                    <CCol lg="12" class="text-center">
+                                        <h3>{{ lesson.topic }}</h3>
+                                        <p>{{ lesson.description }}</p>
+                                    </CCol>
+                                </CRow>
+                                <hr />
+                            </div>
                             <hr />
                             <CRow>
                                 <CCol lg="12">

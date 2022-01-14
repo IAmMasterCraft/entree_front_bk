@@ -63,7 +63,6 @@
                     :subjects="subjectDropdowmn"
                     @show-modal="toggleModal(2)"
                     @show-subjects="updateSubjects"
-                    @show-quiz="updateSubjects()"
                   />
                   <CButton
                     color="success"
@@ -303,7 +302,7 @@ export default {
           subject_id: subjectId,
         };
       });
-      this.showProgress = !this.showProgress;
+      this.showProgress = false;
     }, //end of showData
     toggleModal(md) {
       if (md === 1) {
@@ -312,21 +311,17 @@ export default {
         this.showModalq = !this.showModalq;
       }
     }, //end of toggleModal
+    closeAllModal() {
+      this.showModal = false;
+      this.showModalq = false;
+    }, //end of closeAllModal
     async updateSubjects(updated) {
-      this.showProgress = !this.showProgress;
+      this.closeAllModal();
+      this.showProgress = true;
       this.showModal = false;
       if (updated) {
-        this.items = updated.map((subject) => {
-          return {
-            subject: subject.subject_name,
-            class: subject.grade_name,
-            registered: subject.createddate,
-            total_lessons: (!subject.lesson_count) ? 0 : subject.lesson_count,
-            "teacher's_name": `${subject.first_name} ${subject.last_name}`,
-            subject_id: subject.id,
-          };
-        });
-        this.showProgress = !this.showProgress;
+        this.allSubjects();
+        this.showProgress = false;
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject</code>`;
         this.notification.countdown = 20;
