@@ -97,7 +97,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Student Attendance",
-          to: "/manage-students",
+          to: "/manage-attendance",
           icon: "cil-people",
         },
         {
