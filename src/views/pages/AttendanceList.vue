@@ -30,7 +30,25 @@
             <CCardHeader>
               <CRow>
                 <CCol lg="6">
-                  <span>Students</span>
+                  <span>Attendance Records </span>
+                </CCol>
+                <CCol lg="6" v-if="user === 3">
+                  <TakeAttendance
+                    :showModal="showModal"
+                    @show-modal="toggleModal"
+                    @show-students="updateStudents"
+                  />
+                  <CButton
+                    color="success"
+                    variant="outline"
+                    square
+                    class="text-right float-right"
+                    size="sm"
+                    :disabled="isBtnDisabled"
+                    @click="toggleModal"
+                  >
+                    Take Attendance
+                  </CButton>
                 </CCol>
               </CRow>
             </CCardHeader>
@@ -78,6 +96,8 @@
 
 <script>
 
+import TakeAttendance from "../modals/TakeAttendance";
+
 const items = [];
 
 const fields = [
@@ -94,6 +114,9 @@ const fields = [
 
 export default {
   name: "AttendanceList",
+  components: {
+    TakeAttendance,
+  },
   data() {
     return {
       isBtnDisabled: false,
