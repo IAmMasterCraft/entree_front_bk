@@ -30,7 +30,7 @@
         </CCol>
     </CRow>
       <template v-slot:header>
-        <h5 class="px-3">Add a new Student to your school</h5>
+        <h5 class="px-3">Mark Attendance of Students in {{ $route.params.class }} for {{ today }}</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
       <CRow>
@@ -134,8 +134,9 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Subject . . . ",
+        message: "Loading Students . . . ",
       },
+      today: new Date,
       subjects: ["Please Wait!!!"],
     }
   },
@@ -221,7 +222,7 @@ export default {
     }, //end of subjectCheckbox
   },
   mounted(){
-    this.getSubjects();
+    // this.getSubjects();
   },
 }
 </script>
