@@ -131,20 +131,15 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/register",
+          url: "https://entreelab.com.ng/src/api/attendance/submit",
           data: this.formValues,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
         const response = await this.axios(config);
         // this.updateModalVisibility();
-        let updatedStudents = response.data;
-        this.formValues.user_type = null;
-        this.formValues.first_name = null;
-        this.formValues.last_name = null;
-        this.formValues.email = null;
-        this.formValues.password = null;
-        this.formValues.subjects = null;
-        this.$emit("show-students", updatedStudents);
+        const attendance = response.data;
+        this.formValues.students_present = null;
+        this.$emit("show-students", attendance);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch(error) {
@@ -173,7 +168,7 @@ export default {
         const response = await this.axios(config);
         this.items = response.data.map(student => {
           return {
-            id: student.id,
+            id: student.user_id,
             name: `${student.first_name} ${student.last_name}`,
           };
         });
@@ -204,8 +199,8 @@ export default {
       }
     }, //end of allStudent()
     MarkAsPresent(id) {
-      if (!this.formValues.student_present.includes(id)) {
-        this.formValues.student_present.push(id);
+      if (!this.formValues.students_present.includes(id)) {
+        this.formValues.students_present.push(id);
       }
     }, //end of MarkAsPresent
     subjectCheckbox(event){

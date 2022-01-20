@@ -71,12 +71,6 @@
                     </CBadge>
                   </td>
                 </template>
-                <template #show_details="{}">
-                  <td class="py-2">
-                    <CInputCheckbox 
-                    />
-                  </td>
-                </template>
                 <template #details="{ item }">
                   <CCollapse
                     :show="Boolean(item._toggled)"
@@ -102,14 +96,16 @@ const items = [];
 
 const fields = [
   { key: "name", _style: "min-width:100px" },
-  { key: "class", _style: "min-width:100px;" },
-  {
-    key: "show_details",
-    label: "",
-    _style: "width:1%",
-    sorter: false,
-    filter: false,
-  },
+  // { key: "class", _style: "min-width:100px;" },
+  { key: "day", _style: "min-width:100px;" },
+  { key: "date", _style: "min-width:100px;" },
+  // {
+  //   key: "show_details",
+  //   label: "",
+  //   _style: "width:1%",
+  //   sorter: false,
+  //   filter: false,
+  // },
 ];
 
 export default {
@@ -177,7 +173,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/school/students/${this.$route.params.id}`,
+          url: `https://entreelab.com.ng/src/api/attendance`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -214,11 +210,9 @@ export default {
       this.items = response.map(resp => {
         return {
           name: `${resp.first_name} ${resp.last_name}`,
-          class: resp.grade_name,
-          registered: resp.createddate,
-          login_count: resp.login_count,
-          total_subject: resp.subject_count,
-          student_id: resp.id,
+          // class: resp.grade_name,
+          day: resp.day,
+          date: resp.date,
         }
       });
       this.showProgress = !this.showProgress;
