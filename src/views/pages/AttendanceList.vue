@@ -35,6 +35,7 @@
                 <CCol lg="6" v-if="user === 3">
                   <TakeAttendance
                     :showModal="showModal"
+                    :students="items"
                     @show-modal="toggleModal"
                     @show-students="updateStudents"
                   />
@@ -46,7 +47,7 @@
                     size="sm"
                     :disabled="isBtnDisabled"
                     @click="toggleModal"
-                  >
+                    >
                     Take Attendance
                   </CButton>
                 </CCol>
@@ -218,6 +219,7 @@ export default {
           registered: resp.createddate,
           login_count: resp.login_count,
           total_subject: resp.subject_count,
+          student_id: resp.id,
         }
       });
       this.showProgress = !this.showProgress;

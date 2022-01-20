@@ -34,54 +34,25 @@
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
       <CRow>
-				<CCol sm="6">
-					<CInput
-						label="First Name"
-						required="true"
-						placeholder="Enter Student's first name"
-            v-model="formValues.first_name"
-					/>
-				</CCol>
-				<CCol sm="6">
-					<CInput
-						label="Last Name"
-						required="true"
-						placeholder="Enter Student's last name"
-            v-model="formValues.last_name"
-					/>
-				</CCol>
-			</CRow>
-      <CRow>
-				<CCol sm="6">
-					<CInput
-						label="Email Address"
-						required="true"
-            type="email"
-						placeholder="Enter email address"
-            v-model="formValues.email"
-					/>
-				</CCol>
-				<CCol sm="6">
-					<CInput
-						label="Password"
-						required="true"
-						placeholder="Enter Student's password"
-            v-model="formValues.password"
-					/>
-				</CCol>
-			</CRow>
-      <CRow>
-				<CCol sm="6">
-          <span tag="label" class="col-form-label">Subjects</span>
-					<CInputCheckbox
-            v-for="(subject, index) in subjects"
-            :key="index"
-            :label="subject.label"
-            :value="subject.value"
-            required="true"
-            :options="subjects"
-            @change="subjectCheckbox"
-            />
+				<CCol sm="12">
+					<CDataTable
+            :items="items"
+            :fields="fields"
+            column-filter
+            table-filter
+            items-per-page-select
+            :items-per-page="5"
+                hover
+                sorter
+                pagination
+              >
+                <template #show_details="{}">
+                  <td class="py-2">
+                    <CInputCheckbox 
+                    />
+                  </td>
+                </template>
+              </CDataTable>
 				</CCol>
 			</CRow> <br />
 			<CRow>
@@ -105,6 +76,16 @@
 </template>
 
 <script>
+const fields = [
+  { key: "name" },
+  {
+    key: "show_details",
+    label: "",
+    sorter: false,
+    filter: false,
+  },
+];
+
 export default {
   name: "TakeAttendance",
   props: {
@@ -113,7 +94,7 @@ export default {
       required: true,
       default: false,
     },
-    classes: {
+    students: {
       type: Array,
     }
   },
@@ -137,7 +118,8 @@ export default {
         message: "Loading Students . . . ",
       },
       today: new Date,
-      subjects: ["Please Wait!!!"],
+      items: [],
+      fields,
     }
   },
   methods: {
@@ -181,40 +163,43 @@ export default {
         }
       }
     }, //end of newStudent
-    async getSubjects(){
+    async allStudents() {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/school/subjects/${this.$route.params.id}`,
+          url: `https://entreelab.com.ng/src/api/school/students/${this.$route.params.id}`,
           data: null,
-          headers: {"Authorization" : localStorage.getItem("token"),},
+          headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
         };
         const response = await this.axios(config);
-        // this.showData(response.data);
-        const subjects = response.data.map(subject => {
-          return {
-            label: subject.subject_name,
-            value: subject.id,
-          }
-        });
-        // this.subjects = [...subjects, {label: "Chem", value: 2}];
-        this.subjects = subjects;
-      } catch(error) {
-        if (error.response.data.message) {
-          this.notification.message = error.response.data.message ?? `Something went wrong!</code>`;
+        this.showData(response.data);
+        // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
+        // this.$router.push({name: "Home", data: response.data});
+      } catch (error) {
+        if (error.response) {
+          this.notification.message =
+            error.response.data.message ??
+            `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
           this.notification.countdown = 20;
           this.notification.type = "danger";
-          this.teachers = [{label: "Something went wrong", value: null,}];
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else if (error.request) {
+          this.notification.message = `<code>Network Error!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
         } else {
-          this.notification.message = error.message ?? `Something went wrong!</code>`;
-          this.notification.countdown = 20;
-          this.notification.type = "danger";
-          this.teachers = [{label: "Something went wrong", value: null,}];
+          console.log("Developer fucked up!");
+          // this.notification.countdown = 20;
+          // this.notification.type = "danger";
+          // this.isBtnDisabled = !this.isBtnDisabled;
+          // this.showProgress = !this.showProgress;
         }
-        
       }
-    }, //end of getSubjects
+    }, //end of allStudent()
     subjectCheckbox(event){
       const subjectId = event.target.value;
       if (this.formValues.subjects.includes(subjectId)) this.formValues.subjects = this.formValues.subjects.filter(id => id !== subjectId);
@@ -222,7 +207,7 @@ export default {
     }, //end of subjectCheckbox
   },
   mounted(){
-    // this.getSubjects();
+    this.allStudents();
   },
 }
 </script>
