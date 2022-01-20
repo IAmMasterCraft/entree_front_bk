@@ -46,9 +46,11 @@
                 sorter
                 pagination
               >
-                <template #show_details="{}">
-                  <td class="py-2">
-                    <CInputCheckbox 
+                <template #show_details="{ item }">
+                  <td class="py-2 d-flex">
+                    Mark As Present <CInputCheckbox 
+                      class="mx-2"
+                      @update:checked="MarkAsPresent(item.id)"
                     />
                   </td>
                 </template>
@@ -57,12 +59,13 @@
 			</CRow> <br />
 			<CRow>
 				<CCol lg="12">
+        {{ formValues.student_present }}
 					<CButton
 						type="submit"
 						color="info"
 						block
             :disabled="isBtnDisabled"
-            @click="newStudent"
+            @click="SubmitAttendance"
           >
             {{ `submit`.toUpperCase() }}
 					</CButton>
@@ -102,13 +105,8 @@ export default {
     return {
       warningModal: false,
       formValues: {
-        first_name: null,
-        last_name: null,
-        email: null,
-        password: null,
-        subjects: [],
+        students_present: [],
         class_id: parseInt(this.$route.params.id),
-        user_type: 4,
       },
       isBtnDisabled: false,
       showProgress: false,
@@ -127,7 +125,7 @@ export default {
       let visibility = this.showModal;
       this.$emit("show-modal", !visibility);
     }, //updateModalVisibility method
-    async newStudent () {
+    async SubmitAttendance () {
       try {
         this.isBtnDisabled = true;
         this.showProgress = true;
@@ -173,7 +171,12 @@ export default {
           withCredentials: false,
         };
         const response = await this.axios(config);
-        this.showData(response.data);
+        this.items = response.data.map(student => {
+          return {
+            id: student.id,
+            name: `${student.first_name} ${student.last_name}`,
+          };
+        });
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch (error) {
@@ -200,6 +203,11 @@ export default {
         }
       }
     }, //end of allStudent()
+    MarkAsPresent(id) {
+      if (!this.formValues.student_present.includes(id)) {
+        this.formValues.student_present.push(id);
+      }
+    }, //end of MarkAsPresent
     subjectCheckbox(event){
       const subjectId = event.target.value;
       if (this.formValues.subjects.includes(subjectId)) this.formValues.subjects = this.formValues.subjects.filter(id => id !== subjectId);

@@ -35,7 +35,6 @@
                 <CCol lg="6" v-if="user === 3">
                   <TakeAttendance
                     :showModal="showModal"
-                    :students="items"
                     @show-modal="toggleModal"
                     @show-students="updateStudents"
                   />
