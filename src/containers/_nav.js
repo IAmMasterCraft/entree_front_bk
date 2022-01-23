@@ -47,7 +47,7 @@ const SCHOOL = [
         },
         {
           _name: "CSidebarNavItem",
-          name: "Scheme of Work",
+          name: "Lesson Plan",
           to: "/manage-students",
           icon: "cil-people",
         },
@@ -102,7 +102,7 @@ const SCHOOL = [
         },
         {
           _name: "CSidebarNavItem",
-          name: "Scheme of Work",
+          name: "Lesson Plan",
           to: "/manage-students",
           icon: "cil-people",
         },
@@ -184,7 +184,7 @@ const SCHOOL = [
         },
         {
           _name: "CSidebarNavItem",
-          name: "Scheme of Work",
+          name: "Lesson Plan",
           to: "/manage-students",
           icon: "cil-people",
         },
