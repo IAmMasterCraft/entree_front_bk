@@ -54,7 +54,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Communication Booklet",
-          to: "/manage-students",
+          to: "/communication-booklet",
           icon: "cil-people",
         },
         {
@@ -109,7 +109,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Communication Booklet",
-          to: "/manage-students",
+          to: "/communication-booklet",
           icon: "cil-people",
         },
         // {
@@ -146,7 +146,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Communication Booklet",
-          to: "/manage-students",
+          to: "/communication-booklet",
           icon: "cil-people",
         },
       ],
@@ -191,7 +191,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Communication Booklet",
-          to: "/manage-students",
+          to: "/communication-booklet",
           icon: "cil-people",
         },
       ],
