@@ -20,6 +20,7 @@ const Dashboard = () => import('@/views/Dashboard')
 const Profile = () => import('@/views/pages/Profile')
 const ManageAttendance = () => import('@/views/pages/ManageAttendance')
 const AttendanceList = () => import('@/views/pages/AttendanceList')
+const ManageLessonPlan = () => import("@/views/pages/ManageLessonPlan");
 const ManageClasses = () => import('@/views/pages/ManageClasses')
 const ManageFeeStructures = () => import('@/views/pages/ManageFeeStructures')
 const ManagePaymentRecords = () => import('@/views/pages/ManagePaymentRecords')
@@ -70,6 +71,16 @@ function configRoutes () {
         {
           path: "manage-attendance/:id/:class",
           name: "Manage Attendance / ",
+          component: AttendanceList,
+        },
+        {
+          path: "manage-lesson-plan",
+          name: "Manage Lesson Plan",
+          component: ManageLessonPlan,
+        },
+        {
+          path: "manage-lesson-plan/:id/:class",
+          name: "Manage LessonPlan / ",
           component: AttendanceList,
         },
         {
