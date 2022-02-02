@@ -35,6 +35,7 @@
                 <CCol lg="6" v-if="user === 3">
                   <AddBooklet
                     :showModal="showModal"
+                    :students="studentList"
                     @show-modal="toggleModal"
                     @show-students="updateStudents"
                   />
@@ -143,6 +144,9 @@ export default {
       fields,
       details: [],
       collapseDuration: 0,
+      studentList: [
+        { label: "-- Select One --", value: "" },
+      ],
     };
   },
   methods: {
@@ -220,6 +224,10 @@ export default {
     }, //end of allStudent()
     showData(response) {
       this.items = response.map(resp => {
+        this.studentList.push({
+          label: `${resp.first_name} ${resp.last_name}`,
+          value: resp.user_id,
+        });
         return {
           name: `${resp.first_name} ${resp.last_name}`,
           class: resp.grade_name,
