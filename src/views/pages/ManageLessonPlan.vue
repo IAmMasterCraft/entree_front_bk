@@ -123,7 +123,7 @@ export default {
       this.showProgress = !this.showProgress;
     }, //end of showData
     navigation(classProps) {
-      this.$router.push({name: "Manage Attendance / ", params: {id: classProps.id, class: classProps.grade_name.toLowerCase()}});
+      this.$router.push({name: "Manage Lesson Plan / ", params: {id: classProps.id, class: classProps.grade_name.toLowerCase()}});
     }, //end of navigation
   },
   created () {

@@ -31,12 +31,12 @@
       </CRow>
       
       <template v-slot:header>
-        <h5 class="px-3">Setup Booklet</h5>
+        <h5 class="px-3">Edit Booklet</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
       <div v-if="!isBtnDisabled && !showProgress">
         <CRow class="my-3">
-          <CCol sm="6">
+          <CCol sm="6" v-if="true === false">
             <CSelect
               label="Select Student"
               autocomplete="off"
@@ -80,6 +80,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.subject_objectives"
               v-model="formValues.subject_objectives"
             />
           </CCol>
@@ -91,6 +92,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.intervention_plan"
               v-model="formValues.intervention_plan"
             />
           </CCol>
@@ -102,6 +104,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.homework_info"
               v-model="formValues.homework_info"
             />
           </CCol>
@@ -113,6 +116,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.behaviour_habits"
               v-model="formValues.behaviour_habits"
             />
           </CCol>
@@ -124,6 +128,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.work_habits"
               v-model="formValues.work_habits"
             />
           </CCol>
@@ -135,6 +140,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.important_event"
               v-model="formValues.important_event"
             />
           </CCol>
@@ -146,6 +152,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.accident_illness"
               v-model="formValues.accident_illness"
             />
           </CCol>
@@ -157,6 +164,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.reading_club_programme"
               v-model="formValues.reading_club_programme"
             />
           </CCol>
@@ -168,6 +176,7 @@
             <Editor 
               :api-key="apiKey"
               :init="editor"
+              :initial-value="formValues.teachers_comment"
               v-model="formValues.teachers_comment"
             />
           </CCol>
@@ -198,7 +207,7 @@
 import Editor from '@tinymce/tinymce-vue'
 
 export default {
-  name: "AddBooklet",
+  name: "EditBooklet",
   components: {
     Editor,
   },
@@ -211,6 +220,9 @@ export default {
     students: {
       type: Array,
     },
+    booklet: {
+      type: Object,
+    }
   },
   data () {
     return {
@@ -275,7 +287,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/booklet/new-booklet",
+          url: "https://entreelab.com.ng/src/api/booklet/edit",
           data: this.formValues,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
@@ -302,6 +314,7 @@ export default {
   },
   mounted(){
     // this.getSubjects();\
+    this.formValues = this.booklet;
   },
 }
 </script>

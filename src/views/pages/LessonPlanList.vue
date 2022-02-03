@@ -34,10 +34,10 @@
                 </CCol>
                 <CCol lg="6" v-if="user === 3">
                   <AddLessonPlan
-                    :subjects = "[]"
                     :showModal="showModal"
                     @show-modal="toggleModal"
-                    @show-students="updateStudents"
+                    @show-students="updateLessonPlan"
+                    :subjects="subjectList"
                   />
                   <CButton
                     color="success"
@@ -72,6 +72,19 @@
                     </CBadge>
                   </td>
                 </template>
+                <template #show_details="{ item }">
+                  <td class="py-2">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      class="fa fa-eye"
+                      @click="$router.push({name: 'Preview Lesson Plan / ', params: {id: $route.params.id, class: $route.params.class.toLowerCase(), plan: item.id}})"
+                    />
+                  </td>
+                </template>
                 <template #details="{ item }">
                   <CCollapse
                     :show="Boolean(item._toggled)"
@@ -96,17 +109,17 @@ import AddLessonPlan from "../modals/AddLessonPlan";
 const items = [];
 
 const fields = [
-  { key: "name", _style: "min-width:100px" },
+  { key: "subject", _style: "min-width:100px" },
   // { key: "class", _style: "min-width:100px;" },
-  { key: "day", _style: "min-width:100px;" },
-  { key: "date", _style: "min-width:100px;" },
-  // {
-  //   key: "show_details",
-  //   label: "",
-  //   _style: "width:1%",
-  //   sorter: false,
-  //   filter: false,
-  // },
+  { key: "topic", _style: "min-width:100px;" },
+  { key: "week", _style: "min-width:100px;" },
+  {
+    key: "show_details",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -122,7 +135,7 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Students . . . ",
+        message: "Loading Lesson Plan . . . ",
       },
       showModal: false,
 
@@ -132,7 +145,9 @@ export default {
       fields,
       details: [],
       collapseDuration: 0,
-      subjects: [],
+      subjectList: [
+        { label: "-- Select One --", value: "" },
+      ],
     };
   },
   methods: {
@@ -171,11 +186,11 @@ export default {
       });
     },
 
-    async allStudents() {
+    async allLessonPlan() {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/attendance`,
+          url: `https://entreelab.com.ng/src/api/lesson-plan/${this.$route.params.id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -185,6 +200,7 @@ export default {
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch (error) {
+        console.log(error.message);
         if (error.response) {
           this.notification.message =
             error.response.data.message ??
@@ -207,14 +223,23 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of allStudent()
+    }, //end of allLessonPlan()
     showData(response) {
-      this.items = response.map(resp => {
+      if (this.user === 3) {
+        response.subjects.forEach(subject => {
+          this.subjectList.push({
+            label: subject.subject_name,
+            value: subject.id,
+          });
+        });
+      }
+      
+      this.items = response.lesson_plan.map(resp => {
         return {
-          name: `${resp.first_name} ${resp.last_name}`,
-          // class: resp.grade_name,
-          day: resp.day,
-          date: resp.date,
+          id: resp.id,
+          subject: resp.subject_name,
+          topic: resp.topic,
+          week: resp.week,
         }
       });
       this.showProgress = !this.showProgress;
@@ -222,20 +247,20 @@ export default {
     toggleModal() {
       this.showModal = !this.showModal;
     }, //end of toggleModal
-    async updateStudents(updated) {
+    async updateLessonPlan(updated) {
       this.showProgress = !this.showProgress;
       this.showModal = false;
       if (updated) {
-        this.allStudents();
+        this.allLessonPlan();
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject</code>`;
         this.notification.countdown = 20;
         this.notification.type = "danger";
       }
-    }, //end of updateSubjects
+    }, //end of updateLessonPlan
   },
   created() {
-    this.allStudents();
+    this.allLessonPlan();
   },
 };
 </script>

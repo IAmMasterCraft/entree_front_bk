@@ -21,8 +21,14 @@ const Profile = () => import('@/views/pages/Profile')
 const ManageAttendance = () => import('@/views/pages/ManageAttendance')
 const AttendanceList = () => import('@/views/pages/AttendanceList')
 const ManageLessonPlan = () => import("@/views/pages/ManageLessonPlan");
+const LessonPlanList = () => import('@/views/pages/LessonPlanList')
 const ManageBooklet = () => import("@/views/pages/ManageBooklet");
 const StudentBooklet = () => import("@/views/pages/StudentBooklet");
+
+const ViewStudentBooklet = () => import("@/views/preview/SingleBooklet");
+const ViewLessonPlan = () => import("@/views/preview/SingleLessonPlan");
+
+
 const ManageClasses = () => import('@/views/pages/ManageClasses')
 const ManageFeeStructures = () => import('@/views/pages/ManageFeeStructures')
 const ManagePaymentRecords = () => import('@/views/pages/ManagePaymentRecords')
@@ -86,14 +92,24 @@ function configRoutes () {
           component: StudentBooklet,
         },
         {
+          path: "communication-booklet/:id/:class/:booklet",
+          name: "Preview Communication Booklet / ",
+          component: ViewStudentBooklet,
+        },
+        {
           path: "manage-lesson-plan",
           name: "Manage Lesson Plan",
           component: ManageLessonPlan,
         },
         {
           path: "manage-lesson-plan/:id/:class",
-          name: "Manage LessonPlan / ",
-          component: AttendanceList,
+          name: "Manage Lesson Plan / ",
+          component: LessonPlanList,
+        },
+        {
+          path: "manage-lesson-plan/:id/:class/:plan",
+          name: "Preview Lesson Plan / ",
+          component: ViewLessonPlan,
         },
         {
           path: "manage-classes",

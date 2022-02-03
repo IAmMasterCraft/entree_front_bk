@@ -45,12 +45,12 @@ const SCHOOL = [
           to: "/manage-students",
           icon: "cil-people",
         },
-        // {
-        //   _name: "CSidebarNavItem",
-        //   name: "Lesson Plan",
-        //   to: "/manage-students",
-        //   icon: "cil-people",
-        // },
+        {
+          _name: "CSidebarNavItem",
+          name: "Lesson Plan",
+          to: "/manage-lesson-plan",
+          icon: "cil-people",
+        },
         {
           _name: "CSidebarNavItem",
           name: "Communication Booklet",
@@ -100,12 +100,12 @@ const SCHOOL = [
           to: "/manage-attendance",
           icon: "cil-people",
         },
-        // {
-        //   _name: "CSidebarNavItem",
-        //   name: "Lesson Plan",
-        //   to: "/manage-students",
-        //   icon: "cil-people",
-        // },
+        {
+          _name: "CSidebarNavItem",
+          name: "Lesson Plan",
+          to: "/manage-lesson-plan",
+          icon: "cil-people",
+        },
         {
           _name: "CSidebarNavItem",
           name: "Communication Booklet",

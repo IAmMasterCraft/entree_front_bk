@@ -72,7 +72,7 @@
                     </CBadge>
                   </td>
                 </template>
-                <template #show_details="{}">
+                <template #show_details="{ item }">
                   <td class="py-2">
                     <CButton
                       color="info"
@@ -80,7 +80,9 @@
                       square
                       :disabled="isBtnDisabled"
                       size="sm"
+                      style="cursor: pointer;"
                       class="fa fa-eye"
+                      @click="$router.push({name: 'Preview Communication Booklet / ', params: {id: $route.params.id, class: $route.params.class.toLowerCase(), booklet: item.id}})"
                     />
                   </td>
                 </template>
@@ -107,11 +109,9 @@ import AddBooklet from "../modals/AddBooklet";
 const items = [];
 
 const fields = [
-  { key: "name", _style: "min-width:100px" },
-  { key: "class", _style: "min-width:100px;" },
-  { key: "login_count", _style: "min-width:100px;" },
-  { key: "total_subject", _style: "min-width:100px;" },
-  "registered",
+  { key: "first_name", _style: "min-width:100px" },
+  { key: "last_name", _style: "min-width:100px;" },
+  { key: "week", _style: "min-width:100px;" },
   {
     key: "show_details",
     label: "",
@@ -185,11 +185,11 @@ export default {
       });
     },
 
-    async allStudents() {
+    async allBooklet() {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/school/students/${this.$route.params.id}`,
+          url: `https://entreelab.com.ng/src/api/booklet/${this.$route.params.id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -221,19 +221,23 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of allStudent()
+    }, //end of allBooklet()
     showData(response) {
-      this.items = response.map(resp => {
-        this.studentList.push({
-          label: `${resp.first_name} ${resp.last_name}`,
-          value: resp.user_id,
+      if (this.countdownuser === 3) {
+        response.students.forEach(student => {
+          this.studentList.push({
+            label: `${student.first_name} ${student.last_name}`,
+            value: student.user_id,
+          });
         });
+      }
+      
+      this.items = response.booklet.map(resp => {
         return {
-          name: `${resp.first_name} ${resp.last_name}`,
-          class: resp.grade_name,
-          registered: resp.createddate,
-          login_count: resp.login_count,
-          total_subject: resp.subject_count,
+          id: resp.id,
+          first_name: resp.first_name,
+          last_name: resp.last_name,
+          week: resp.week,
         }
       });
       this.showProgress = !this.showProgress;
@@ -245,7 +249,7 @@ export default {
       this.showProgress = !this.showProgress;
       this.showModal = false;
       if (updated) {
-        this.allStudents();
+        this.allBooklet();
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject</code>`;
         this.notification.countdown = 20;
@@ -254,7 +258,7 @@ export default {
     }, //end of updateSubjects
   },
   created() {
-    this.allStudents();
+    this.allBooklet();
   },
 };
 </script>

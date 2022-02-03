@@ -28,20 +28,13 @@
             class="mb-2"
           />
         </CCol>
-    </CRow>
+      </CRow>
+      
       <template v-slot:header>
-        <h5 class="px-3">Lesson Plan</h5>
+        <h5 class="px-3">Edit Lesson Plan</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
       <CRow class="my-3">
-        <CCol sm="6">
-          <CSelect
-            label="Select Subject"
-            autocomplete="off"
-            :options="subjects"
-            :value.sync="formValues.subject_id"
-          />
-        </CCol>
         <CCol sm="6">
           <CInput
             label="Enter Academic Session"
@@ -81,7 +74,7 @@
           />
         </CCol>
       </CRow> <br />
-			<CRow>
+      <CRow>
 				<CCol lg="12">
 					<CButton
 						type="submit"
@@ -95,25 +88,18 @@
 				</CCol>
 			</CRow>
       <template v-slot:footer>
-          <CButton v-show="false">Close</CButton>
+          <CButton v-show="true" @click="updateModalVisibility">Close</CButton>
       </template>
     </CModal>
   </div>
 </template>
 
 <script>
-const fields = [
-  { key: "name" },
-  {
-    key: "show_details",
-    label: "",
-    sorter: false,
-    filter: false,
-  },
-];
 
 export default {
-  name: "AddLessonPlan",
+  name: "EditLessonPlan",
+  components: {
+  },
   props: {
     showModal: {
       type: Boolean,
@@ -121,24 +107,23 @@ export default {
       default: false,
     },
     subjects: {
-        type: Array,
+      type: Array,
+    },
+    lesson_plan: {
+      type: Object,
     }
   },
   data () {
     return {
       warningModal: false,
-      formValues: {
-      },
+      formValues: {},
       isBtnDisabled: false,
       showProgress: false,
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Students . . . ",
+        message: "Loading Booklet . . . ",
       },
-      today: new Date,
-      items: [],
-      fields,
       term: [
         { label: "-- Select One --", value: ""},
         "1st Term",
@@ -174,11 +159,12 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/lesson-plan/new-plan",
+          url: "https://entreelab.com.ng/src/api/lesson-plan/edit",
           data: this.formValues,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
         await this.axios(config);
+        // this.updateModalVisibility();
         this.formValues = {};
         this.$emit("show-students", true);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
@@ -196,9 +182,11 @@ export default {
           console.log("Developer fucked up!");
         }
       }
-    }, //end of SubmitPlan
+    }, //end of SubmitPlan()
   },
   mounted(){
+    // this.getSubjects();\
+    this.formValues = this.lesson_plan;
   },
 }
 </script>
