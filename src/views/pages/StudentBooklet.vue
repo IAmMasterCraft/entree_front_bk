@@ -223,7 +223,7 @@ export default {
       }
     }, //end of allBooklet()
     showData(response) {
-      if (this.countdownuser === 3) {
+      if (this.user === 3) {
         response.students.forEach(student => {
           this.studentList.push({
             label: `${student.first_name} ${student.last_name}`,
