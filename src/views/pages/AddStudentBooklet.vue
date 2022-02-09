@@ -30,68 +30,91 @@
             <CCardHeader>
               <CRow>
                 <CCol lg="6">
-                  <span>Student Booklet</span>
+                  <span>Add Student Booklet</span>
                 </CCol>
                 <CCol lg="6" v-if="user === 3">
-                  <CButton
-                    color="success"
-                    variant="outline"
-                    square
-                    class="text-right float-right"
-                    size="sm"
-                    :disabled="isBtnDisabled"
-                    @click="navigation({
-                      id: $route.params.id,
-                      grade_name: $route.params.class
-                    })"
-                  >
-                    Add Booklet
-                  </CButton>
                 </CCol>
               </CRow>
             </CCardHeader>
             <CCardBody>
-              <CDataTable
-                :items="items"
-                :fields="fields"
-                column-filter
-                table-filter
-                items-per-page-select
-                :items-per-page="5"
-                hover
-                sorter
-                pagination
-              >
-                <template #status="{ item }">
-                  <td>
-                    <CBadge :color="getBadge(item.status)">
-                      {{ item.status }}
-                    </CBadge>
-                  </td>
-                </template>
-                <template #show_details="{ item }">
-                  <td class="py-2">
-                    <CButton
-                      color="info"
-                      variant="outline"
-                      square
-                      :disabled="isBtnDisabled"
-                      size="sm"
-                      style="cursor: pointer;"
-                      class="fa fa-eye"
-                      @click="$router.push({name: 'Preview Communication Booklet / ', props: {a: 's'}, params: {id: $route.params.id, class: $route.params.class.toLowerCase(), booklet: item.id}})"
-                    />
-                  </td>
-                </template>
-                <template #details="{ item }">
-                  <CCollapse
-                    :show="Boolean(item._toggled)"
-                    :duration="collapseDuration"
+              <CRow>
+                <CCol sm="6">
+                  <CSelect
+                    label="Select Student"
+                    autocomplete="off"
+                    :options="students"
+                    :value.sync="formValues.student_id"
+                  />
+                </CCol>
+                <CCol sm="6">
+                  <CInput
+                    label="Enter Academic Session"
+                    required="true"
+                    placeholder="Enter Present Academic Session"
+                    v-model="formValues.academic_session"
+                  />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol sm="6">
+                  <CSelect
+                    label="Select Term"
+                    autocomplete="off"
+                    :options="term"
+                    :value.sync="formValues.term"
+                  />
+                </CCol>
+                <CCol sm="6">
+                  <CSelect
+                    label="Select Week"
+                    autocomplete="off"
+                    :options="week"
+                    :value.sync="formValues.week"
+                  />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol sm="6">
+                  <SubjectObjectives @submit-objective="submitRecord" />
+                </CCol>
+                <CCol sm="6">
+                  <InterventionPlan @submit-intervention="submitRecord" />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol sm="6">
+                  <HomeworkInfo @submit-homework="submitRecord" />
+                </CCol>
+                <CCol sm="6">
+                  <Behaviour @submit-behaviour="submitRecord" />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol sm="6">
+                  <WorkHabit @submit-work-habit="submitRecord" />
+                </CCol>
+                <CCol sm="6">
+                  <ReadingClub @submit-reading-club="submitRecord" />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol sm="12">
+                  <OtherFields @submit-accident="submitRecord" @submit-important-event="submitRecord" @submit-teacher-comment="submitRecord" />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol lg="12">
+                  <CButton
+                    type="submit"
+                    color="info"
+                    block
+                    :disabled="isBtnDisabled"
+                    @click="GeneralSubmission"
                   >
-                    <CCardBody> </CCardBody>
-                  </CCollapse>
-                </template>
-              </CDataTable>
+                    {{ `submit records`.toUpperCase() }}
+                  </CButton>
+                </CCol>
+              </CRow>
             </CCardBody>
           </CCard>
         </CCol>
@@ -101,6 +124,13 @@
 </template>
 
 <script>
+import SubjectObjectives from "../booklet/view/SubjectObjectives";
+import InterventionPlan from "../booklet/view/InterventionPlan";
+import HomeworkInfo from "../booklet/view/HomeworkInfo";
+import Behaviour from "../booklet/view/Behaviour";
+import WorkHabit from "../booklet/view/WorkHabit";
+import ReadingClub from "../booklet/view/ReadingClub";
+import OtherFields from "../booklet/create/Others";
 
 const items = [];
 
@@ -118,8 +148,15 @@ const fields = [
 ];
 
 export default {
-  name: "StudentBooklet",
+  name: "AddStudentBooklet",
   components: {
+    SubjectObjectives,
+    InterventionPlan,
+    HomeworkInfo,
+    Behaviour,
+    WorkHabit,
+    ReadingClub,
+    OtherFields,
   },
   data() {
     return {
@@ -138,9 +175,32 @@ export default {
       }),
       fields,
       details: [],
+      formValues: {},
       collapseDuration: 0,
-      studentList: [
+      students: [
         { label: "-- Select One --", value: "" },
+      ],
+      term: [
+        { label: "-- Select One --", value: ""},
+        "1st Term",
+        "2nd Term",
+        "3rd Term",
+      ],
+      week: [
+        { label: "-- Select One --", value: ""},
+        "Week 1",
+        "Week 2",
+        "Week 3",
+        "Week 4",
+        "Week 5",
+        "Week 6",
+        "Week 7",
+        "Week 8",
+        "Week 9",
+        "Week 10",
+        "Week 11",
+        "Week 12",
+        "Week 13",
       ],
     };
   },
@@ -209,7 +269,7 @@ export default {
           this.isBtnDisabled = false;
           this.showProgress = false;
         } else {
-          console.log("Developer fucked up!");
+          console.log("Developer fucked up!", error.message);
           // this.notification.countdown = 20;
           // this.notification.type = "danger";
           // this.isBtnDisabled = !this.isBtnDisabled;
@@ -220,7 +280,7 @@ export default {
     showData(response) {
       if (this.user === 3) {
         response.students.forEach(student => {
-          this.studentList.push({
+          this.students.push({
             label: `${student.first_name} ${student.last_name}`,
             value: student.user_id,
           });
@@ -254,6 +314,12 @@ export default {
     navigation(classProps) {
       this.$router.push({name: "Communication Booklet / Add", params: {id: classProps.id, class: classProps.grade_name.toLowerCase()}});
     }, //end of navigation
+    submitRecord(dataObject){
+      this.formValues[dataObject.key] = dataObject.value;
+    }, //end of submitObjective
+    async GeneralSubmission(){
+      console.log(this.formValues);
+    }, //end of GeneralSubmission
   },
   created() {
     this.allBooklet();

@@ -24,6 +24,7 @@ const ManageLessonPlan = () => import("@/views/pages/ManageLessonPlan");
 const LessonPlanList = () => import('@/views/pages/LessonPlanList')
 const ManageBooklet = () => import("@/views/pages/ManageBooklet");
 const StudentBooklet = () => import("@/views/pages/StudentBooklet");
+const AddStudentBooklet = () => import("@/views/pages/AddStudentBooklet");
 
 const ViewStudentBooklet = () => import("@/views/preview/SingleBooklet");
 const ViewLessonPlan = () => import("@/views/preview/SingleLessonPlan");
@@ -90,6 +91,11 @@ function configRoutes () {
           path: "communication-booklet/:id/:class",
           name: "Communication Booklet / ",
           component: StudentBooklet,
+        },
+        {
+          path: "communication-booklet/:id/:class/add",
+          name: "Communication Booklet / Add",
+          component: AddStudentBooklet,
         },
         {
           path: "communication-booklet/:id/:class/:booklet",
