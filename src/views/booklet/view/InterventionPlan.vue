@@ -32,7 +32,7 @@
                 <CCol lg="6">
                   <span>Intervention Plan</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 3">
+                <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <InterventionModal
                     :showModal="showModal"
                     :subjects="subjects"
@@ -88,6 +88,14 @@ export default {
   name: "InterventionPlan",
   components: {
     InterventionModal,
+  },
+  props: {
+    action: {
+      type: String,
+    },
+    allIntervention: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -199,6 +207,7 @@ export default {
   },
   created() {
     this.getSubjects();
+    if (this.allIntervention.length > 0) this.items =  this.allIntervention;
   },
 };
 </script>

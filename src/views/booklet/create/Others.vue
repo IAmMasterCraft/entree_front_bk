@@ -42,19 +42,23 @@
                     autocomplete="off"
                     placeholder="Enter Important Event"
                     @input="submitInput"
+                    v-if="action != 'edit'"
                     v-model="formValues.important_event"
                   />
+                  <p v-else>Important Event: {{ event }}</p>
                 </CCol>
                 <CCol sm="6">
                   <CTextarea
                     label="Accident/Illness in School"
                     autocomplete="off"
                     @input="submitInput"
+                    v-if="action != 'edit'"
                     placeholder="What Happened:
 Illness/Injury: 
 Action taken:"
                     v-model="formValues.accident_illness"
                   />
+                  <p v-else>Accident/Illness: {{ accident }}</p>
                 </CCol>
               </CRow>
               <CRow>
@@ -64,8 +68,10 @@ Action taken:"
                     autocomplete="off"
                     placeholder="Enter Teacher's Comment"
                     @input="submitInput"
+                    v-if="action != 'edit'"
                     v-model="formValues.teachers_comment"
                   />
+                  <p v-else>Comment: {{ comment }}</p>
                 </CCol>
               </CRow>
             </CCardBody>
@@ -88,6 +94,20 @@ const fields = [
 export default {
   name: "OtherBookletField",
   components: {
+  },
+  props: {
+    action: {
+      type: String,
+    },
+    event: {
+      type: String,
+    },
+    comment: {
+      type: String,
+    },
+    accident: {
+      type: String,
+    },
   },
   data() {
     return {

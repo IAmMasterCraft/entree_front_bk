@@ -32,7 +32,7 @@
                 <CCol lg="6">
                   <span>Work Habits in School</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 3">
+                <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <WorkHabitModal
                     :showModal="showModal"
                     @show-modal="toggleModal"
@@ -87,6 +87,14 @@ export default {
   name: "WorkHabit",
   components: {
     WorkHabitModal,
+  },
+  props: {
+    action: {
+      type: String,
+    },
+    allWorkHabit: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -197,6 +205,7 @@ export default {
     }, //end of updateSubjects
   },
   created() {
+    if (this.allWorkHabit.length > 0) this.items =  this.allWorkHabit;
   },
 };
 </script>

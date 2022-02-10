@@ -32,7 +32,7 @@
                 <CCol lg="6">
                   <span>Subject Objectives</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 3">
+                <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <Objectives
                     :showModal="showModal"
                     :subjects="subjects"
@@ -89,6 +89,14 @@ export default {
   name: "SubjectObjectives",
   components: {
     Objectives,
+  },
+  props: {
+    action: {
+      type: String,
+    },
+    allObjectives: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -201,6 +209,7 @@ export default {
   },
   created() {
     this.getSubjects();
+    if (this.allObjectives.length > 0) this.items =  this.allObjectives;
   },
 };
 </script>

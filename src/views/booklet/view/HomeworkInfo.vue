@@ -32,7 +32,7 @@
                 <CCol lg="6">
                   <span>Homework/Project Work Info</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 3">
+                <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <HomeworkInfoModal
                     :showModal="showModal"
                     :subjects="subjects"
@@ -91,6 +91,14 @@ export default {
   name: "HomeworkInfo",
   components: {
     HomeworkInfoModal,
+  },
+  props: {
+    action: {
+      type: String,
+    },
+    allHomeworkInfo: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -204,6 +212,7 @@ export default {
     }, //end of updateSubjects
   },
   created() {
+    if (this.allHomeworkInfo.length > 0) this.items =  this.allHomeworkInfo;
   },
 };
 </script>

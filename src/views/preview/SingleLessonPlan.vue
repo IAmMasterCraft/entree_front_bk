@@ -62,11 +62,48 @@
                                     in {{ lesson_plan.academic_session }} Academic Session
                                 </p>
                             </div>
-                            <div class="my-3">
-                                <div>
-                                    {{ lesson_plan.topic }}
-                                </div>
-                            </div>
+                            <CRow class="my-3">
+                                <CCol sm="4">
+                                    <p>Topic: {{ lesson_plan.topic }}</p>
+                                    <p>Objectives: {{ lesson_plan.objectives }}</p>
+                                    <p>Textbook: {{ lesson_plan.textbook }}</p>
+                                    <p>Textbook Pages: {{ lesson_plan.textbook_pages }}</p>
+                                    <p>Other materials needed: {{ lesson_plan.other_materials }}</p>
+                                    Opportunities: <CInputCheckbox
+                                        v-for="(opportunity, index) in opportunities" :key="index"
+                                        :label="opportunity"
+                                        :disabled="!lesson_plan.opportunities[index]"
+                                        :checked.sync="lesson_plan.opportunities[index]"
+                                    />
+                                    <br />
+                                </CCol>
+                                <CCol sm="4">
+                                    <p>Previous Knowledge: {{ lesson_plan.previous_knowledge }}</p>
+                                    <p>Direct Instruction: {{ lesson_plan.direct_instruction }}</p>
+                                    <p>Intervention: {{ lesson_plan.intervention }}</p>
+                                    <p>Extension: {{ lesson_plan.extension }}</p>
+                                    <p>Guided Practice: {{ lesson_plan.guided_practice }}</p>
+                                    Activities:  <CInputCheckbox
+                                        v-for="(activity, index) in activities" :key="index"
+                                        :label="activity"
+                                        :disabled="!lesson_plan.activities[index]"
+                                        :checked.sync="lesson_plan.activities[index]"
+                                    /> <br />
+                                </CCol>
+                                <CCol sm="4">
+                                    <p>Assessment: {{ lesson_plan.assessment }}</p>
+                                    <p>Homework: {{ lesson_plan.topic }}</p>
+                                    <p>Notes and Contents: {{ lesson_plan.content_notes }}</p>
+                                    <p>Follow Up: {{ lesson_plan.follow_up }}</p>
+                                    <p>Closing: {{ lesson_plan.closing }}</p>
+                                    Reflection:  <CInputCheckbox
+                                        v-for="(reflect, index) in reflection" :key="index"
+                                        :label="reflect"
+                                        :disabled="!lesson_plan.reflection[index]"
+                                        :checked.sync="lesson_plan.reflection[index]"
+                                    /> <br />
+                                </CCol>
+                            </CRow>
                             <hr />
                         </CCardBody>
                     </CCard>
@@ -100,6 +137,28 @@ export default {
             ],
             lesson_plan: {},
             formValues: {},
+            opportunities: [
+                "Evaluation",
+                "Analysis",
+                "Application",
+                "Understanding",
+                "Knowledge",
+                "Critical thinking",
+                "Creative thinking",
+            ],
+            activities: [
+                "Co-op learning",
+                "Independent work",
+                "Small group",
+                "Teacher assisted",
+                "Hands on",
+            ],
+            reflection: [
+                "I use data to plan my lesson",
+                "I state my objectives clearly",
+                "I provide opportunities to engage pupils and give feed back",
+                "I provide time for interaction",
+            ],
         }
     },
     methods: {
@@ -146,6 +205,9 @@ export default {
                 });
             });
             this.lesson_plan = response.lesson_plan[0];
+            this.lesson_plan.opportunities = JSON.parse(response.lesson_plan[0].opportunities);
+            this.lesson_plan.activities = JSON.parse(response.lesson_plan[0].activities);
+            this.lesson_plan.reflection = JSON.parse(response.lesson_plan[0].reflection);
             this.showProgress = !this.showProgress;
         }, //end of ShowData()
         toggleModal() {

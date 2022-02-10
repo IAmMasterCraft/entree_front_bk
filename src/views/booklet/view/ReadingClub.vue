@@ -32,7 +32,7 @@
                 <CCol lg="6">
                   <span>Reading Club Programme</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 3">
+                <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <ReadingClubModal
                     :showModal="showModal"
                     @show-modal="toggleModal"
@@ -90,6 +90,14 @@ export default {
   name: "ReadingClub",
   components: {
     ReadingClubModal,
+  },
+  props: {
+    action: {
+      type: String,
+    },
+    allReadingClub: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -203,6 +211,7 @@ export default {
     }, //end of updateSubjects
   },
   created() {
+    if (this.allReadingClub.length > 0) this.items =  this.allReadingClub;
   },
 };
 </script>

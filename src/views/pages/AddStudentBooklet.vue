@@ -318,7 +318,35 @@ export default {
       this.formValues[dataObject.key] = dataObject.value;
     }, //end of submitObjective
     async GeneralSubmission(){
-      console.log(this.formValues);
+      try {
+        this.isBtnDisabled = true;
+        this.showProgress = true;
+        const config = {
+          method: "post",
+          url: "https://entreelab.com.ng/src/api/booklet/new-booklet",
+          data: this.formValues,
+          headers: {"Authorization" : localStorage.getItem("token"),},
+        };
+        await this.axios(config);
+        // this.updateModalVisibility();
+        this.formValues = {};
+        // this.$emit("show-students", true);
+        // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
+        // this.$router.push({name: "Home", data: response.data});
+        this.$router.go(-1);
+      } catch(error) {
+        if (error.response) {
+          this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status ?? ""}<br />MESSAGE: ${error.response.data.error.message ?? error}</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = !this.isBtnDisabled;
+          this.showProgress = !this.showProgress;
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Developer fucked up!");
+        }
+      }
     }, //end of GeneralSubmission
   },
   created() {

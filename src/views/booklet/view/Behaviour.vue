@@ -32,7 +32,7 @@
                 <CCol lg="6">
                   <span>Behaviour in School</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 3">
+                <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <BehaviourModal
                     :showModal="showModal"
                     :subjects="subjects"
@@ -88,6 +88,14 @@ export default {
   name: "Behaviour",
   components: {
     BehaviourModal,
+  },
+  props: {
+    action: {
+      type: String,
+    },
+    allBehaviourHabit: {
+      type: Array,
+    },
   },
   data() {
     return {
@@ -198,6 +206,7 @@ export default {
     }, //end of updateSubjects
   },
   created() {
+    if (this.allBehaviourHabit.length > 0) this.items =  this.allBehaviourHabit;
   },
 };
 </script>

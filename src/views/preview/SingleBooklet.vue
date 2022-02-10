@@ -32,26 +32,6 @@
                                 <CCol lg="6">
                                     <span>Student Booklet</span>
                                 </CCol>
-                                <CCol lg="6" v-if="user === 3">
-                                    <EditBooklet
-                                        :showModal="showModal"
-                                        :students="studentList"
-                                        :booklet="booklet"
-                                        @show-modal="toggleModal"
-                                        @show-students="updateBooklet"
-                                    />
-                                    <CButton
-                                        color="success"
-                                        variant="outline"
-                                        square
-                                        class="text-right float-right"
-                                        size="sm"
-                                        :disabled="isBtnDisabled"
-                                        @click="toggleModal"
-                                    >
-                                        Edit Booklet
-                                    </CButton>
-                                </CCol>
                             </CRow>
                         </CCardHeader>
                         <CCardBody>
@@ -62,58 +42,35 @@
                                     in {{ booklet.academic_session }} Academic Session
                                 </p>
                             </div>
-                            <div class="my-3">
-                                <h4>Subject Objectives</h4>
-                                <div v-html="booklet.subject_objectives"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Intervention Plan</h4>
-                                <div v-html="booklet.intervention_plan"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Homework/Project Work Information</h4>
-                                <div v-html="booklet.homework_info"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Behaviour in School</h4>
-                                <div v-html="booklet.behaviour_habits"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Work Habits in School</h4>
-                                <div v-html="booklet.work_habits"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Important Event</h4>
-                                <div v-html="booklet.important_event"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Accident/Illness</h4>
-                                <div v-html="booklet.accident_illness"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Reading Club Programme</h4>
-                                <div v-html="booklet.reading_club_programme"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Supervision</h4>
-                                <div v-html="booklet.supervision"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Parents Comment</h4>
-                                <div v-html="booklet.parents_comment"></div>
-                            </div>
-                            <div class="my-3">
-                                <h4>Teachers Comment</h4>
-                                <div v-html="booklet.teachers_comment"></div>
-                            </div>
-                            <div v-if="user === 3 && true === false">
-                                <h4>Teachers Comment</h4>
-                                <Editor 
-                                    :api-key="apiKey"
-                                    :init="editor"
-                                    v-model="formValues.teachers_comment"
-                                />
-                            </div>
+                            <CRow>
+                                <CCol sm="6">
+                                    <SubjectObjectives action="edit" :allObjectives="JSON.parse(booklet.subject_objectives)" />
+                                </CCol>
+                                <CCol sm="6">
+                                    <InterventionPlan action="edit" :allIntervention="JSON.parse(booklet.intervention_plan)" />
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol sm="6">
+                                    <HomeworkInfo action="edit" :allHomeworkInfo="JSON.parse(booklet.homework_info)" />
+                                </CCol>
+                                <CCol sm="6">
+                                    <Behaviour action="edit" :allBehaviourHabit="JSON.parse(booklet.behaviour_habits)" />
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol sm="6">
+                                    <WorkHabit action="edit" :allWorkHabit="JSON.parse(booklet.work_habits)" />
+                                </CCol>
+                                <CCol sm="6">
+                                    <ReadingClub action="edit" :allReadingClub="JSON.parse(booklet.reading_club_programme)" />
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol sm="12">
+                                    <OtherFields action='edit' :event="JSON.parse(booklet.important_event)" :comment="JSON.parse(booklet.teachers_comment)" :accident="JSON.parse(booklet.accident_illness)" />
+                                </CCol>
+                            </CRow>
                             <hr />
                         </CCardBody>
                     </CCard>
@@ -124,12 +81,24 @@
 </template>
 
 <script>
-import EditBooklet from "../edit/EditBooklet";
+import SubjectObjectives from "../booklet/view/SubjectObjectives";
+import InterventionPlan from "../booklet/view/InterventionPlan";
+import HomeworkInfo from "../booklet/view/HomeworkInfo";
+import Behaviour from "../booklet/view/Behaviour";
+import WorkHabit from "../booklet/view/WorkHabit";
+import ReadingClub from "../booklet/view/ReadingClub";
+import OtherFields from "../booklet/create/Others";
 
 export default {
     name: "ViewBooklet",
     components: {
-        EditBooklet,
+        SubjectObjectives,
+        InterventionPlan,
+        HomeworkInfo,
+        Behaviour,
+        WorkHabit,
+        ReadingClub,
+        OtherFields,
     },
     data () {
         return {
