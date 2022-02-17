@@ -34,20 +34,20 @@
                         </CCardHeader>
                         <CCardBody>
                             <div v-for="(lesson, index) in lessons" :key="index">
+                                <ViewRevisionQuiz :showModal="showModal[index]" @show-modal="toggleModal(index, false)" :lesson="lesson" />
                                 <CRow>
-                                    <CCol lg="1">
+                                    <CCol sm="1">
                                         {{ index + 1 }}
                                     </CCol>
-                                    <CCol lg="11" class="text-center">
+                                    <CCol sm="6" class="">
                                         <video controls width="350" height="200">
                                             <source :src="`https://entreelab.com.ng/src/storage/app/${lesson.source}`" type="video/mp4">
                                         </video>
                                     </CCol>
-                                </CRow>
-                                <CRow>
-                                    <CCol lg="12" class="text-center">
-                                        <h3>{{ lesson.topic }}</h3>
+                                    <CCol sm="5">
+                                        <h5>{{ lesson.topic }}</h5>
                                         <p>{{ lesson.description }}</p>
+                                        <CButton color="info" variant="outline" @click="toggleModal(index, true)" square>View Revision Quiz</CButton>
                                     </CCol>
                                 </CRow>
                                 <hr />
@@ -71,9 +71,11 @@
 </template>
 
 <script>
+import ViewRevisionQuiz from "../modals/ViewRevisionQuiz";
 export default {
     name: "ViewLessons",
     components: {
+        ViewRevisionQuiz,
     },
     data() {
         return {
@@ -84,8 +86,9 @@ export default {
                 countdown: 2,
                 message: "Loading Lessons . . . ",
             },
-            showModal: false,
+            showModal: [],
             lessons: [],
+            modalLesson: {},
         }
     },
     methods: {
@@ -126,10 +129,13 @@ export default {
         }, //end of getParentInfo
         showResponse (response) {
             this.lessons = response;
+            for (let i = 0; i < this.lessons.length; i++) { this.showModal.push(false); }
             this.showProgress = !this.showProgress;
         }, //end of showResponse
-        toggleModal(){
-            this.showModal = !this.showModal;
+        toggleModal(index, val){
+            this.showModal = this.showModal.map((a, i) => {
+                return (i == index) ? val : false;
+            });
         }, //end of toggleModal
     },
     created() {

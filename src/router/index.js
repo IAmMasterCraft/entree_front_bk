@@ -189,7 +189,7 @@ function configRoutes () {
         },
         {
           path: "view-lessons/:subject_id",
-          name: "Manage Lessons",
+          name: "View Lessons",
           component: ViewLessons,
         },
         {

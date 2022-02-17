@@ -34,211 +34,8 @@
         <h5 class="px-3">Edit Lesson Plan</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CInput
-            label="Enter Academic Session"
-            required="true"
-            placeholder="Enter Present Academic Session"
-            v-model="formValues.academic_session"
-          />
-        </CCol>
-      </CRow>
-
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CSelect
-            label="Select Term"
-            autocomplete="off"
-            :options="term"
-            :value.sync="formValues.term"
-          />
-        </CCol>
-
-        <CCol sm="6">
-          <CSelect
-            label="Select Week"
-            autocomplete="off"
-            :options="week"
-            :value.sync="formValues.week"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CInput
-            label="Enter Topic"
-            required="true"
-            placeholder="Enter Subject Topic"
-            v-model="formValues.topic"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Objectives"
-            required="true"
-            placeholder="Enter Objectives"
-            v-model="formValues.objectives"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Textbook"
-            required="true"
-            placeholder="Enter Textbook Needed"
-            v-model="formValues.textbook"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Textbook pages"
-            required="true"
-            placeholder="Enter Textbook Pages"
-            v-model="formValues.textbook_pages"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Other materials needed"
-            required="true"
-            placeholder="Enter other materials needed"
-            v-model="formValues.other_materials"
-          />
-        </CCol>
-        <CCol sm="6">
-          Opportunities Provided
-          <CInputCheckbox
-            v-for="(opportunity, index) in opportunities" :key="index"
-            :label="opportunity"
-            :checked.sync="formValues.opportunities[index]"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Previous Knowledge/Entry Point"
-            required="true"
-            placeholder="Enter Previous Knowledge"
-            v-model="formValues.previous_knowledge"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Direct Instruction"
-            required="true"
-            placeholder="Enter Textbook Pages"
-            v-model="formValues.direct_instruction"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Intervention"
-            required="true"
-            placeholder="Enter Intervention"
-            v-model="formValues.intervention"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Extension"
-            required="true"
-            placeholder="Enter Extension"
-            v-model="formValues.extension"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Guided and Independent Practice"
-            required="true"
-            placeholder="Enter Guided and Independent Practice"
-            v-model="formValues.guided_practice"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Closing"
-            required="true"
-            placeholder="Enter Closing"
-            v-model="formValues.closing"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Assessment"
-            required="true"
-            placeholder="Enter assessment"
-            v-model="formValues.assessment"
-          />
-        </CCol>
-        <CCol sm="6">
-          Types of Activities
-          <CInputCheckbox
-            v-for="(activity, index) in activities" :key="index"
-            :label="activity"
-            :checked.sync="formValues.activities[index]"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Follow Up"
-            required="true"
-            placeholder="Enter Follow Up"
-            v-model="formValues.follow_up"
-          />
-        </CCol>
-        <CCol sm="6">
-          Reflection
-          <CInputCheckbox
-            v-for="(reflect, index) in reflection" :key="index"
-            :label="reflect"
-            :checked.sync="formValues.reflection[index]"
-          />
-        </CCol>
-      </CRow>
-      <CRow class="my-3">
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Homework"
-            required="true"
-            placeholder="Enter Homework"
-            v-model="formValues.homework"
-          />
-        </CCol>
-        <CCol sm="6">
-          <CTextarea
-            label="Enter Contents and Notes"
-            required="true"
-            placeholder="Enter Contents and Notes"
-            v-model="formValues.content_notes"
-          />
-        </CCol>
-      </CRow> <br />
-      <CRow>
-				<CCol lg="12">
-					<CButton
-						type="submit"
-						color="info"
-						block
-            :disabled="isBtnDisabled"
-            @click="SubmitPlan"
-          >
-            {{ `submit`.toUpperCase() }}
-					</CButton>
-				</CCol>
-			</CRow>
+      <EditPrimaryPlan :subjects="subjects" :lessonPlan="lessonPlan" @submit-primary="SubmitPlan" v-if="lessonPlan.lesson_plan_type == 1" />
+      <EditNurseryPlan :subjects="subjects" :lessonPlan="lessonPlan" @submit-nursery="SubmitPlan" v-else />
       <template v-slot:footer>
           <CButton v-show="true" @click="updateModalVisibility">Close</CButton>
       </template>
@@ -247,10 +44,14 @@
 </template>
 
 <script>
+import EditPrimaryPlan from "../lesson_plan/EditPrimaryPlan";
+import EditNurseryPlan from "../lesson_plan/EditNurseryPlan";
 
 export default {
   name: "EditLessonPlan",
   components: {
+    EditPrimaryPlan,
+    EditNurseryPlan,
   },
   props: {
     showModal: {
@@ -261,7 +62,7 @@ export default {
     subjects: {
       type: Array,
     },
-    lesson_plan: {
+    lessonPlan: {
       type: Object,
     }
   },
@@ -331,15 +132,6 @@ export default {
       try {
         this.isBtnDisabled = true;
         this.showProgress = true;
-        const config = {
-          method: "post",
-          url: "https://entreelab.com.ng/src/api/lesson-plan/edit",
-          data: this.formValues,
-          headers: {"Authorization" : localStorage.getItem("token"),},
-        };
-        await this.axios(config);
-        // this.updateModalVisibility();
-        this.formValues = {};
         this.$emit("show-students", true);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
@@ -360,7 +152,7 @@ export default {
   },
   mounted(){
     // this.getSubjects();\
-    this.formValues = this.lesson_plan;
+    // this.formValues = this.lessonPlan;
   },
 }
 </script>

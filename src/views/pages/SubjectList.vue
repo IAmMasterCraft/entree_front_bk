@@ -330,7 +330,7 @@ export default {
     }, //end of updateSubjects
     toLesson(subject_id){
       //console.log(subject_id);
-      this.$router.push({name: "Manage Lessons", params: {subject_id: subject_id,}});
+      this.$router.push({name: "View Lessons", params: {subject_id: subject_id,}});
     }, //end of subject_id
   },
   created() {

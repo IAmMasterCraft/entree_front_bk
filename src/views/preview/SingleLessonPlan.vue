@@ -36,7 +36,7 @@
                                     <EditLessonPlan
                                         :showModal="showModal"
                                         :subjects="subjectList"
-                                        :lesson_plan="lesson_plan"
+                                        :lessonPlan="lesson_plan"
                                         @show-modal="toggleModal"
                                         @show-students="updateLessonPlan"
                                     />
@@ -62,7 +62,7 @@
                                     in {{ lesson_plan.academic_session }} Academic Session
                                 </p>
                             </div>
-                            <CRow class="my-3">
+                            <CRow class="my-3" v-if="lesson_plan.lesson_plan_type == 1">
                                 <CCol sm="4">
                                     <p>Topic: {{ lesson_plan.topic }}</p>
                                     <p>Objectives: {{ lesson_plan.objectives }}</p>
@@ -102,6 +102,22 @@
                                         :disabled="!lesson_plan.reflection[index]"
                                         :checked.sync="lesson_plan.reflection[index]"
                                     /> <br />
+                                </CCol>
+                            </CRow>
+                            <CRow class="my-3" v-else>
+                                <CCol sm="4">
+                                    <p>Theme: {{ lesson_plan.topic }}</p>
+                                    <p>Objectives: {{ lesson_plan.objectives }}</p>
+                                    <p>Content and Notes: {{ lesson_plan.content_notes }}</p>
+                                    <br />
+                                </CCol>
+                                <CCol sm="4">
+                                    <p>Class Activities: {{ lesson_plan.activities }}</p>
+                                    <p>Materials Needed: {{ lesson_plan.other_materials }}</p>
+                                </CCol>
+                                <CCol sm="4">
+                                    <p>Montesorri: {{ lesson_plan.montesorri }}</p>
+                                    <p>Character Education: {{ lesson_plan.character_education }}</p>
                                 </CCol>
                             </CRow>
                             <hr />
@@ -205,9 +221,11 @@ export default {
                 });
             });
             this.lesson_plan = response.lesson_plan[0];
-            this.lesson_plan.opportunities = JSON.parse(response.lesson_plan[0].opportunities);
-            this.lesson_plan.activities = JSON.parse(response.lesson_plan[0].activities);
-            this.lesson_plan.reflection = JSON.parse(response.lesson_plan[0].reflection);
+            if (this.lesson_plan.lesson_plan_type == 1) {
+                this.lesson_plan.opportunities = JSON.parse(response.lesson_plan[0].opportunities);
+                this.lesson_plan.activities = JSON.parse(response.lesson_plan[0].activities);
+                this.lesson_plan.reflection = JSON.parse(response.lesson_plan[0].reflection);
+            }
             this.showProgress = !this.showProgress;
         }, //end of ShowData()
         toggleModal() {
