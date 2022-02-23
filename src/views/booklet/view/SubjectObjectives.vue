@@ -36,6 +36,7 @@
                   <Objectives
                     :showModal="showModal"
                     :subjects="subjects"
+                    :objectives="objectiveEditItem"
                     @show-modal="toggleModal"
                     @show-objectives="updateObjective"
                   />
@@ -65,6 +66,30 @@
                 sorter
                 pagination
               >
+                <template #edit_info="{ item }">
+                  <td class="py-2" v-if="action != 'edit'">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-edit"
+                      @click="EditSubjectObjectiveItem(item)"
+                    />
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-trash"
+                      @click="DeleteRecord(item.id)"
+                    />
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -83,6 +108,13 @@ const fields = [
   { key: "subject", _style: "min-width:100px" },
   { key: "objective", _style: "min-width:100px;" },
   { key: "status", _style: "min-width:100px;" },
+  {
+    key: "edit_info",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -118,7 +150,8 @@ export default {
       collapseDuration: 0,
       subjects: [
         { label: "-- Select One --", value: ""},
-      ]
+      ],
+      objectiveEditItem: null,
     };
   },
   methods: {
@@ -192,13 +225,18 @@ export default {
       this.showProgress = false;
       this.showModal = false;
       if (updated) {
-        const id = this.items.length;
-        this.items.push({
-            id,
-            subject: updated.subject,
-            objective: updated.objective,
-            status: updated.status ? "Achieved" : "NOT Achieved",
-        });
+        updated.status = (updated.status) ? "Achieved" : "NOT Achieved";
+        if (updated.edit) {
+          this.items[updated.id] = updated;
+        } else {
+          const id = this.items.length;
+          this.items.push({
+              id,
+              subject: updated.subject,
+              objective: updated.objective,
+              status: updated.status,
+          });
+        }
         this.$emit("submit-objective", {key: "subject_objectives", value: JSON.stringify(this.items)});
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject objective</code>`;
@@ -206,10 +244,23 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateSubjects
+    EditSubjectObjectiveItem(objectiveItem) {
+      objectiveItem.timeStamp = Date.now();
+      this.objectiveEditItem = objectiveItem;
+      this.showModal = true;
+    }, // end of EditSubjectObjectiveItem
+    DeleteRecord(pointer) {
+      this.items = this.items.splice(pointer, 1);
+      this.$emit("submit-objective", {key: "subject_objectives", value: JSON.stringify(this.items)});
+    }, //end of DeleteRecord
   },
   created() {
-    this.getSubjects();
-    if (this.allObjectives.length > 0) this.items =  this.allObjectives;
+    try {
+      this.getSubjects();
+      if (this.allObjectives.length > 0) this.items =  this.allObjectives;
+    } catch (error) {
+      // console.log(error.message);
+    }
   },
 };
 </script>

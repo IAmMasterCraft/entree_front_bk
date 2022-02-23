@@ -32,6 +32,32 @@
                                 <CCol lg="6">
                                     <span>Student Booklet</span>
                                 </CCol>
+                                <CCol lg="6">
+                                    <CButton
+                                        color="success"
+                                        variant="outline"
+                                        square
+                                        class="text-right float-right"
+                                        size="sm"
+                                        :disabled="isBtnDisabled"
+                                        v-if="edit == 'edit'"
+                                        @click="StartEditing()"
+                                    >
+                                        Edit Mode
+                                    </CButton>
+                                    <CButton
+                                        color="success"
+                                        variant="outline"
+                                        square
+                                        class="text-right float-right"
+                                        size="sm"
+                                        :disabled="isBtnDisabled"
+                                        v-else
+                                        @click="StartEditing('edit')"
+                                    >
+                                        Save Changes
+                                    </CButton>
+                                </CCol>
                             </CRow>
                         </CCardHeader>
                         <CCardBody>
@@ -44,31 +70,31 @@
                             </div>
                             <CRow>
                                 <CCol sm="6">
-                                    <SubjectObjectives action="edit" :allObjectives="JSON.parse(booklet.subject_objectives)" />
+                                    <SubjectObjectives :action="edit" :allObjectives="JSON.parse(booklet.subject_objectives)" />
                                 </CCol>
                                 <CCol sm="6">
-                                    <InterventionPlan action="edit" :allIntervention="JSON.parse(booklet.intervention_plan)" />
-                                </CCol>
-                            </CRow>
-                            <CRow>
-                                <CCol sm="6">
-                                    <HomeworkInfo action="edit" :allHomeworkInfo="JSON.parse(booklet.homework_info)" />
-                                </CCol>
-                                <CCol sm="6">
-                                    <Behaviour action="edit" :allBehaviourHabit="JSON.parse(booklet.behaviour_habits)" />
+                                    <InterventionPlan :action="edit" :allIntervention="JSON.parse(booklet.intervention_plan)" />
                                 </CCol>
                             </CRow>
                             <CRow>
                                 <CCol sm="6">
-                                    <WorkHabit action="edit" :allWorkHabit="JSON.parse(booklet.work_habits)" />
+                                    <HomeworkInfo :action="edit" :allHomeworkInfo="JSON.parse(booklet.homework_info)" />
                                 </CCol>
                                 <CCol sm="6">
-                                    <ReadingClub action="edit" :allReadingClub="JSON.parse(booklet.reading_club_programme)" />
+                                    <Behaviour :action="edit" :allBehaviourHabit="JSON.parse(booklet.behaviour_habits)" />
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol sm="6">
+                                    <WorkHabit :action="edit" :allWorkHabit="JSON.parse(booklet.work_habits)" />
+                                </CCol>
+                                <CCol sm="6">
+                                    <ReadingClub :action="edit" :allReadingClub="JSON.parse(booklet.reading_club_programme)" />
                                 </CCol>
                             </CRow>
                             <CRow>
                                 <CCol sm="12">
-                                    <OtherFields action='edit' :event="JSON.parse(booklet.important_event)" :comment="JSON.parse(booklet.teachers_comment)" :accident="JSON.parse(booklet.accident_illness)" />
+                                    <OtherFields :action='edit' :event="JSON.parse(booklet.important_event)" :comment="JSON.parse(booklet.teachers_comment)" :accident="JSON.parse(booklet.accident_illness)" />
                                 </CCol>
                             </CRow>
                             <hr />
@@ -114,6 +140,7 @@ export default {
             studentList: [
                 { label: "-- Select One --", value: "" },
             ],
+            edit: "edit",
             booklet: {},
             formValues: {},
             apiKey: "ehbiiwvflorgcf3lxxhc8nvq2a1j7986wii4q2ci4irutrdg",
@@ -195,6 +222,9 @@ export default {
                 this.notification.type = "danger";
             }
         }, //end of updateBooklet
+        StartEditing (val = "") {
+            this.edit = val;
+        }, //end of StartEditing
     },
     created () {
         this.GetBooklet();

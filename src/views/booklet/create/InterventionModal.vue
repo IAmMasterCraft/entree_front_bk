@@ -30,7 +30,7 @@
             </CCol>
         </CRow>
             <template v-slot:header>
-                <h5 class="px-3">Add Intervention Plan</h5>
+                <h5 class="px-3">{{ checkAction }} Intervention Plan</h5>
                 <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
             </template>
             <CRow>
@@ -81,14 +81,32 @@ export default {
       required: true,
       default: false,
     },
+    intervention: {
+        type: Object
+    },
     subjects: {
       type: Array,
     }
   },
+  watch: {
+      intervention(newIntervention) {
+          if (newIntervention != null) {
+              this.formValues = newIntervention;
+              this.formValues.edit = true;
+            }
+      },
+  },
+  computed: {
+      checkAction: function () {
+          return (this.formValues.edit) ? "Edit" : "Add";
+      },
+  },
   data () {
     return {
       warningModal: false,
-      formValues: {},
+      formValues: {
+          edit: false
+      },
       isBtnDisabled: false,
       showProgress: false,
       notification: {

@@ -109,6 +109,17 @@ export default {
       type: String,
     },
   },
+  watch: {
+    event(val) {
+      this.formValues.important_event = val;
+    },
+    comment(val) {
+      this.formValues.teachers_comment = val;
+    },
+    accident(val) {
+      this.formValues.accident_illness = val;
+    },
+  },
   data() {
     return {
       isBtnDisabled: false,
@@ -207,6 +218,9 @@ export default {
     }, //end of submitInput
   },
   created() {
+    this.formValues.important_event = this.event;
+    this.formValues.teachers_comment = this.comment;
+    this.formValues.accident_illness = this.accident;
   },
 };
 </script>

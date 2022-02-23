@@ -30,7 +30,7 @@
             </CCol>
         </CRow>
             <template v-slot:header>
-                <h5 class="px-3">Reading Club/Programme</h5>
+                <h5 class="px-3">{{ checkAction }} Reading Club/Programme</h5>
                 <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
             </template>
             <CRow>
@@ -113,9 +113,25 @@ export default {
       required: true,
       default: false,
     },
+    readingClub: {
+        type: Object,
+    },
     subjects: {
       type: Array,
     }
+  },
+  watch: {
+      readingClub(newRead) {
+          if (newRead != null) {
+              this.formValues = newRead;
+              this.formValues.edit = true;
+            }
+      },
+  },
+  computed: {
+      checkAction: function () {
+          return (this.formValues.edit) ? "Edit" : "Add";
+      },
   },
   data () {
     return {

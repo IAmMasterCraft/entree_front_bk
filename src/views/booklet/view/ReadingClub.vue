@@ -35,6 +35,7 @@
                 <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <ReadingClubModal
                     :showModal="showModal"
+                    :readingClub="readEditItem"
                     @show-modal="toggleModal"
                     @show-program="updateProgram"
                   />
@@ -64,6 +65,30 @@
                 sorter
                 pagination
               >
+                <template #edit_info="{ item }">
+                  <td class="py-2" v-if="action != 'edit'">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-edit"
+                      @click="EditReadItem(item)"
+                    />
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-trash"
+                      @click="DeleteRecord(item.id)"
+                    />
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -84,6 +109,13 @@ const fields = [
   { key: "chapter", _style: "min-width:100px;" },
   { key: "new_words", _style: "min-width:100px;" },
   { key: "reading_assignment", _style: "min-width:100px;" },
+  {
+    key: "edit_info",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -119,7 +151,8 @@ export default {
       collapseDuration: 0,
       subjects: [
         { label: "-- Select One --", value: ""},
-      ]
+      ],
+      readEditItem: null,
     };
   },
   methods: {
@@ -193,15 +226,19 @@ export default {
       this.showProgress = false;
       this.showModal = false;
       if (updated) {
-        const id = this.items.length;
-        this.items.push({
-            id,
-            date: updated.date,
-            book_title: updated.book_title,
-            chapter: updated.chapter,
-            new_words: updated.new_words,
-            reading_assignment: updated.reading_assignment,
-        });
+        if (updated.edit) {
+          this.items[updated.id] = updated;
+        } else {
+          const id = this.items.length;
+          this.items.push({
+              id,
+              date: updated.date,
+              book_title: updated.book_title,
+              chapter: updated.chapter,
+              new_words: updated.new_words,
+              reading_assignment: updated.reading_assignment,
+          });
+        }
         this.$emit("submit-reading-club", {key: "reading_club_programme", value: JSON.stringify(this.items)});
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject objective</code>`;
@@ -209,9 +246,20 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateSubjects
+    EditReadItem(readItem) {
+      readItem.timeStamp = Date.now();
+      this.readEditItem = readItem;
+      this.showModal = true;
+    }, // end of EditReadItem
+    DeleteRecord(pointer) {
+      this.items = this.items.splice(pointer, 1);
+      this.$emit("submit-reading-club", {key: "reading_club_programme", value: JSON.stringify(this.items)});
+    }, //end of DeleteRecord
   },
   created() {
-    if (this.allReadingClub.length > 0) this.items =  this.allReadingClub;
+    this.$watch('allReadingClub', (update) => {
+      this.items = update;
+    });
   },
 };
 </script>

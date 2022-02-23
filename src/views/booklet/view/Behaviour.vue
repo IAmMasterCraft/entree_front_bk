@@ -36,6 +36,7 @@
                   <BehaviourModal
                     :showModal="showModal"
                     :subjects="subjects"
+                    :behaviourHabit="behaviourEditItem"
                     @show-modal="toggleModal"
                     @show-behaviour="updateBehaviour"
                   />
@@ -65,6 +66,30 @@
                 sorter
                 pagination
               >
+                <template #edit_info="{ item }">
+                  <td class="py-2" v-if="action != 'edit'">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-edit"
+                      @click="EditBehaviourItem(item)"
+                    />
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-trash"
+                      @click="DeleteRecord(item.id)"
+                    />
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -82,6 +107,13 @@ const items = [];
 const fields = [
   { key: "behaviour", _style: "min-width:100px" },
   { key: "performance", _style: "min-width:100px;" },
+  {
+    key: "edit_info",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -117,7 +149,8 @@ export default {
       collapseDuration: 0,
       subjects: [
         { label: "-- Select One --", value: ""},
-      ]
+      ],
+      behaviourEditItem: null,
     };
   },
   methods: {
@@ -191,12 +224,16 @@ export default {
       this.showProgress = false;
       this.showModal = false;
       if (updated) {
-        const id = this.items.length;
-        this.items.push({
-            id,
-            behaviour: updated.behaviour,
-            performance: updated.performance,
-        });
+        if (updated.edit) {
+          this.items[updated.id] = updated;
+        } else {
+          const id = this.items.length;
+          this.items.push({
+              id,
+              behaviour: updated.behaviour,
+              performance: updated.performance,
+          });
+        }
         this.$emit("submit-behaviour", {key: "behaviour_habits", value: JSON.stringify(this.items)});
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject objective</code>`;
@@ -204,9 +241,20 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateSubjects
+    EditBehaviourItem(behaviourItem) {
+      behaviourItem.timeStamp = Date.now();
+      this.behaviourEditItem = behaviourItem;
+      this.showModal = true;
+    }, // end of EditBehaviourItem
+    DeleteRecord(pointer) {
+      this.items = this.items.splice(pointer, 1);
+      this.$emit("submit-behaviour", {key: "behaviour_habits", value: JSON.stringify(this.items)});
+    }, //end of DeleteRecord
   },
   created() {
-    if (this.allBehaviourHabit.length > 0) this.items =  this.allBehaviourHabit;
+    this.$watch('allBehaviourHabit', (update) => {
+      this.items = update;
+    });
   },
 };
 </script>

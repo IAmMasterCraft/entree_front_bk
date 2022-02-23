@@ -36,6 +36,7 @@
                   <HomeworkInfoModal
                     :showModal="showModal"
                     :subjects="subjects"
+                    :homework="homeworkEditItem"
                     @show-modal="toggleModal"
                     @show-plan="updatePlan"
                   />
@@ -65,6 +66,30 @@
                 sorter
                 pagination
               >
+                <template #edit_info="{ item }">
+                  <td class="py-2" v-if="action != 'edit'">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-edit"
+                      @click="EditHomeworkItem(item)"
+                    />
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-trash"
+                      @click="DeleteRecord(item.id)"
+                    />
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -85,6 +110,13 @@ const fields = [
   { key: "submission_date", _style: "min-width:100px;" },
   { key: "parent_assessment", _style: "min-width:100px;" },
   { key: "missing_homework", _style: "min-width:100px;" },
+  {
+    key: "edit_info",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -120,7 +152,8 @@ export default {
       collapseDuration: 0,
       subjects: [
         { label: "-- Select One --", value: ""},
-      ]
+      ],
+      homeworkEditItem: null,
     };
   },
   methods: {
@@ -194,15 +227,19 @@ export default {
       this.showProgress = false;
       this.showModal = false;
       if (updated) {
-        const id = this.items.length;
-        this.items.push({
-            id,
-            date: updated.date,
-            homework: updated.homework,
-            submission_date: updated.submission_date,
-            parent_assessment: updated.parent_assessment,
-            missing_homework: updated.missing_homework,
-        });
+        if (updated.edit) {
+          this.items[updated.id] = updated;
+        } else {
+          const id = this.items.length;
+          this.items.push({
+              id,
+              date: updated.date,
+              homework: updated.homework,
+              submission_date: updated.submission_date,
+              parent_assessment: updated.parent_assessment,
+              missing_homework: updated.missing_homework,
+          });
+        }
         this.$emit("submit-homework", {key: "homework_info", value: JSON.stringify(this.items)});
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject objective</code>`;
@@ -210,9 +247,21 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateSubjects
+    EditHomeworkItem(homeworkItem) {
+      homeworkItem.timeStamp = Date.now();
+      this.homeworkEditItem = homeworkItem;
+      this.showModal = true;
+      console.log(this.homeworkEditItem);
+    }, // end of EditHomeworkItem
+    DeleteRecord(pointer) {
+      this.items = this.items.splice(pointer, 1);
+      this.$emit("submit-homework", {key: "homework_info", value: JSON.stringify(this.items)});
+    }, //end of DeleteRecord
   },
   created() {
-    if (this.allHomeworkInfo.length > 0) this.items =  this.allHomeworkInfo;
+    this.$watch('allHomeworkInfo', (update) => {
+      this.items = update;
+    });
   },
 };
 </script>

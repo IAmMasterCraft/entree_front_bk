@@ -36,6 +36,7 @@
                   <InterventionModal
                     :showModal="showModal"
                     :subjects="subjects"
+                    :intervention="interventionEditItem"
                     @show-modal="toggleModal"
                     @show-intervention="updatePlan"
                   />
@@ -65,6 +66,30 @@
                 sorter
                 pagination
               >
+                <template #edit_info="{ item }">
+                  <td class="py-2" v-if="action != 'edit'">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-edit"
+                      @click="EditInterventionItem(item)"
+                    />
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-trash"
+                      @click="DeleteRecord(item.id)"
+                    />
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -82,6 +107,13 @@ const items = [];
 const fields = [
   { key: "subject", _style: "min-width:100px" },
   { key: "intervention_plan", _style: "min-width:100px;" },
+  {
+    key: "edit_info",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -117,7 +149,8 @@ export default {
       collapseDuration: 0,
       subjects: [
         { label: "-- Select One --", value: ""},
-      ]
+      ],
+      interventionEditItem: null,
     };
   },
   methods: {
@@ -191,12 +224,16 @@ export default {
       this.showProgress = false;
       this.showModal = false;
       if (updated) {
-        const id = this.items.length;
-        this.items.push({
-            id,
-            subject: updated.subject,
-            intervention_plan: updated.intervention_plan,
-        });
+        if (updated.edit) {
+          this.items[updated.id] = updated;
+        } else {
+          const id = this.items.length;
+          this.items.push({
+              id,
+              subject: updated.subject,
+              intervention_plan: updated.intervention_plan,
+          });
+        }
         this.$emit("submit-intervention", {key: "intervention_plan", value: JSON.stringify(this.items)});
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject objective</code>`;
@@ -204,10 +241,21 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateSubjects
+    EditInterventionItem(interventionItem) {
+      interventionItem.timeStamp = Date.now();
+      this.interventionEditItem = interventionItem;
+      this.showModal = true;
+    }, // end of EditInterventionItem
+    DeleteRecord(pointer) {
+      this.items = this.items.splice(pointer, 1);
+      this.$emit("submit-intervention", {key: "intervention_plan", value: JSON.stringify(this.items)});
+    }, //end of DeleteRecord
   },
   created() {
     this.getSubjects();
-    if (this.allIntervention.length > 0) this.items =  this.allIntervention;
+    this.$watch('allIntervention', (update) => {
+      this.items = update;
+    });
   },
 };
 </script>

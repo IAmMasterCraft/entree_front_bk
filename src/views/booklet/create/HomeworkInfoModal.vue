@@ -109,14 +109,32 @@ export default {
       required: true,
       default: false,
     },
+    homework: {
+        type: Object
+    },
     subjects: {
       type: Array,
     }
   },
+  watch: {
+      homework(newHomework) {
+          if (newHomework != null) {
+              this.formValues = newHomework;
+              this.formValues.edit = true;
+            }
+      },
+  },
+  computed: {
+      checkAction: function () {
+          return (this.formValues.edit) ? "Edit" : "Add";
+      },
+  },
   data () {
     return {
         warningModal: false,
-        formValues: {},
+        formValues: {
+            edit: false,
+        },
         isBtnDisabled: false,
         showProgress: false,
         notification: {

@@ -35,6 +35,7 @@
                 <CCol lg="6" v-if="user === 3 && action != 'edit'">
                   <WorkHabitModal
                     :showModal="showModal"
+                    :workHabit="workEditItem"
                     @show-modal="toggleModal"
                     @show-habit="updateHabit"
                   />
@@ -64,6 +65,30 @@
                 sorter
                 pagination
               >
+                <template #edit_info="{ item }">
+                  <td class="py-2" v-if="action != 'edit'">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-edit"
+                      @click="EditWorkItem(item)"
+                    />
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      style="cursor: pointer;"
+                      class="fa fa-trash"
+                      @click="DeleteRecord(item.id)"
+                    />
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -81,6 +106,13 @@ const items = [];
 const fields = [
   { key: "habit", _style: "min-width:100px" },
   { key: "performance", _style: "min-width:100px;" },
+  {
+    key: "edit_info",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -116,7 +148,8 @@ export default {
       collapseDuration: 0,
       subjects: [
         { label: "-- Select One --", value: ""},
-      ]
+      ],
+      workEditItem: null,
     };
   },
   methods: {
@@ -190,12 +223,16 @@ export default {
       this.showProgress = false;
       this.showModal = false;
       if (updated) {
-        const id = this.items.length;
-        this.items.push({
-            id,
-            habit: updated.habit,
-            performance: updated.performance,
-        });
+        if (updated.edit) {
+          this.items[updated.id] = updated;
+        } else {
+          const id = this.items.length;
+          this.items.push({
+              id,
+              habit: updated.habit,
+              performance: updated.performance,
+          });
+        }
         this.$emit("submit-work-habit", {key: "work_habits", value: JSON.stringify(this.items)});
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject objective</code>`;
@@ -203,9 +240,20 @@ export default {
         this.notification.type = "danger";
       }
     }, //end of updateSubjects
+    EditWorkItem(workItem) {
+      workItem.timeStamp = Date.now();
+      this.workEditItem = workItem;
+      this.showModal = true;
+    }, // end of EditWorkItem
+    DeleteRecord(pointer) {
+      this.items = this.items.splice(pointer, 1);
+      this.$emit("submit-work-habit", {key: "work_habits", value: JSON.stringify(this.items)});
+    }, //end of DeleteRecord
   },
   created() {
-    if (this.allWorkHabit.length > 0) this.items =  this.allWorkHabit;
+    this.$watch('allWorkHabit', (update) => {
+      this.items = update;
+    });
   },
 };
 </script>
