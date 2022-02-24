@@ -31,7 +31,7 @@
                             <CRow>
                                 <CCol lg="6">Parent Info</CCol>
                                 <CCol lg="6">
-                                    <AddWard :showModal="showModal" @show-modal="toggleModal" />
+                                    <AddWard :showModal="showModal" @show-modal="toggleModal" @submitted="getParentInfo" />
                                     <CButton
                                         color="success"
                                         variant="outline"
@@ -47,8 +47,45 @@
                             </CRow>
                         </CCardHeader>
                         <CCardBody>
-                            <!--full_name<br />
-                            email -->
+                            <CRow>
+                                <CCol md="4">
+                                    <img rounded thumbnail :src="parent.avatar" width="200" height="200"/>
+                                </CCol>
+                                <CCol md="8">
+                                    <CCardTitle>{{ parent.full_name }}</CCardTitle>
+                                    <CCardText>{{ parent.email }}</CCardText>
+                                    <CCardText>Total Wards: {{ parent.ward_count }}</CCardText>
+                                </CCol>
+                            </CRow>
+                            <CRow class="my-4">
+                                <CCol sm="12">
+                                    <CDataTable
+                                        :items="wards"
+                                        :fields="fields"
+                                        column-filter
+                                        table-filter
+                                        items-per-page-select
+                                        :items-per-page="5"
+                                        hover
+                                        sorter
+                                        pagination
+                                    >
+                                        <template #show_details="{ }">
+                                            <td class="py-2">
+                                                <CButton
+                                                color="info"
+                                                variant="outline"
+                                                square
+                                                :disabled="isBtnDisabled"
+                                                size="sm"
+                                                style="cursor: pointer;"
+                                                class="fa fa-eye"
+                                                />
+                                            </td>
+                                        </template>
+                                    </CDataTable>
+                                </CCol>
+                            </CRow>
                         </CCardBody>
                     </CCard>
                 </CCol>
@@ -59,6 +96,20 @@
 
 <script>
 import AddWard from '../modals/AddWard';
+
+const fields = [
+    { key: "first_name", _style: "min-width:100px" },
+    { key: "last_name", _style: "min-width:100px;" },
+    { key: "grade_name", _style: "min-width:100px;" },
+    {
+        key: "show_details",
+        label: "",
+        _style: "width:1%",
+        sorter: false,
+        filter: false,
+    },
+];
+
 export default {
     name: "ViewParent",
     components: {
@@ -74,6 +125,9 @@ export default {
                 message: "Loading Parent . . . ",
             },
             showModal: false,
+            parent: {},
+            wards: [],
+            fields,
         }
     },
     methods: {
@@ -113,7 +167,7 @@ export default {
             }
         }, //end of getParentInfo
         showResponse (response) {
-            const classes = response.map(parentObject => {
+            const classes = response.parent.map(parentObject => {
                 return {
                     id: parentObject.id,
                     user_id: parentObject.user_id,
@@ -122,9 +176,12 @@ export default {
                     registered: parentObject.createddate,
                     ward_count: parentObject.ward_count ?? 0,
                     login_count: parentObject.login_count ?? 0,
+                    avatar: (parentObject.avatar) ? `https://entreelab.com.ng/src/storage/app/${parentObject.avatar}` : "img/logo_a.png",
                 };
             });
-            this.showProgress = !this.showProgress;
+            this.parent = classes[0];
+            this.wards = response.wards
+            this.showProgress = false;
         }, //end of showResponse
         toggleModal(){
             this.showModal = !this.showModal;

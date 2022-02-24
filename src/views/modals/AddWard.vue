@@ -198,8 +198,11 @@ export default {
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
 
-        const response = await this.axios(config);
-      } catch (error) {}
+        await this.axios(config);
+        this.$emit("submitted", true);
+      } catch (error) {
+        console.log(error.message);
+      }
     }, //end of linkWards
   },
   created() {

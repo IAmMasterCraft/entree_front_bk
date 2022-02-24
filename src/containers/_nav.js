@@ -166,7 +166,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Manage Wards",
-          to: "/manage-students",
+          to: "/manage-wards",
           icon: "cil-people",
         },
 

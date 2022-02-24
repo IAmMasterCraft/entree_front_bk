@@ -30,9 +30,15 @@
             <CCardHeader>
               <CRow>
                 <CCol lg="6">
-                  <span>Student Booklet</span>
+                  <span>Lesson Plan </span>
                 </CCol>
                 <CCol lg="6" v-if="user === 3">
+                  <AddLessonPlan
+                    :showModal="showModal"
+                    @show-modal="toggleModal"
+                    @show-students="updateLessonPlan"
+                    :subjects="subjectList"
+                  />
                   <CButton
                     color="success"
                     variant="outline"
@@ -40,12 +46,9 @@
                     class="text-right float-right"
                     size="sm"
                     :disabled="isBtnDisabled"
-                    @click="navigation({
-                      id: $route.params.id,
-                      grade_name: $route.params.class
-                    })"
-                  >
-                    Add Booklet
+                    @click="toggleModal"
+                    >
+                    Add New
                   </CButton>
                 </CCol>
               </CRow>
@@ -62,6 +65,13 @@
                 sorter
                 pagination
               >
+                <template #status="{ item }">
+                  <td>
+                    <CBadge :color="getBadge(item.status)">
+                      {{ item.status }}
+                    </CBadge>
+                  </td>
+                </template>
                 <template #show_details="{ item }">
                   <td class="py-2">
                     <CButton
@@ -70,11 +80,18 @@
                       square
                       :disabled="isBtnDisabled"
                       size="sm"
-                      style="cursor: pointer;"
                       class="fa fa-eye"
-                      @click="$router.push({name: 'Preview Communication Booklet / ', props: {a: 's'}, params: {id: $route.params.id, class: $route.params.class.toLowerCase(), booklet: item.id}})"
+                      @click="$router.push({name: 'Preview Lesson Plan / ', params: {id: $route.params.id, class: $route.params.class.toLowerCase(), plan: item.id}})"
                     />
                   </td>
+                </template>
+                <template #details="{ item }">
+                  <CCollapse
+                    :show="Boolean(item._toggled)"
+                    :duration="collapseDuration"
+                  >
+                    <CCardBody> </CCardBody>
+                  </CCollapse>
                 </template>
               </CDataTable>
             </CCardBody>
@@ -87,11 +104,14 @@
 
 <script>
 
+import AddLessonPlan from "../modals/AddLessonPlan";
+
 const items = [];
 
 const fields = [
-  { key: "first_name", _style: "min-width:100px" },
-  { key: "last_name", _style: "min-width:100px;" },
+  { key: "subject", _style: "min-width:100px" },
+  // { key: "class", _style: "min-width:100px;" },
+  { key: "topic", _style: "min-width:100px;" },
   { key: "week", _style: "min-width:100px;" },
   {
     key: "show_details",
@@ -103,8 +123,9 @@ const fields = [
 ];
 
 export default {
-  name: "StudentBooklet",
+  name: "LessonPlanList",
   components: {
+    AddLessonPlan,
   },
   data() {
     return {
@@ -114,7 +135,7 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Students . . . ",
+        message: "Loading Lesson Plan . . . ",
       },
       showModal: false,
 
@@ -124,7 +145,7 @@ export default {
       fields,
       details: [],
       collapseDuration: 0,
-      studentList: [
+      subjectList: [
         { label: "-- Select One --", value: "" },
       ],
     };
@@ -165,11 +186,11 @@ export default {
       });
     },
 
-    async allBooklet() {
+    async allLessonPlan() {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/booklet/${this.$route.params.id}`,
+          url: `https://entreelab.com.ng/src/api/lesson-plan/${this.$route.params.id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -179,6 +200,7 @@ export default {
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch (error) {
+        console.log(error.message);
         if (error.response) {
           this.notification.message =
             error.response.data.message ??
@@ -201,22 +223,22 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of allBooklet()
+    }, //end of allLessonPlan()
     showData(response) {
       if (this.user === 3) {
-        response.students.forEach(student => {
-          this.studentList.push({
-            label: `${student.first_name} ${student.last_name}`,
-            value: student.user_id,
+        response.subjects.forEach(subject => {
+          this.subjectList.push({
+            label: subject.subject_name,
+            value: subject.id,
           });
         });
       }
       
-      this.items = response.booklet.map(resp => {
+      this.items = response.lesson_plan.map(resp => {
         return {
           id: resp.id,
-          first_name: resp.first_name,
-          last_name: resp.last_name,
+          subject: resp.subject_name,
+          topic: resp.topic,
           week: resp.week,
         }
       });
@@ -225,23 +247,20 @@ export default {
     toggleModal() {
       this.showModal = !this.showModal;
     }, //end of toggleModal
-    async updateStudents(updated) {
+    async updateLessonPlan(updated) {
       this.showProgress = !this.showProgress;
       this.showModal = false;
       if (updated) {
-        this.allBooklet();
+        this.allLessonPlan();
       } else {
         this.notification.message = `<code>Something went wrong with creating new subject</code>`;
         this.notification.countdown = 20;
         this.notification.type = "danger";
       }
-    }, //end of updateSubjects
-    navigation(classProps) {
-      this.$router.push({name: "Communication Booklet / Add", params: {id: classProps.id, class: classProps.grade_name.toLowerCase()}});
-    }, //end of navigation
+    }, //end of updateLessonPlan
   },
   created() {
-    this.allBooklet();
+    this.allLessonPlan();
   },
 };
 </script>
