@@ -90,6 +90,22 @@
                   </CCardText>
                   <CCardText><small class="text-muted">{{ profile.user_details.createddate }}</small></CCardText>
                 </CCardBody>
+
+                <CCardBody v-if="user === 5">
+                  <CCardTitle>
+                    {{ profile.user.first_name }} {{ profile.user.last_name }}
+                  </CCardTitle>
+                  <CCardText>
+                    {{ profile.user.email }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user.phone_number }}
+                  </CCardText>
+                  <CCardText>
+                    {{ profile.user_details.ward_count }} Student(s) at {{ profile.user_details.school_name }}
+                  </CCardText>
+                  <CCardText><small class="text-muted">{{ profile.user.createddate }}</small></CCardText>
+                </CCardBody>
               </CCol>
             </CRow>
           </CCard>

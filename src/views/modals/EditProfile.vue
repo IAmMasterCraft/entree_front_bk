@@ -202,6 +202,15 @@ export default {
         description: this.userProfile.user_details.description,
       };
     }
+    if (this.user === 5) {
+      this.formValues = {
+        first_name: this.userProfile.user.first_name,
+        last_name: this.userProfile.user.last_name,
+        phone_number: this.userProfile.user.phone_number,
+        email_address: this.userProfile.user.email,
+        avatar: this.userProfile.user.avatar,
+      };
+    }
   },
 }
 </script>

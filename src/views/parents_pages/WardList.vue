@@ -30,26 +30,7 @@
             <CCardHeader>
               <CRow>
                 <CCol lg="6">
-                  <span>Lesson Plan </span>
-                </CCol>
-                <CCol lg="6" v-if="user === 3">
-                  <AddLessonPlan
-                    :showModal="showModal"
-                    @show-modal="toggleModal"
-                    @show-students="updateLessonPlan"
-                    :subjects="subjectList"
-                  />
-                  <CButton
-                    color="success"
-                    variant="outline"
-                    square
-                    class="text-right float-right"
-                    size="sm"
-                    :disabled="isBtnDisabled"
-                    @click="toggleModal"
-                    >
-                    Add New
-                  </CButton>
+                  <span>Wards</span>
                 </CCol>
               </CRow>
             </CCardHeader>
@@ -65,34 +46,6 @@
                 sorter
                 pagination
               >
-                <template #status="{ item }">
-                  <td>
-                    <CBadge :color="getBadge(item.status)">
-                      {{ item.status }}
-                    </CBadge>
-                  </td>
-                </template>
-                <template #show_details="{ item }">
-                  <td class="py-2">
-                    <CButton
-                      color="info"
-                      variant="outline"
-                      square
-                      :disabled="isBtnDisabled"
-                      size="sm"
-                      class="fa fa-eye"
-                      @click="$router.push({name: 'Preview Lesson Plan / ', params: {id: $route.params.id, class: $route.params.class.toLowerCase(), plan: item.id}})"
-                    />
-                  </td>
-                </template>
-                <template #details="{ item }">
-                  <CCollapse
-                    :show="Boolean(item._toggled)"
-                    :duration="collapseDuration"
-                  >
-                    <CCardBody> </CCardBody>
-                  </CCollapse>
-                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -104,28 +57,16 @@
 
 <script>
 
-import AddLessonPlan from "../modals/AddLessonPlan";
-
 const items = [];
 
 const fields = [
-  { key: "subject", _style: "min-width:100px" },
-  // { key: "class", _style: "min-width:100px;" },
-  { key: "topic", _style: "min-width:100px;" },
-  { key: "week", _style: "min-width:100px;" },
-  {
-    key: "show_details",
-    label: "",
-    _style: "width:1%",
-    sorter: false,
-    filter: false,
-  },
+  { key: "name", _style: "min-width:100px" },
+  { key: "class", _style: "min-width:100px;" },
 ];
 
 export default {
-  name: "LessonPlanList",
+  name: "WardList",
   components: {
-    AddLessonPlan,
   },
   data() {
     return {
@@ -135,7 +76,7 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Lesson Plan . . . ",
+        message: "Loading Wards . . . ",
       },
       showModal: false,
 
@@ -145,9 +86,6 @@ export default {
       fields,
       details: [],
       collapseDuration: 0,
-      subjectList: [
-        { label: "-- Select One --", value: "" },
-      ],
     };
   },
   methods: {
@@ -186,11 +124,11 @@ export default {
       });
     },
 
-    async allLessonPlan() {
+    async allStudents() {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/lesson-plan/${this.$route.params.id}`,
+          url: `https://entreelab.com.ng/src/api/wards`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -200,7 +138,6 @@ export default {
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch (error) {
-        console.log(error.message);
         if (error.response) {
           this.notification.message =
             error.response.data.message ??
@@ -223,23 +160,15 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of allLessonPlan()
+    }, //end of allStudent()
     showData(response) {
-      if (this.user === 3) {
-        response.subjects.forEach(subject => {
-          this.subjectList.push({
-            label: subject.subject_name,
-            value: subject.id,
-          });
-        });
-      }
-      
-      this.items = response.lesson_plan.map(resp => {
+      this.items = response.map(resp => {
         return {
-          id: resp.id,
-          subject: resp.subject_name,
-          topic: resp.topic,
-          week: resp.week,
+          name: `${resp.first_name} ${resp.last_name}`,
+          class: resp.grade_name,
+          registered: resp.createddate,
+          login_count: resp.login_count,
+          total_subject: resp.subject_count,
         }
       });
       this.showProgress = !this.showProgress;
@@ -247,20 +176,9 @@ export default {
     toggleModal() {
       this.showModal = !this.showModal;
     }, //end of toggleModal
-    async updateLessonPlan(updated) {
-      this.showProgress = !this.showProgress;
-      this.showModal = false;
-      if (updated) {
-        this.allLessonPlan();
-      } else {
-        this.notification.message = `<code>Something went wrong with creating new subject</code>`;
-        this.notification.countdown = 20;
-        this.notification.type = "danger";
-      }
-    }, //end of updateLessonPlan
   },
   created() {
-    this.allLessonPlan();
+    this.allStudents();
   },
 };
 </script>

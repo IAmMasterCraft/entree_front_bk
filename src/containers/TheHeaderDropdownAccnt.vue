@@ -45,6 +45,10 @@
     <CDropdownItem to="/profile">
       <CIcon name="cil-user" /> Profile
     </CDropdownItem>
+    <CDropdownDivider/>
+    <CDropdownItem to="/reset-password">
+      <CIcon name="cil-lock-locked" /> Reset Password
+    </CDropdownItem>
     <CDropdownItem v-if="true === false">
       <CIcon name="cil-settings" /> Settings
     </CDropdownItem>

@@ -27,6 +27,7 @@
       <SchoolDashboard v-if="user === 2" :dashBoardData="dashBoardData" />
       <TeacherDashboard v-if="user === 3" :dashBoardData="dashBoardData" />
       <StudentDashboard v-if="user === 4" :dashBoardData="dashBoardData" />
+      <ParentsDashboard v-if="user === 5" :dashBoardData="dashBoardData" />
       <BursarDashboard v-if="user === 6" :dashBoardData="dashBoardData" />
     </div>
 
@@ -38,6 +39,7 @@ import getDashboardData from './dash_data'
 import SchoolDashboard from './users/School/SchoolDashboard'
 import TeacherDashboard from './users/Teacher/TeachersDashboard'
 import StudentDashboard from './users/Student/StudentDashboard'
+import ParentsDashboard from './users/Parent/ParentDashboard'
 import BursarDashboard from './users/Bursar/BursarsDashboard'
 
 export default {
@@ -46,6 +48,7 @@ export default {
     SchoolDashboard,
     TeacherDashboard,
     StudentDashboard,
+    ParentsDashboard,
     BursarDashboard,
   },
   data () {

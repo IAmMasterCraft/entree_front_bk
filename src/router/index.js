@@ -18,7 +18,9 @@ const Dashboard = () => import('@/views/Dashboard')
 
 // View - Pages
 const Profile = () => import('@/views/pages/Profile')
-const ManageAttendance = () => import('@/views/pages/ManageAttendance')
+const ManageAttendance = () => import("@/views/pages/ManageAttendance");
+const ManageWardAttendance = () => import("@/views/parents_pages/StudentAttendance");
+const SingleWardAttendance = () => import("@/views/parents_pages/SingleAttendance");
 const AttendanceList = () => import('@/views/pages/AttendanceList')
 const ManageLessonPlan = () => import("@/views/pages/ManageLessonPlan");
 const LessonPlanList = () => import('@/views/pages/LessonPlanList')
@@ -45,7 +47,7 @@ const ViewParent = () => import("@/views/pages/ViewParent");
 const ViewLessons = () => import("@/views/pages/ViewLessons");
 const ResetPassword = () => import("@/views/pages/ResetPassword");
 
-const ManageWards = () => import("@/views/pages/ManageWards");
+const WardList = () => import("@/views/parents_pages/WardList");
 
 // Views - Pages
 const Page404 = () => import('@/views/pages/Page404')
@@ -73,6 +75,16 @@ function configRoutes () {
           path: "dashboard",
           name: "Dashboard",
           component: Dashboard,
+        },
+        {
+          path: "parents/manage-attendance",
+          name: "Manage Wards Attendance",
+          component: ManageWardAttendance,
+        },
+        {
+          path: "parents/manage-attendance/:id/:name",
+          name: "Manage Wards Attendance / ",
+          component: SingleWardAttendance,
         },
         {
           path: "manage-attendance",
@@ -204,7 +216,7 @@ function configRoutes () {
         {
           path: "manage-wards",
           name: "Manage Wards",
-          component: ManageWards,
+          component: WardList,
         },
       ],
     },
