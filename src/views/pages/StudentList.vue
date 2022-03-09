@@ -38,7 +38,15 @@
                     @show-modal="toggleModal"
                     @show-students="updateStudents"
                   />
+                  <Studentpreview
+                    :showModal="showpreview"
+                    @show-studentpreview = "togglepreview"
+                    :students = "studentobjects"
+
+                   />
+                  
                   <CButton
+                  
                     color="success"
                     variant="outline"
                     square
@@ -52,6 +60,7 @@
                 </CCol>
               </CRow>
             </CCardHeader>
+            
             <CCardBody>
               <CDataTable
                 :items="items"
@@ -71,9 +80,10 @@
                     </CBadge>
                   </td>
                 </template>
-                <template #show_details="{}">
+                <template #show_details="{item}">
                   <td class="py-2">
                     <CButton
+                      @click="togglepreview (item.index_value) "
                       color="info"
                       variant="outline"
                       square
@@ -102,6 +112,7 @@
 
 <script>
 import AddStudent from "../modals/AddStudent";
+import Studentpreview from "../modals/Studentpreview";
 
 const items = [];
 
@@ -124,6 +135,8 @@ export default {
   name: "StudentList",
   components: {
     AddStudent,
+    Studentpreview
+    
   },
   data() {
     return {
@@ -136,6 +149,11 @@ export default {
         message: "Loading Students . . . ",
       },
       showModal: false,
+      showpreview: false,
+      studentobjects :{
+
+      },
+      studentpopulation : [  ],
 
       items: items.map((item, id) => {
         return { ...item, id };
@@ -219,23 +237,37 @@ export default {
       }
     }, //end of allStudent()
     showData(response) {
-      this.items = response.map(resp => {
+      this.studentpopulation = response;
+      this.items = response.map( (resp,i) => {
         return {
           name: `${resp.first_name} ${resp.last_name}`,
           class: resp.grade_name,
           registered: resp.createddate,
           login_count: resp.login_count,
           total_subject: resp.subject_count,
+          index_value : i,
         }
       });
       this.showProgress = !this.showProgress;
     }, //end of showData
     toggleModal() {
       this.showModal = !this.showModal;
-    }, //end of toggleModal
+    },
+     //end of toggleModal
+    togglepreview(studentitem = false){
+      if (studentitem != false){
+        this.studentobjects = this.studentpopulation[studentitem];
+      }
+      this.showpreview = !this.showpreview;
+      
+    },
+     //end of togglePreview
+   
     async updateStudents(updated) {
       this.showProgress = !this.showProgress;
       this.showModal = false;
+      this.showpreview = false;
+
       if (updated) {
         this.allStudents();
       } else {
