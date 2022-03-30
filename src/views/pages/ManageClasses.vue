@@ -33,6 +33,7 @@
                   <span>Classes</span>
                 </CCol>
                 <CCol lg="6" v-if="user === 2">
+                  <ClassPreview   :showModal="showclass" @ClassPreview-modal="CloseClassPreview"  :classes="classPreviewobj" />
                   <AddClass :showModal="showModal" @show-modal="toggleModal" @show-classes="updateClasses" />
                   <CButton
                     color="success"
@@ -67,6 +68,19 @@
                     </CBadge>
                   </td>
                 </template>
+                  <template #show_details="{item}">
+                  <td class="py-2">
+                    <CButton
+                      @click="toggleClasspreview (item.index_value) "
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      class="fa fa-eye"
+                    />
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -78,6 +92,7 @@
 
 <script>
 import AddClass from '../modals/AddClass';
+import ClassPreview from '../modals/ClassPreview';
 
 const items = [];
 
@@ -86,31 +101,37 @@ const fields = [
   { key: 'total_subject', _style:'min-width:100px;' },
   { key: 'total_student', _style:'min-width:100px;' },
   'registered',
-  // {
-  //   key: 'show_details',
-  //   label: '',
-  //   _style: 'width:1%',
-  //   sorter: false,
-  //   filter: false
-  // }
+  {
+    key: 'show_details',
+    label: '',
+    _style: 'width:1%',
+    sorter: false,
+    filter: false
+  }
 ]
 
 
 export default {
   name: 'ManageClasses',
   components: {
-    AddClass
+    AddClass,
+    ClassPreview
   },
   data () {
     return {
       isBtnDisabled: false,
       showProgress: true,
       user: parseInt(localStorage.getItem("user_type")),
+      showclass: false,
       notification: {
         type: "success",
         countdown: 2,
         message: "Loading Classes . . . ",
+       
       },
+       classPreviewobj:{
+
+        },
       showModal: false,
 
       items: items.map((item, id) => { return {...item, id}}),
@@ -184,8 +205,10 @@ export default {
       }
     }, //end of allClasses
     showData(response){
-      const classes = response.map(classObject => {
+      
+      const classes = response.map((classObject,index) => {
         return {
+          index_value: index,
           id: classObject.id,
           class_name: classObject.grade_name,
           registered: classObject.createddate,
@@ -199,9 +222,24 @@ export default {
     toggleModal(){
       this.showModal = !this.showModal;
     }, //end of toggleModal
+    toggleClasspreview(index_value){
+    
+      this.classPreviewobj = this.items[index_value];
+      this.showclass = !this.showclass;
+   
+      
+
+
+    
+    },
+    CloseClassPreview(closeClass){
+      this.showclass = closeClass;
+    },
+    //end of toggleshowclass
     updateClasses(allClasses) {
       this.showProgress = !this.showProgress;
       this.showModal = false;
+      this.showclass = false;
       this.showData(allClasses);
     }, //end of updateClasses
   },
