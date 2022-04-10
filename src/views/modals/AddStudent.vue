@@ -150,7 +150,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/register",
+          url: `${window.location.origin}/src/api/register`,
           data: this.formValues,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
@@ -184,7 +184,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/school/subjects/${this.$route.params.id}`,
+          url: `${window.location.origin}/src/api/school/subjects/${this.$route.params.id}`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,

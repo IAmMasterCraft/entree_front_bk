@@ -193,7 +193,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/attendance`,
+          url: `${window.location.origin}/src/api/attendance`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -260,7 +260,7 @@ export default {
         try {
             const config = {
               method: "get",
-              url: `https://entreelab.com.ng/src/api/attendance/get-attendance/${revert}`,
+              url: `${window.location.origin}/src/api/attendance/get-attendance/${revert}`,
               data: null,
               headers: { Authorization: localStorage.getItem("token") },
               withCredentials: false,

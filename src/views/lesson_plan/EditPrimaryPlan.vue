@@ -301,7 +301,7 @@ export default {
         this.formValues.reflection = JSON.stringify(this.formValues.reflection);
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/lesson-plan/edit",
+          url: `${window.location.origin}/src/api/lesson-plan/edit`,
           data: this.formValues,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };

@@ -5,7 +5,7 @@ const getDashboardData = async () => {
 	try {
 		const config = {
 			method: "get",
-			url: "https://entreelab.com.ng/src/api/dashboard",
+			url: `${window.location.origin}/src/api/dashboard`,
 			headers: {
 				"Authorization": localStorage.getItem("token"),
 			},

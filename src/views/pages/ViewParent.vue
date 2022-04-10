@@ -135,7 +135,7 @@ export default {
             try {
                 const config = {
                     method: "get",
-                    url: `https://entreelab.com.ng/src/api/parents/${this.$route.params.id}`,
+                    url: `${window.location.origin}/src/api/parents/${this.$route.params.id}`,
                     data: null,
                     headers: { Authorization: localStorage.getItem("token") },
                     withCredentials: false,
@@ -176,7 +176,7 @@ export default {
                     registered: parentObject.createddate,
                     ward_count: parentObject.ward_count ?? 0,
                     login_count: parentObject.login_count ?? 0,
-                    avatar: (parentObject.avatar) ? `https://entreelab.com.ng/src/storage/app/${parentObject.avatar}` : "img/logo_a.png",
+                    avatar: (parentObject.avatar) ? `${window.location.origin}/src/storage/app/${parentObject.avatar}` : "img/logo_a.png",
                 };
             });
             this.parent = classes[0];

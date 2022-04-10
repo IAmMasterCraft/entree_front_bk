@@ -41,7 +41,7 @@
                                     </CCol>
                                     <CCol sm="6" class="">
                                         <video controls width="350" height="200">
-                                            <source :src="`https://entreelab.com.ng/src/storage/app/${lesson.source}`" type="video/mp4">
+                                            <source :src="`${window.location.origin}/src/storage/app/${lesson.source}`" type="video/mp4">
                                         </video>
                                     </CCol>
                                     <CCol sm="5">
@@ -96,7 +96,7 @@ export default {
             try {
                 const config = {
                     method: "get",
-                    url: `https://entreelab.com.ng/src/api/lessons/${this.$route.params.subject_id}`,
+                    url: `${window.location.origin}/src/api/lessons/${this.$route.params.subject_id}`,
                     data: null,
                     headers: { Authorization: localStorage.getItem("token") },
                     withCredentials: false,

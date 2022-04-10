@@ -157,13 +157,13 @@ export default {
       try {
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/login",
+          url: `${window.location.origin}/src/api/login`,
           data: this.formValues,
         };
         const response = await this.axios(config);
         localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         localStorage.setItem("user_type", response.data.user.user_type);
-        (response.data.user.avatar) ? localStorage.setItem("avatar", `https://entreelab.com.ng/src/storage/app/${response.data.user.avatar}`) : localStorage.setItem("avatar", "img/logo_a.png");
+        (response.data.user.avatar) ? localStorage.setItem("avatar", `${window.location.origin}/src/storage/app/${response.data.user.avatar}`) : localStorage.setItem("avatar", "img/logo_a.png");
         if (response.data.user.login_count == 0) {
           alert(
             "Please set a new password"

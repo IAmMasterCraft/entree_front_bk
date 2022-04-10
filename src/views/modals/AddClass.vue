@@ -102,7 +102,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/classes",
+          url: `${window.location.origin}/src/api/classes`,
           data: {
             grade_name: this.formValues.grade_name,
           },

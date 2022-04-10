@@ -270,7 +270,7 @@ export default {
     },
     async submitForm(){
       try {
-        // const response = await fetch('https://entreelab.com.ngsrc/api/auth/register', {
+        // const response = await fetch(`${window.location.origin}/src/api/auth/register`, {
         //   method: "POST",
         //   body: JSON.stringify(data),
         //   headers: {
@@ -404,7 +404,7 @@ export default {
       try {
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/mail",
+          url: `${window.location.origin}/src/api/mail`,
           data: mailValue,
         };
         await this.axios(config);
@@ -418,7 +418,7 @@ export default {
       try {
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/register",
+          url: `${window.location.origin}/src/api/register`,
           data: this.formValues,
         };
         const response = await this.axios(config);

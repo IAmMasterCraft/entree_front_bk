@@ -137,7 +137,7 @@ export default {
         formData.append("description", this.formValues.description);
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/user-profile",
+          url: `${window.location.origin}/src/api/user-profile`,
           data: formData,
           headers: {
             "Authorization" : localStorage.getItem("token"),
@@ -146,7 +146,7 @@ export default {
         };
         const response = await this.axios(config);
         this.formValues = null;
-        (response.data.user.avatar) ? localStorage.setItem("avatar", `https://entreelab.com.ng/src/storage/app/${response.data.user.avatar}`) : localStorage.setItem("avatar", "img/logo_a.png");
+        (response.data.user.avatar) ? localStorage.setItem("avatar", `${window.location.origin}/src/storage/app/${response.data.user.avatar}`) : localStorage.setItem("avatar", "img/logo_a.png");
         this.isBtnDisabled = false;
         this.showProgress = false;
         this.$emit("show-profile", response.data);

@@ -275,7 +275,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/booklet/new-booklet",
+          url: `${window.location.origin}/src/api/booklet/new-booklet`,
           data: this.formValues,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };

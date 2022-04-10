@@ -165,7 +165,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: "https://entreelab.com.ng/src/api/parents",
+          url: `${window.location.origin}/src/api/parents`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,

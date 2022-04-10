@@ -151,7 +151,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: "https://entreelab.com.ng/src/api/bursars",
+          url: `${window.location.origin}/src/api/bursars`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,

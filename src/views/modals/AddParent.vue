@@ -134,7 +134,7 @@ export default {
         const user = localStorage.getItem("user_type");
         const config = {
           method: "post",
-          url: "https://entreelab.com.ng/src/api/register",
+          url: `${window.location.origin}/src/api/register`,
           data: {
             user_type: 5,
             first_name: this.formValues.first_name,

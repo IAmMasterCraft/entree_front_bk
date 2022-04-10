@@ -169,7 +169,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `https://entreelab.com.ng/src/api/attendance/get-student/${this.$route.params.id}`,
+          url: `${window.location.origin}/src/api/attendance/get-student/${this.$route.params.id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -222,7 +222,7 @@ export default {
         try {
             const config = {
             method: "get",
-            url: `https://entreelab.com.ng/src/api/attendance/student-attendance/${this.$route.params.id}/${revert}`,
+            url: `${window.location.origin}/src/api/attendance/student-attendance/${this.$route.params.id}/${revert}`,
             data: null,
             headers: { Authorization: localStorage.getItem("token") },
             withCredentials: false,

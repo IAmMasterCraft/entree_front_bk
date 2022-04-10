@@ -170,7 +170,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: "https://entreelab.com.ng/src/api/user-profile",
+          url: `${window.location.origin}/src/api/user-profile`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,
@@ -203,7 +203,7 @@ export default {
     showData(response){
       this.profile = response;
       this.showProgress = !this.showProgress;
-      this.profile.user.avatar = (!this.profile.user.avatar) ? "img/logo_a.png" : `https://entreelab.com.ng/src/storage/app/${this.profile.user.avatar}`;
+      this.profile.user.avatar = (!this.profile.user.avatar) ? "img/logo_a.png" : `${window.location.origin}/src/storage/app/${this.profile.user.avatar}`;
     }, //end of showData
     toggleModal(){
       this.showModal = !this.showModal;

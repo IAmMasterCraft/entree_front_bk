@@ -90,7 +90,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: "https://entreelab.com.ng/src/api/classes",
+          url: `${window.location.origin}/src/api/classes`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,
