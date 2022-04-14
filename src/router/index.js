@@ -107,6 +107,16 @@ function configRoutes () {
           component: StudentBooklet,
         },
         {
+          path: "view-communication-booklet",
+          name: "View Communication Booklet / ",
+          component: StudentBooklet,
+        },
+        {
+          path: "view-communication-booklet/:booklet",
+          name: "View Communication Booklet / Student",
+          component: ViewStudentBooklet,
+        },
+        {
           path: "communication-booklet/:id/:class/add",
           name: "Communication Booklet / Add",
           component: AddStudentBooklet,

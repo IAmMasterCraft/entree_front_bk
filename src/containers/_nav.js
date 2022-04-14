@@ -146,7 +146,7 @@ const SCHOOL = [
         {
           _name: "CSidebarNavItem",
           name: "Communication Booklet",
-          to: "/communication-booklet",
+          to: "/view-communication-booklet",
           icon: "cil-people",
         },
       ],

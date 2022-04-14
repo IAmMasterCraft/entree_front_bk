@@ -72,7 +72,7 @@
                       size="sm"
                       style="cursor: pointer;"
                       class="fa fa-eye"
-                      @click="$router.push({name: 'Preview Communication Booklet / ', props: {a: 's'}, params: {id: $route.params.id, class: $route.params.class.toLowerCase(), booklet: item.id}})"
+                      @click="ManagePush(item.id)"
                     />
                   </td>
                 </template>
@@ -174,6 +174,7 @@ export default {
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
         };
+        if (this.user === 4) config.url = "https://entreelab.com.ng/src/api/booklet/student";
         const response = await this.axios(config);
         this.showData(response.data);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
@@ -202,6 +203,13 @@ export default {
         }
       }
     }, //end of allBooklet()
+    ManagePush(id) {
+      if (this.user === 4) {
+        this.$router.push({name: 'View Communication Booklet / Student', params: {booklet: id}})
+      } else {
+        this.$router.push({name: 'Preview Communication Booklet / ', props: {a: 's'}, params: {id: this.$route.params.id, class: this.$route.params.class.toLowerCase(), booklet: id}})
+      }
+    }, //end of ManagePush
     showData(response) {
       if (this.user === 3) {
         response.students.forEach(student => {
