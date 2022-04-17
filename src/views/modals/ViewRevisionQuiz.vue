@@ -33,6 +33,9 @@
         <h5 class="px-3">Revision Quiz</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
+      <div v-if="!lessonQuiz.question">
+        <h4 class="text-danger mx-4">No revision quiz...</h4>
+      </div>
 			<div v-for="(quest, index) in formValues.questions" :key="index">
           <div v-if="setupQuestion">
             <h5>Question {{ index + 1}}</h5>
@@ -94,6 +97,9 @@ export default {
     },
     lesson: {
       type: Object,
+    },
+    lessonQuiz: {
+      type: Object,
     }
   },
   data () {
@@ -118,15 +124,10 @@ export default {
       this.$emit("show-modal", !visibility);
     }, //updateModalVisibility method
   },
-  created() {
-    this.formValues.questions = [
-      {
-        question: this.lesson.question,
-        correct_answer: this.lesson.correct_answer,
-        score: this.lesson.score
-      }
-    ];
-    this.mcq_options = this.lesson.options.split("%~");
-  },
+  watch: {
+    lessonQuiz(newVal) {
+      console.log(newVal);
+    },
+  }
 }
 </script>

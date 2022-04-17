@@ -40,7 +40,7 @@
                                         class="text-right float-right"
                                         size="sm"
                                         :disabled="isBtnDisabled"
-                                        v-if="edit == 'edit'"
+                                        v-if="edit == 'edit' && user == 3"
                                         @click="StartEditing()"
                                     >
                                         Edit Mode
@@ -52,7 +52,7 @@
                                         class="text-right float-right"
                                         size="sm"
                                         :disabled="isBtnDisabled"
-                                        v-else
+                                        v-else-if="edit != 'edit' && user == 3"
                                         @click="StartEditing('edit')"
                                     >
                                         Save Changes
@@ -167,12 +167,12 @@ export default {
             try {
                 const config = {
                     method: "get",
-                    url: `${window.location.origin}/src/api/booklet/${this.$route.params.id}/${this.$route.params.booklet}`,
+                    url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/booklet/${this.$route.params.id}/${this.$route.params.booklet}`,
                     data: null,
                     headers: { Authorization: localStorage.getItem("token") },
                     withCredentials: false,
                 };
-                if (this.user === 4) config.url = `https://entreelab.com.ng/src/api/booklet/student/${this.$route.params.booklet}`;
+                if (this.user === 4) config.url = `https://entreelab.org/src/api/booklet/single-student/${this.$route.params.booklet}`;
                 const response = await this.axios(config);
                 this.ShowData(response.data);
             } catch (error) {
@@ -200,14 +200,20 @@ export default {
             }
         }, //end of GetBooklet
         ShowData (response) {
-            response.students.forEach(student => {
-                this.studentList.push({
-                    label: `${student.first_name} ${student.last_name}`,
-                    value: student.user_id,
-                });
-            });
-            this.booklet = response.booklet[0];
-            this.showProgress = !this.showProgress;
+            try {
+                if (this.user == 3) {
+                    response.students.forEach(student => {
+                        this.studentList.push({
+                            label: `${student.first_name} ${student.last_name}`,
+                            value: student.user_id,
+                        });
+                    });
+                }
+                this.booklet = response.booklet[0];
+                this.showProgress = !this.showProgress;
+            } catch (error) {
+                console.error(error);
+            }
         }, //end of ShowData()
         toggleModal() {
             this.showModal = !this.showModal;

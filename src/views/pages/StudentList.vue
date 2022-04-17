@@ -203,7 +203,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/school/students/${this.$route.params.id}`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/school/students/${this.$route.params.id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,

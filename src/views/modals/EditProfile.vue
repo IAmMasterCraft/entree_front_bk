@@ -137,7 +137,7 @@ export default {
         formData.append("description", this.formValues.description);
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/user-profile`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/user-profile`,
           data: formData,
           headers: {
             "Authorization" : localStorage.getItem("token"),

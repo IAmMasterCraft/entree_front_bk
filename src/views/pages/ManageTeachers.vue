@@ -187,7 +187,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/teachers`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/teachers`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,
@@ -269,7 +269,7 @@ export default {
       try {
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/reset-password`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/reset-password`,
           data: {
             user: id,
           },

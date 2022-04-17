@@ -116,7 +116,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/subjects`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/subjects`,
           data: {
             subject_name: this.formValues.subject_name,
             class_id: this.formValues.class_id,
@@ -152,7 +152,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/teachers`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/teachers`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,

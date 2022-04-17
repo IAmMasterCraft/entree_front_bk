@@ -134,7 +134,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/students`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/students`,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
         const response = await this.axios(config);
@@ -190,7 +190,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/parents/wards`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/parents/wards`,
           data: {
             user_id: this.$route.params.id,
             all_wards: this.students_selected,

@@ -26,6 +26,7 @@
         <div v-if="!showProgress">
             <CRow>
                 <CCol lg="12">
+                    <ViewRevisionQuiz :showModal="showModal" @show-modal="toggleModal(false)" :lessonQuiz="lessonQuiz" />
                     <CCard>
                         <CCardHeader>
                             <CRow>
@@ -34,20 +35,19 @@
                         </CCardHeader>
                         <CCardBody>
                             <div v-for="(lesson, index) in lessons" :key="index">
-                                <ViewRevisionQuiz :showModal="showModal[index]" @show-modal="toggleModal(index, false)" :lesson="lesson" />
                                 <CRow>
                                     <CCol sm="1">
                                         {{ index + 1 }}
                                     </CCol>
                                     <CCol sm="6" class="">
                                         <video controls width="350" height="200">
-                                            <source :src="`${window.location.origin}/src/storage/app/${lesson.source}`" type="video/mp4">
+                                            <source :src="`${/*window.location.origin*/'https://entreelab.org'}/src/storage/app/${lesson.source}`" type="video/mp4">
                                         </video>
                                     </CCol>
                                     <CCol sm="5">
                                         <h5>{{ lesson.topic }}</h5>
-                                        <p>{{ lesson.description }}</p>
-                                        <CButton color="info" variant="outline" @click="toggleModal(index, true)" square>View Revision Quiz</CButton>
+                                        <p v-if="lesson.description && lesson.description != 'null'">{{ lesson.description }}</p>
+                                        <CButton color="info" variant="outline" @click="toggleModal(true, index)" square>View Revision Quiz</CButton>
                                     </CCol>
                                 </CRow>
                                 <hr />
@@ -86,9 +86,10 @@ export default {
                 countdown: 2,
                 message: "Loading Lessons . . . ",
             },
-            showModal: [],
+            showModal: false,
             lessons: [],
             modalLesson: {},
+            lessonQuiz: {}
         }
     },
     methods: {
@@ -96,7 +97,7 @@ export default {
             try {
                 const config = {
                     method: "get",
-                    url: `${window.location.origin}/src/api/lessons/${this.$route.params.subject_id}`,
+                    url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/lessons/${this.$route.params.subject_id}`,
                     data: null,
                     headers: { Authorization: localStorage.getItem("token") },
                     withCredentials: false,
@@ -129,13 +130,11 @@ export default {
         }, //end of getParentInfo
         showResponse (response) {
             this.lessons = response;
-            for (let i = 0; i < this.lessons.length; i++) { this.showModal.push(false); }
             this.showProgress = !this.showProgress;
         }, //end of showResponse
-        toggleModal(index, val){
-            this.showModal = this.showModal.map((a, i) => {
-                return (i == index) ? val : false;
-            });
+        toggleModal(val = false, index = 0){
+            this.lessonQuiz = this.lessons[index];
+            this.showModal = val;
         }, //end of toggleModal
     },
     created() {

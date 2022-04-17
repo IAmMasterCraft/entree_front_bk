@@ -192,7 +192,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/user-profile`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/user-profile`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,

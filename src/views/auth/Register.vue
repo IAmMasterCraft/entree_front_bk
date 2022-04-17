@@ -371,9 +371,9 @@ export default {
     },
     updateLga(){
       const lgaList = [{value: "-- Select LGA --", label: "-- Select LGA --"}];
-      const lgaObject = statesData.forEach(stateObject => {
-        if (stateObject.name === this.formValues.state) return stateObject.locals.map(lga => {lgaList.push({value: lga.name, label: lga.name})});
-      });
+      // const lgaObject = statesData.forEach(stateObject => {
+      //   if (stateObject.name === this.formValues.state) return stateObject.locals.map(lga => {lgaList.push({value: lga.name, label: lga.name})});
+      // });
       this.allLga = lgaList;
       //disable lga
       this.isLgaDisabled = false;
@@ -404,7 +404,7 @@ export default {
       try {
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/mail`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/mail`,
           data: mailValue,
         };
         await this.axios(config);
@@ -418,7 +418,7 @@ export default {
       try {
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/register`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/register`,
           data: this.formValues,
         };
         const response = await this.axios(config);

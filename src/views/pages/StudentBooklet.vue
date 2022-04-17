@@ -169,12 +169,12 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/booklet/${this.$route.params.id}`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/booklet/${this.$route.params.id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
         };
-        if (this.user === 4) config.url = "https://entreelab.com.ng/src/api/booklet/student";
+        if (this.user === 4) config.url = "https://entreelab.org/src/api/booklet/student";
         const response = await this.axios(config);
         this.showData(response.data);
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);

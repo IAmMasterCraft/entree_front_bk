@@ -194,7 +194,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/lesson-plan/new-plan`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/lesson-plan/new-plan`,
           data: this.formValues,
           headers: {"Authorization" : localStorage.getItem("token"),},
         };

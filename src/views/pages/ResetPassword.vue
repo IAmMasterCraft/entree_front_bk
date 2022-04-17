@@ -77,7 +77,7 @@ export default {
                 this.showProgress = true;
                 const config = {
                     method: "post",
-                    url: `${window.location.origin}/src/api/reset-user-password`,
+                    url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/reset-user-password`,
                     data: {
                         password: this.password,
                     },

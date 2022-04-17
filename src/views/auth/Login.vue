@@ -157,7 +157,7 @@ export default {
       try {
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/login`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/login`,
           data: this.formValues,
         };
         const response = await this.axios(config);

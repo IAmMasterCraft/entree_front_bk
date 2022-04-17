@@ -125,7 +125,7 @@
                       square
                       size="sm"
                       :disabled="isBtnDisabled"
-                      v-if="Number.parseInt(item.total_lessons) > 0"
+                      v-if="Number.parseInt(item.total_lessons) > 0 && presentRoute == 'lesson'"
                       @click="toLesson(item.subject_id)"
                     >
                       View Lessons
@@ -136,7 +136,7 @@
                       square
                       size="sm"
                       :disabled="isBtnDisabled"
-                      v-if="Number.parseInt(item.total_quiz) > 0"
+                      v-if="Number.parseInt(item.total_quiz) > 0 && presentRoute == 'quiz'"
                     >
                       View Quiz
                     </CButton>
@@ -209,6 +209,7 @@ export default {
       details: [],
       collapseDuration: 0,
       subjectDropdowmn: [ {label: "--Select Subject--", value: null,}, ],
+      presentRoute: null,
     };
   },
   methods: {
@@ -251,7 +252,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/school/subjects/${this.$route.params.id}`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/school/subjects/${this.$route.params.id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -334,6 +335,8 @@ export default {
     }, //end of subject_id
   },
   created() {
+    if (this.$route.path.includes("quiz")) this.presentRoute = "quiz";
+    if (this.$route.path.includes("subject")) this.presentRoute = "lesson";
     this.allSubjects();
     // console.log("welcome");
   },

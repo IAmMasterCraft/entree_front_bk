@@ -316,7 +316,7 @@ export default {
         formData.append("questions", JSON.stringify(this.formValues.questions));
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/subjects/new-topic`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/subjects/new-topic`,
           data: formData,
           headers: {
             "Authorization" : localStorage.getItem("token"),
@@ -357,7 +357,7 @@ export default {
       try {
         const config = {
           method: "get",
-          url: `${window.location.origin}/src/api/school/subjects/${this.$route.params.id}`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/school/subjects/${this.$route.params.id}`,
           data: null,
           headers: {"Authorization" : localStorage.getItem("token"),},
           withCredentials: false,

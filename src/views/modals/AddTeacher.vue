@@ -167,7 +167,7 @@ export default {
       try {
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/mail`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/mail`,
           data: mailValue,
         };
         await this.axios(config);
@@ -181,7 +181,7 @@ export default {
         this.showProgress = true;
         const config = {
           method: "post",
-          url: `${window.location.origin}/src/api/register`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/register`,
           data: {
             user_type: 3,
             first_name: this.formValues.first_name,
