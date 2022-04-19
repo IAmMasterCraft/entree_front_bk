@@ -126,7 +126,7 @@ export default {
   },
   watch: {
     lessonQuiz(newVal) {
-      console.log(newVal);
+      this.formValues = newVal;
     },
   }
 }

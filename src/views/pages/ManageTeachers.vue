@@ -219,7 +219,6 @@ export default {
       }
     }, //end of allClasses
     showData(response){
-      console.log(response);
       const teachers = response.map((TeacherPreviewobj,index) => {
         return {
            index_value: index,
@@ -244,7 +243,6 @@ export default {
      toggleTeacherPreview(index_value){
           this.TeacherPreviewobj = this.items[index_value];
         this.showTeachermodal = !this.showTeachermodal
-        console.log(index_value);
     },//end of toggleTeacherPreview
 
       CloseTeacherPreview(closeTeacher){

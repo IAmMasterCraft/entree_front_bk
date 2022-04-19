@@ -131,6 +131,7 @@ function configRoutes () {
           name: "Manage Lesson Plan",
           component: ManageLessonPlan,
         },
+        
         {
           path: "manage-lesson-plan/:id/:class",
           name: "Manage Lesson Plan / ",
@@ -226,6 +227,12 @@ function configRoutes () {
         {
           path: "manage-wards",
           name: "Manage Wards",
+          component: WardList,
+        },
+
+        {
+          path: "parents/communication-booklet",
+          name: "Parents / Communication Booklet",
           component: WardList,
         },
       ],

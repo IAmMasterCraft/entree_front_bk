@@ -157,3 +157,11 @@ There is only one limitation - you cannot re-distribute the `CoreUI` as stock no
 ## Support CoreUI Development
 
 CoreUI is an MIT licensed open source project and completely free to use. However, the amount of effort needed to maintain and develop new features for the project is not sustainable without proper financial backing. You can support development by buying [PRO version](https://coreui.io/pro/).
+
+
+- parents comm booklet
+- attendance display adjustment
+- ordering attendance by date
+- preview lesson plan on school
+- communication booklet by class on school
+- 

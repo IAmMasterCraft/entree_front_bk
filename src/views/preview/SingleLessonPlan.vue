@@ -205,21 +205,23 @@ export default {
                     this.isBtnDisabled = false;
                     this.showProgress = false;
                 } else {
-                    console.log("Developer fucked up!");
+                    console.log("Developer fucked up! => ", error.message);
                     // this.notification.countdown = 20;
                     // this.notification.type = "danger";
                     // this.isBtnDisabled = !this.isBtnDisabled;
-                    // this.showProgress = !this.showProgress;
+                    // this.showProgress = !this.showProgress; 500*53; 1000 * 92
                 }
             }
         }, //end of GetLessonPlan
         ShowData (response) {
-            response.subjects.forEach(subject => {
-                this.subjectList.push({
-                    label: subject.subject_name,
-                    value: subject.id,
+            if (this.user === 3) {
+                response.subjects.forEach(subject => {
+                    this.subjectList.push({
+                        label: subject.subject_name,
+                        value: subject.id,
+                    });
                 });
-            });
+            }
             this.lesson_plan = response.lesson_plan[0];
             if (this.lesson_plan.lesson_plan_type == 1) {
                 this.lesson_plan.opportunities = JSON.parse(response.lesson_plan[0].opportunities);

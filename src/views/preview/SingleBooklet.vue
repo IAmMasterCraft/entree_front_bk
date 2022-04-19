@@ -172,7 +172,7 @@ export default {
                     headers: { Authorization: localStorage.getItem("token") },
                     withCredentials: false,
                 };
-                if (this.user === 4) config.url = `https://entreelab.org/src/api/booklet/single-student/${this.$route.params.booklet}`;
+                if (this.user === 4 || this.user === 5) config.url = `https://entreelab.org/src/api/booklet/single-student/${this.$route.params.booklet}`;
                 const response = await this.axios(config);
                 this.ShowData(response.data);
             } catch (error) {

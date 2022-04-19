@@ -92,6 +92,7 @@ const items = [];
 const fields = [
   { key: "first_name", _style: "min-width:100px" },
   { key: "last_name", _style: "min-width:100px;" },
+  { key: "class", _style: "min-width:100px;" },
   { key: "week", _style: "min-width:100px;" },
   {
     key: "show_details",
@@ -225,6 +226,7 @@ export default {
           id: resp.id,
           first_name: resp.first_name,
           last_name: resp.last_name,
+          class: resp.grade_name,
           week: resp.week,
         }
       });

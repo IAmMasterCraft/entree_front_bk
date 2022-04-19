@@ -46,6 +46,19 @@
                 sorter
                 pagination
               >
+                <template #show_details="{item}">
+                  <td class="py-2">
+                    <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      :disabled="isBtnDisabled"
+                      size="sm"
+                      v-if="presentRoute == 'booklet' && item.booklet_id"
+                      @click="ManagePush(item.booklet_id)"
+                    >View Booklet</CButton>
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -62,6 +75,13 @@ const items = [];
 const fields = [
   { key: "name", _style: "min-width:100px" },
   { key: "class", _style: "min-width:100px;" },
+  {
+    key: "show_details",
+    label: "",
+    _style: "width:1%",
+    sorter: false,
+    filter: false,
+  },
 ];
 
 export default {
@@ -86,6 +106,7 @@ export default {
       fields,
       details: [],
       collapseDuration: 0,
+      presentRoute: null,
     };
   },
   methods: {
@@ -161,24 +182,83 @@ export default {
         }
       }
     }, //end of allStudent()
-    showData(response) {
-      this.items = response.map(resp => {
-        return {
-          name: `${resp.first_name} ${resp.last_name}`,
-          class: resp.grade_name,
-          registered: resp.createddate,
-          login_count: resp.login_count,
-          total_subject: resp.subject_count,
+
+    async StudentBooklet() {
+      try {
+        const config = {
+          method: "get",
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/booklet/parent`,
+          data: null,
+          headers: { Authorization: localStorage.getItem("token") },
+          withCredentials: false,
+        };
+        const response = await this.axios(config);
+        this.showData(response.data);
+        // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
+        // this.$router.push({name: "Home", data: response.data});
+      } catch (error) {
+        if (error.response) {
+          this.notification.message =
+            error.response.data.message ??
+            `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else if (error.request) {
+          this.notification.message = `<code>Network Error!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else {
+          console.log("Developer fucked up! => ");
+          // this.notification.countdown = 20;
+          // this.notification.type = "danger";
+          // this.isBtnDisabled = !this.isBtnDisabled;
+          // this.showProgress = !this.showProgress;
         }
-      });
+      }
+    }, //end of StudentBooklet
+    showData(response) {
+      if (this.presentRoute == "booklet") {
+        const { results } = response;
+        this.items = results.map(resp => {
+          return {
+            name: `${resp.ward.first_name} ${resp.ward.last_name}`,
+            class: resp.ward.grade_name,
+            registered: resp.ward.createddate,
+            login_count: resp.ward.login_count,
+            total_subject: resp.ward.subject_count,
+            grade_id: resp.ward.grade_id,
+            booklet_id: (resp.booklet) ? resp.booklet.id : resp.booklet,
+          }
+        });
+      } else {
+        this.items = response.map(resp => {
+          return {
+            name: `${resp.first_name} ${resp.last_name}`,
+            class: resp.grade_name,
+            registered: resp.createddate,
+            login_count: resp.login_count,
+            total_subject: resp.subject_count,
+          }
+        });
+      }
       this.showProgress = !this.showProgress;
     }, //end of showData
+    ManagePush(id) {
+      this.$router.push({name: 'View Communication Booklet / Student', params: {booklet: id}})
+    }, //end of ManagePush
     toggleModal() {
       this.showModal = !this.showModal;
     }, //end of toggleModal
   },
   created() {
-    this.allStudents();
+    if (this.$route.name.toLowerCase().includes("booklet")) this.presentRoute = "booklet";
+    if (this.presentRoute == "booklet") {
+      this.StudentBooklet();
+    } else this.allStudents();
   },
 };
 </script>

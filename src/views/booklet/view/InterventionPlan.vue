@@ -252,10 +252,16 @@ export default {
     }, //end of DeleteRecord
   },
   created() {
-    this.getSubjects();
-    this.$watch('allIntervention', (update) => {
-      this.items = update;
-    });
+    try {
+      if (this.user === 3) this.getSubjects();
+      this.items = this.allIntervention;
+      this.$watch('allIntervention', (update) => {
+        this.items = update;
+      });
+      this.showProgress = false;
+    } catch (error) {
+      // console.log(error.message);
+    }
   },
 };
 </script>

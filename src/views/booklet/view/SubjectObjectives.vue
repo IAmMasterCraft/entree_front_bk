@@ -256,8 +256,12 @@ export default {
   },
   created() {
     try {
-      this.getSubjects();
-      if (this.allObjectives.length > 0) this.items =  this.allObjectives;
+      if (this.user === 3) this.getSubjects();
+      this.items = this.allObjectives;
+      this.$watch('allObjectives', (update) => {
+        this.items = update;
+      });
+      this.showProgress = false;
     } catch (error) {
       // console.log(error.message);
     }
