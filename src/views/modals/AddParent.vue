@@ -145,11 +145,12 @@ export default {
           },
           headers: {"Authorization" : localStorage.getItem("token"),},
         };
-        const response = await this.axios(config);
+        // const response = 
+        await this.axios(config);
         // this.updateModalVisibility();
-        let updatedParents = response.data;
+        // let updatedParents = response.data;
         this.formValues.grade_name = null;
-        this.$emit("show-parent", updatedParents);
+        this.$emit("show-parent");
         // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
         // this.$router.push({name: "Home", data: response.data});
       } catch(error) {

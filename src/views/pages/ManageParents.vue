@@ -80,6 +80,19 @@
                     />
                   </td>
                 </template>
+                <template #reset="{item}">
+                  <td class="py-2">
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      size="sm"
+                      :disabled="isBtnDisabled"
+                      v-if="user === 2"
+                      @click="ResetPassword(item.reset)"
+                    >Reset</CButton>
+                  </td>
+                </template>
               </CDataTable>
             </CCardBody>
           </CCard>
@@ -99,6 +112,7 @@ const fields = [
   { key: 'email', _style:'min-width:100px;' },
   { key: 'ward_count', _style:'min-width:100px;' },
   'registered',
+  { key: 'reset', label: '', _style: 'width:1%', sorter: false, filter: false },
   {
     key: 'show_details',
     label: '',
@@ -206,6 +220,7 @@ export default {
           registered: parentObject.createddate,
           ward_count: parentObject.ward_count ?? 0,
           login_count: parentObject.login_count ?? 0,
+          reset: parentObject.id,
         };
       });
       this.items = classes;
@@ -214,12 +229,64 @@ export default {
     toggleModal(){
       this.showModal = !this.showModal;
     }, //end of toggleModal
-    updateParent(allParents) {
+    updateParent() {
       this.showProgress = !this.showProgress;
       this.showModal = false;
       // this.showData(allParents);
       this.allParents();
     }, //end of updateParent
+    async ResetPassword(id) {
+      this.showProgress = true;
+      this.isBtnDisabled = true;
+      try {
+        const config = {
+          method: "post",
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/reset-password`,
+          data: {
+            user: id,
+          },
+          headers: {"Authorization" : localStorage.getItem("token"),},
+          withCredentials: false,
+        };
+        const response = await this.axios(config);
+        if (response.data.status == 1) {
+          this.notification.message = `Password reset successful, default password: 'p@ss'`;
+          this.notification.countdown = 20;
+          this.notification.type = "success";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else {
+          this.notification.message = `<code>Something went wrong with password reset!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        }
+        // this.showData(response.data);
+        // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
+        // this.$router.push({name: "Home", data: response.data});
+      } catch(error) {
+        if (error.response) {
+          this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else if (error.request) {
+          this.notification.message = `<code>Network Error!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else {
+          console.log("Developer fucked up!");
+          // this.notification.countdown = 20;
+          // this.notification.type = "danger";
+          // this.isBtnDisabled = !this.isBtnDisabled;
+          // this.showProgress = !this.showProgress;
+        }
+      }
+    }, //end of ResetPassword
     navigation(classProps) {
       // console.log(classProps);
       this.$router.push({name: "View Parent", params: {id: classProps.id, name: classProps.name.toLowerCase().replace(/ /g, "-")}});
