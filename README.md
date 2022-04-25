@@ -164,4 +164,5 @@ CoreUI is an MIT licensed open source project and completely free to use. Howeve
 - ordering attendance by date
 - preview lesson plan on school
 - communication booklet by class on school
-- 
+- lesson plan class review
+-

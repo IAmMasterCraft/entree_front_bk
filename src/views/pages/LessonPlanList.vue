@@ -110,7 +110,7 @@ const items = [];
 
 const fields = [
   { key: "subject", _style: "min-width:100px" },
-  // { key: "class", _style: "min-width:100px;" },
+  { key: "class", _style: "min-width:100px;" },
   { key: "topic", _style: "min-width:100px;" },
   { key: "week", _style: "min-width:100px;" },
   {
@@ -240,6 +240,7 @@ export default {
           subject: resp.subject_name,
           topic: resp.topic,
           week: resp.week,
+          class: resp.grade_name,
         }
       });
       this.showProgress = !this.showProgress;

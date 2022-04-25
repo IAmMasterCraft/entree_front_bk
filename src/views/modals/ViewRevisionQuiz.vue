@@ -36,6 +36,19 @@
       <div v-if="!lessonQuiz.question">
         <h4 class="text-danger mx-4">No revision quiz...</h4>
       </div>
+      <div v-else>
+        <CRow class="mx-4">
+          <CCol sm="12">
+            <p>{{ lessonQuiz.question }}</p>
+          </CCol>
+          <CCol sm="12">
+            <CInputRadioGroup
+              rows="5"
+              :options="mcq_options"
+            />
+          </CCol>
+        </CRow>
+      </div>
 			<div v-for="(quest, index) in formValues.questions" :key="index">
           <div v-if="setupQuestion">
             <h5>Question {{ index + 1}}</h5>
@@ -126,7 +139,8 @@ export default {
   },
   watch: {
     lessonQuiz(newVal) {
-      this.formValues = newVal;
+      this.lessonQuiz = newVal;
+      this.mcq_options = newVal.options.split("%~%");
     },
   }
 }
