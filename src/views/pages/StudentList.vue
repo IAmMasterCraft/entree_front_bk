@@ -32,21 +32,22 @@
                 <CCol lg="6">
                   <span>Students</span>
                 </CCol>
-                <CCol lg="6" v-if="user === 2">
+                <CCol lg="6">
                   <AddStudent
                     :showModal="showModal"
                     @show-modal="toggleModal"
                     @show-students="updateStudents"
+                    v-if="user === 2"
                   />
                   <Studentpreview
                     :showModal="showpreview"
                     @show-studentpreview = "togglepreview"
                     :students = "studentobjects"
-
+                    v-if="user === 2"
                    />
                   
                   <CButton
-                  
+                    v-if="user === 2"
                     color="success"
                     variant="outline"
                     square
@@ -56,6 +57,18 @@
                     @click="toggleModal"
                   >
                     Add Student
+                  </CButton>
+                  <CButton
+                    v-if="user === 3"
+                    color="success"
+                    variant="outline"
+                    square
+                    class="text-right float-right"
+                    size="sm"
+                    :disabled="isBtnDisabled"
+                    @click="LinkToSubject"
+                  >
+                    Link To Subject
                   </CButton>
                 </CCol>
               </CRow>
@@ -343,6 +356,48 @@ export default {
         }
       }
     }, //end of ResetPassword
+
+    async LinkToSubject() {
+      this.showProgress = true;
+      this.isBtnDisabled = true;
+      try {
+        const config = {
+          method: "post",
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/link/subject/${this.$route.params.id}`,
+          headers: {"Authorization" : localStorage.getItem("token"),},
+          withCredentials: false,
+        };
+        await this.axios(config);
+        this.notification.message = `<code>Subjects Linked Successfully!</code>`;
+        this.notification.countdown = 20;
+        this.notification.type = "danger";
+        this.isBtnDisabled = false;
+        this.showProgress = false;
+        // this.showData(response.data);
+        // localStorage.setItem("token", `${response.data.token_type} ${response.data.access_token}`);
+        // this.$router.push({name: "Home", data: response.data});
+      } catch(error) {
+        if (error.response) {
+          this.notification.message = error.response.data.message ?? `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else if (error.request) {
+          this.notification.message = `<code>Network Error!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else {
+          console.log("Developer fucked up!");
+          // this.notification.countdown = 20;
+          // this.notification.type = "danger";
+          // this.isBtnDisabled = !this.isBtnDisabled;
+          // this.showProgress = !this.showProgress;
+        }
+      }
+    }, //end of LinkToSubject
   },
   created() {
     this.allStudents();
