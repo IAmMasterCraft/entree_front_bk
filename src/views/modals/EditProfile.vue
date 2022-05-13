@@ -40,7 +40,7 @@
             required="true"
             :disabled="(index.includes('avatar')) ? true : false"
             autocomplete="off"
-            v-if="!index.includes('avatar')"
+            v-if="!index.includes('avatar') && !index.includes('bio')"
             :placeholder="`Enter ${index.replace(/_/g, ' ')}`"
             v-model="formValues[index]"
           />
@@ -63,6 +63,20 @@
             @change="uploadPicture"
             v-if="index.includes('avatar')"
             :placeholder="`Select ${index.replace(/_/g, ' ')}`"
+          />
+          <hr v-if="index.includes('bio')" />
+          <video controls v-if="index.includes('bio')" width="350" height="200">
+            <source :src="formValues.bio_file_data" type="video/mp4">
+          </video>
+          <CInputFile
+            label="Upload Bio Video"
+            placeholder="Upload Bio Video"
+            required="true"
+            ref="file"
+            accept="video/*"
+            autocomplete="off"
+            @change="uploadFile"
+            v-if="index.includes('bio')"
           />
         </CCol>
       </CRow>
@@ -135,6 +149,7 @@ export default {
         formData.append("first_name", this.formValues.first_name);
         formData.append("last_name", this.formValues.last_name);
         formData.append("description", this.formValues.description);
+        formData.append("bio", this.formValues.bio_file);
         const config = {
           method: "post",
           url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/user-profile`,
@@ -174,6 +189,16 @@ export default {
       }
       fileReader.readAsDataURL(this.picture_file);
     }, //end of uploadPicture
+    uploadFile(a){
+      // console.log(b);
+      this.formValues.bio_file = a[0];
+      const fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        this.formValues.bio_file_data = e.target.result;
+      }
+      fileReader.readAsDataURL(this.formValues.bio_file);
+      // console.log(this.formValues);
+    }, //end of uploadFile
     updateModalVisibility(){
       let visibility = this.showModal;
       this.$emit("show-modal", !visibility);
@@ -200,6 +225,7 @@ export default {
         email_address: this.userProfile.user.email,
         avatar: this.userProfile.user.avatar,
         description: this.userProfile.user_details.description,
+        bio: this.userProfile.user_details.bio ?? 'new',
       };
     }
     if (this.user === 4) {

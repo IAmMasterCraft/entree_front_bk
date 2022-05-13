@@ -52,7 +52,7 @@
               <CCol :md="4">
                 <img rounded thumbnail :src="profile.user.avatar" width="200" height="200"/>
               </CCol>
-              <CCol :md="8">
+              <CCol :md="4">
                 <CCardBody v-if="user === 2">
                   <CCardTitle>
                     {{ profile.user_details.school_name }}
@@ -128,6 +128,11 @@
                   </CCardText>
                   <CCardText><small class="text-muted">{{ profile.user.createddate }}</small></CCardText>
                 </CCardBody>
+              </CCol>
+              <CCol :md="4" v-if="user === 3 && profile.user_details.bio">
+                <video controls width="295" height="200">
+                  <source :src="`https://entreelab.org/src/storage/app/${profile.user_details.bio}`" type="video/mp4">
+                </video>
               </CCol>
             </CRow>
           </CCard>
@@ -225,7 +230,7 @@ export default {
     showData(response){
       this.profile = response;
       this.showProgress = !this.showProgress;
-      this.profile.user.avatar = (!this.profile.user.avatar) ? "img/logo_a.png" : `${window.location.origin}/src/storage/app/${this.profile.user.avatar}`;
+      this.profile.user.avatar = (!this.profile.user.avatar) ? "img/logo_a.png" : `${/*window.location.origin*/'https://entreelab.org'}/src/storage/app/${this.profile.user.avatar}`;
     }, //end of showData
     toggleModal(){
       this.showModal = !this.showModal;

@@ -30,62 +30,7 @@
             <CCardHeader>
               <CRow>
                 <CCol lg="6">
-                  <span>Subjects</span>
-                </CCol>
-                <CCol lg="6" v-if="user === 2">
-                  <AddSubject
-                    :showModal="showModal"
-                    @show-modal="toggleModal(1)"
-                    @show-subjects="updateSubjects"
-                  />
-                  <CButton
-                    color="success"
-                    variant="outline"
-                    square
-                    class="text-right float-right"
-                    size="sm"
-                    :disabled="isBtnDisabled"
-                    @click="toggleModal(1)"
-                  >
-                    Add Subject
-                  </CButton>
-                </CCol>
-                <CCol lg="6" v-if="user === 3">
-                  <AddQuiz
-                    :showModal="showModal"
-                    :subjects="subjectDropdowmn"
-                    @show-modal="toggleModal(1)"
-                    @show-subjects="updateSubjects"
-                    @show-quiz="updateSubjects"
-                  />
-                  <AddLesson
-                    :showModal="showModalq"
-                    :subjects="subjectDropdowmn"
-                    @show-modal="toggleModal(2)"
-                    @show-subjects="updateSubjects"
-                  />
-                  <CButton
-                    color="success"
-                    variant="outline"
-                    square
-                    class="text-right float-right"
-                    size="sm"
-                    :disabled="isBtnDisabled"
-                    @click="toggleModal(1)"
-                  >
-                    Add Quiz
-                  </CButton>
-                  <CButton
-                    color="success"
-                    variant="outline"
-                    square
-                    class="text-right float-right mr-4"
-                    size="sm"
-                    :disabled="isBtnDisabled"
-                    @click="toggleModal(2)"
-                  >
-                    Add Lesson
-                  </CButton>
+                  <span>Quiz</span>
                 </CCol>
               </CRow>
             </CCardHeader>
@@ -136,8 +81,7 @@
                       square
                       size="sm"
                       :disabled="isBtnDisabled"
-                      v-if="Number.parseInt(item.total_quiz) > 0 && (presentRoute == 'quiz' || user === 2 || user === 3)"
-                      @click="toQuiz(item.subject_id)"
+                      v-if="Number.parseInt(item.total_quiz) > 0 && (presentRoute == 'quiz' || user === 2)"
                     >
                       View Quiz
                     </CButton>
@@ -161,21 +105,18 @@
 </template>
 
 <script>
-import AddSubject from "../modals/AddSubject";
-import AddLesson from "../modals/AddLesson";
-import AddQuiz from "../modals/AddQuiz";
 
 const items = [];
 
 const fields = [
-  { key: "subject", _style: "min-width:100px" },
-  { key: "class", _style: "min-width:100px;" },
-  { key: "total_lessons", _style: "min-width:100px;" },
-  { key: "total_quiz", _style: "min-width:100px;" },
-  { key: "teacher's_name", _style: "min-width:100px;" },
-  "registered",
+  { key: "quiz_title", _style: "min-width:100px" },
+  { key: "subject", _style: "min-width:100px;" },
+  { key: "quiz_type", _style: "min-width:100px;" },
+  { key: "duration", _style: "min-width:100px;" },
+  { key: "start_date", _style: "min-width:100px;" },
+  { key: "expiry_date", _style: "min-width:100px;" },
   {
-    key: "show_details",
+    key: "take_quiz",
     label: "",
     _style: "width:1%",
     sorter: false,
@@ -184,11 +125,8 @@ const fields = [
 ];
 
 export default {
-  name: "SubjectList",
+  name: "QuizList",
   components: {
-    AddSubject,
-    AddLesson,
-    AddQuiz,
   },
   data() {
     return {
@@ -198,7 +136,7 @@ export default {
       notification: {
         type: "success",
         countdown: 2,
-        message: "Loading Subjects . . . ",
+        message: "Loading Quiz . . . ",
       },
       showModal: false,
       showModalq: false,
@@ -249,11 +187,11 @@ export default {
       });
     },
 
-    async allSubjects() {
+    async allQuiz() {
       try {
         const config = {
           method: "get",
-          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/school/subjects/${this.$route.params.id}`,
+          url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/school/subjects/${this.$route.params.subject_id}`,
           data: null,
           headers: { Authorization: localStorage.getItem("token") },
           withCredentials: false,
@@ -285,7 +223,7 @@ export default {
           // this.showProgress = !this.showProgress;
         }
       }
-    }, //end of allSubject
+    }, //end of allQuiz
     showData(response) {
       this.items = response.map((subject) => {
         const subjectId = (this.user === 4) ? subject.subject_id : subject.id;
@@ -317,31 +255,13 @@ export default {
       this.showModal = false;
       this.showModalq = false;
     }, //end of closeAllModal
-    async updateSubjects(updated) {
-      this.closeAllModal();
-      this.showProgress = true;
-      this.showModal = false;
-      if (updated) {
-        this.allSubjects();
-        this.showProgress = false;
-      } else {
-        this.notification.message = `<code>Something went wrong with creating new subject</code>`;
-        this.notification.countdown = 20;
-        this.notification.type = "danger";
-      }
-    }, //end of updateSubjects
     toLesson(subject_id){
       //console.log(subject_id);
       this.$router.push({name: "View Lessons", params: {subject_id: subject_id,}});
-    }, //end of toLesson
-    toQuiz(subject_id){
-      this.$router.push({name: "Quizzes / ", params: {subject_id: subject_id,}});
-    }, //end of toQuiz
+    }, //end of subject_id
   },
   created() {
-    if (this.$route.path.includes("quiz")) this.presentRoute = "quiz";
-    if (this.$route.path.includes("subject")) this.presentRoute = "lesson";
-    this.allSubjects();
+    this.allQuiz();
     // console.log("welcome");
   },
 };

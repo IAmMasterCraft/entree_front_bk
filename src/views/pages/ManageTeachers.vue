@@ -230,6 +230,7 @@ export default {
           total_subject: TeacherPreviewobj.subject_count ?? 0,
           login_count: TeacherPreviewobj.login_count ?? 0,
           reset: TeacherPreviewobj.id,
+          bio: TeacherPreviewobj.bio,
         };
       });
       this.items = teachers;
@@ -242,6 +243,7 @@ export default {
 
      toggleTeacherPreview(index_value){
           this.TeacherPreviewobj = this.items[index_value];
+          console.log(this.TeacherPreviewobj)
         this.showTeachermodal = !this.showTeachermodal
     },//end of toggleTeacherPreview
 

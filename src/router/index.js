@@ -38,6 +38,7 @@ const ManagePaymentRecords = () => import('@/views/pages/ManagePaymentRecords')
 const ManageTeachers = () => import('@/views/pages/ManageTeachers')
 const ManageSubjects = () => import('@/views/pages/ManageSubjects')
 const SubjectList = () => import('@/views/pages/SubjectList')
+const QuizList = () => import('@/views/pages/QuizList')
 const ManageStudents = () => import('@/views/pages/ManageStudents')
 const StudentList = () => import('@/views/pages/StudentList')
 const ManageQuizzes = () => import('@/views/pages/ManageQuizzes')
@@ -181,6 +182,11 @@ function configRoutes () {
           path: "manage-quizzes/:id/:class",
           name: "Manage Quizzes / ",
           component: SubjectList,
+        },
+        {
+          path: "quizzes/:subject_id",
+          name: "Quizzes / ",
+          component: QuizList,
         },
         {
           path: "manage-parents",

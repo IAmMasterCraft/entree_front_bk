@@ -67,6 +67,14 @@
                             <h4 class=" font-weight-normal" >  {{ teachers.email }} </h4>
                              </div>
                              </div>
+                          <div class="col">
+                            <div class=" text-center d-flex flex-column" > 
+                            <h3> Bio </h3>  
+                            <video controls width="295" height="200">
+                              <source :src="`https://entreelab.org/src/storage/app/${teachers.bio}`" type="video/mp4">
+                            </video>
+                             </div>
+                             </div>
                      </div>
 				</CCol>
 			</CRow>
