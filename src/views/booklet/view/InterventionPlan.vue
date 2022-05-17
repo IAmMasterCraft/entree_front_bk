@@ -227,6 +227,7 @@ export default {
         if (updated.edit) {
           this.items[updated.id] = updated;
         } else {
+          if (!this.items) this.items = [];
           const id = this.items.length;
           this.items.push({
               id,
@@ -252,6 +253,7 @@ export default {
     }, //end of DeleteRecord
   },
   created() {
+    
     try {
       if (this.user === 3) this.getSubjects();
       this.items = this.allIntervention;

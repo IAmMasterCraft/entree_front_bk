@@ -142,9 +142,9 @@ export default {
       },
       showModal: false,
 
-      items: items.map((item, id) => {
+      items: [items.map((item, id) => {
         return { ...item, id };
-      }),
+      })],
       fields,
       details: [],
       collapseDuration: 0,
@@ -229,6 +229,7 @@ export default {
         if (updated.edit) {
           this.items[updated.id] = updated;
         } else {
+          if (!this.items) this.items = [];
           const id = this.items.length;
           this.items.push({
               id,
