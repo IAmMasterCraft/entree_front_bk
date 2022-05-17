@@ -273,7 +273,7 @@ export default {
           login_count: resp.login_count,
           total_subject: resp.subject_count,
           index_value : i,
-          reset: resp.id,
+          reset: resp.user_id,
         }
       });
       this.showProgress = !this.showProgress;

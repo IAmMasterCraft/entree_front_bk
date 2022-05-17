@@ -220,7 +220,7 @@ export default {
           registered: parentObject.createddate,
           ward_count: parentObject.ward_count ?? 0,
           login_count: parentObject.login_count ?? 0,
-          reset: parentObject.id,
+          reset: parentObject.user_id,
         };
       });
       this.items = classes;
