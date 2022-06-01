@@ -89,7 +89,7 @@ For a detailed explanation on how things work, check out the [Vue CLI Guide](htt
 
 CoreUI tools documentation:
 
-- Components documentation: [CoreUI Vue library](https://coreui.io/vue/docs)
+- Components documentation: [CoreUI Vue library](https://coreui.io/vue/docs/3.2/introduction/)
 - Styles documentation: [CoreUI styles](https://coreui.io/docs/3.0-beta/)
 - Icons documentation: [CoreUI Icons](http://coreui.io/icons)
 
