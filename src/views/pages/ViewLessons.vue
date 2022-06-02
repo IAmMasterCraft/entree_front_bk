@@ -47,7 +47,7 @@
                                     <CCol sm="5">
                                         <h5>{{ lesson.topic }}</h5>
                                         <p v-if="lesson.description && lesson.description != 'null'">{{ lesson.description }}</p>
-                                        <CButton color="info" variant="outline" @click="toggleModal(true, index)" square>View Revision Quiz</CButton>
+                                        <CButton v-if="lesson.quiz.length > 0" color="info" variant="outline" @click="toggleModal(true, index)" square>View Revision Quiz</CButton>
                                     </CCol>
                                 </CRow>
                                 <hr />
@@ -120,7 +120,7 @@ export default {
                     this.isBtnDisabled = false;
                     this.showProgress = false;
                 } else {
-                    console.log("Developer fucked up!");
+                    console.log("Developer fucked up!", error.message);
                     // this.notification.countdown = 20;
                     // this.notification.type = "danger";
                     // this.isBtnDisabled = !this.isBtnDisabled;
@@ -134,6 +134,7 @@ export default {
         }, //end of showResponse
         toggleModal(val = false, index = 0){
             this.lessonQuiz = this.lessons[index];
+            this.lessonQuiz.hasQuiz = (this.lessonQuiz.quiz.length > 0) ? true : false;
             this.showModal = val;
         }, //end of toggleModal
     },

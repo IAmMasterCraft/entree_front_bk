@@ -33,19 +33,34 @@
         <h5 class="px-3">Revision Quiz</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
-      <div v-if="!lessonQuiz.question">
+      <div v-if="!lessonQuiz.hasQuiz">
         <h4 class="text-danger mx-4">No revision quiz...</h4>
       </div>
       <div v-else>
-        <CRow class="mx-4">
+        <CRow class="m-4" v-for="(lesson, index) in lessonQuiz.quiz" :key="index">
           <CCol sm="12">
-            <p>{{ lessonQuiz.question }}</p>
+            <p>{{ index + 1}}. {{ lesson.question }}</p>
           </CCol>
           <CCol sm="12">
             <CInputRadioGroup
               rows="5"
-              :options="mcq_options"
+              :options="getOptions(lesson.options)"
+              :checked.sync="formValues.answer[index]"
             />
+          </CCol>
+        </CRow>
+        <hr />
+        <CRow v-if="user === 4">
+          <CCol lg="12">
+            <CButton
+              type="submit"
+              color="info"
+              block
+              :disabled="isBtnDisabled"
+              @click="submitQuiz"
+            >
+              {{ `submit`.toUpperCase() }}
+            </CButton>
           </CCol>
         </CRow>
       </div>
@@ -119,6 +134,7 @@ export default {
     return {
       warningModal: false,
       formValues: {
+        answer: []
       },
       isBtnDisabled: false,
       showProgress: false,
@@ -129,19 +145,79 @@ export default {
       },
       setupQuestion: true,
       mcq_options: [],
+      user: parseInt(localStorage.getItem("user_type")),
     }
+  },
+  computed: {
   },
   methods: {
     updateModalVisibility(){
       let visibility = this.showModal;
       this.$emit("show-modal", !visibility);
     }, //updateModalVisibility method
+    getOptions(val) {
+      return val.split("%~%").map((opt, i) => ({value: (i === 0) ? 'A' : (i === 1) ? 'B' : (i === 2) ? 'C' : 'D', label: opt}));
+    }, //end of getOptions
+    async submitQuiz(){
+      if (this.formValues.answer.length < this.lessonQuiz.quiz.length) {
+        this.notification = {
+          type: "warning",
+          countdown: 2,
+          message: "Please answer all questions before submitting . . . ",
+        };
+        return false;
+      }
+
+      this.isBtnDisabled = true;
+      this.showProgress = true;
+      const config = {
+        method: "post",
+        url: `${/*window.location.origin*/'https://entreelab.org'}/src/api/revision-quiz/submit`,
+        data: {
+          lesson_id: this.lessonQuiz.id,
+          subject_id: this.$route.params.subject_id,
+          answers: this.formValues.answer
+        },
+        headers: { Authorization: localStorage.getItem("token") },
+        withCredentials: false,
+      };
+      try {
+        const { data } = await this.axios(config);
+        this.notification.message = `<code>${ data.message }!</code>`;
+        this.notification.countdown = 20;
+        this.notification.type = "success";
+        alert(data.message);
+        this.updateModalVisibility();
+      } catch (error) {
+        if (error.response) {
+         this.notification.message = error.response.data.message ??
+         `<code>STATUS: ${error.response.data.error.status}<br />MESSAGE: ${error.response.data.error.message}</code>`;
+         this.notification.countdown = 20;
+         this.notification.type = "danger";
+         this.isBtnDisabled = false;
+         this.showProgress = false;
+        } else if (error.request) {
+          this.notification.message = `<code>Network Error!</code>`;
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = false;
+          this.showProgress = false;
+        } else {
+          console.log("Developer fucked up!", error.message);
+          this.notification.countdown = 20;
+          this.notification.type = "danger";
+          this.isBtnDisabled = !this.isBtnDisabled;
+          this.showProgress = !this.showProgress;
+        } 
+      }
+      this.isBtnDisabled = false;
+      this.showProgress = false;
+    }, //end of submitQuiz
   },
   watch: {
     lessonQuiz(newVal) {
       this.lessonQuiz = newVal;
-      this.mcq_options = newVal.options.split("%~%");
     },
-  }
+  },
 }
 </script>
