@@ -33,8 +33,9 @@
         <h5 class="px-3">Revision Quiz</h5>
         <i class="btn btn-info fa fa-close pull-right" @click="updateModalVisibility"></i>
       </template>
-      <div v-if="!lessonQuiz.hasQuiz">
-        <h4 class="text-danger mx-4">No revision quiz...</h4>
+      <div v-if="!lessonQuiz.hasQuiz || quizResult">
+        <h4 class="text-success mx-4" v-if="quizResult">Total Score: {{ quizResult }}</h4>
+        <h4 class="text-danger mx-4" v-else>No revision quiz...</h4>
       </div>
       <div v-else>
         <CRow class="m-4" v-for="(lesson, index) in lessonQuiz.quiz" :key="index">
@@ -128,6 +129,9 @@ export default {
     },
     lessonQuiz: {
       type: Object,
+    },
+    quizResult: {
+      type: String,
     }
   },
   data () {

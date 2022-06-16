@@ -26,7 +26,7 @@
         <div v-if="!showProgress">
             <CRow>
                 <CCol lg="12">
-                    <ViewRevisionQuiz :showModal="showModal" @show-modal="toggleModal(false)" :lessonQuiz="lessonQuiz" />
+                    <ViewRevisionQuiz :showModal="showModal" @show-modal="toggleModal(false)" :lessonQuiz="lessonQuiz" :quizResult="quizResult" />
                     <CCard>
                         <CCardHeader>
                             <CRow>
@@ -89,7 +89,8 @@ export default {
             showModal: false,
             lessons: [],
             modalLesson: {},
-            lessonQuiz: {}
+            lessonQuiz: {},
+            quizResult: null,
         }
     },
     methods: {
@@ -134,6 +135,7 @@ export default {
         }, //end of showResponse
         toggleModal(val = false, index = 0){
             this.lessonQuiz = this.lessons[index];
+            this.quizResult = this.lessonQuiz.quiz_result;
             this.lessonQuiz.hasQuiz = (this.lessonQuiz.quiz.length > 0) ? true : false;
             this.showModal = val;
         }, //end of toggleModal
